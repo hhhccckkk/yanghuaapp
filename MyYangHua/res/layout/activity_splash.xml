@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilt"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/loding_img"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
+
+    <include
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="168dp"
+        layout="@layout/progress_bar" />
+
+    <Button
+        android:visibility="gone"
+        android:textColor="#666666"
+        android:id="@+id/loginBtn"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:text="QQ一键登录"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="140dp"
+        android:gravity="center"
+        android:layout_height="35dp"
+        android:background="@drawable/login_btn_selector" />
+
+</RelativeLayout>

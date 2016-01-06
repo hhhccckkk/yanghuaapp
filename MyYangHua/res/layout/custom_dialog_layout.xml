@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/popup_titlebar_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:textColor="@color/gray"
+        android:textSize="18sp"
+        tool:text="标题" />
+
+    <RelativeLayout
+        android:id="@+id/content_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/whilt" >
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/black"
+            android:textIsSelectable="false"
+            android:textSize="18sp"
+            tool:text="消息内容" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llButtonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:visibility="visible" >
+
+        
+        <TextView
+            android:id="@+id/left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/popup_btn_left_selector"
+            android:gravity="center"
+            android:text="退出"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/popup_btn_right_selector"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#ff0000" />
+    </LinearLayout>
+
+</LinearLayout>

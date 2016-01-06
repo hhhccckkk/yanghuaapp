@@ -1,0 +1,1 @@
+package com.hck.yanghua.interfaces;public interface BaseAlert {public void deal(String value); }

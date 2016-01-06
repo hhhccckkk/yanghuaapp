@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#00000000"
+    android:gravity="center"
+    >
+
+    <LinearLayout
+         android:background="@drawable/update_d_bg_shap"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+    
+        <TextView
+            android:background="#ffffff"
+            
+             android:textColor="#000000"
+            android:padding="3dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/update" />
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="1dp" 
+            />
+       <TextView 
+           android:background="@color/whilt"
+           android:textColor="@color/black"
+           android:padding="3dp"
+           android:layout_width="fill_parent"
+           android:layout_height="100dp"
+           android:id="@+id/update_content_id"
+           
+           />
+       <LinearLayout 
+           android:layout_height="wrap_content"
+           android:layout_width="fill_parent"
+           android:orientation="horizontal"
+           
+           >
+           <Button 
+               android:textSize="12sp"
+               android:id="@+id/update_exit"
+               android:layout_marginLeft="3dp"
+                android:textColor="#ffffff"
+               android:layout_width="wrap_content"
+               android:layout_height="50dp"
+               android:text="退 出"
+               android:background="@drawable/bt_selector"
+               android:layout_weight="1"
+               />
+           <Button 
+               android:textSize="12sp"
+                android:id="@+id/update_resh"
+               android:layout_marginRight="3dp"
+               android:textColor="#ffffff"
+               android:layout_marginLeft="10dp"
+               android:layout_weight="1"
+               android:layout_width="wrap_content"
+               android:layout_height="50dp"
+               android:text="更 新"
+               android:background="@drawable/bt_selector"
+               />
+       </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
