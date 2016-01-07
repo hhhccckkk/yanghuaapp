@@ -14,21 +14,26 @@ public class Request {
 		client.setTimeout(TIME_OUT);
 	}
 
-	private static void getData(String method, RequestParams params,
+	private static void request(String method, RequestParams params,
 			HCKHttpResponseHandler handler) {
 		if (params == null) {
 			client.post(Constant.MAINHOST+method, handler);
 		}
 		else {
-			client.get(Constant.MAINHOST+method, params, handler);
+			client.post(Constant.MAINHOST+method, params, handler);
 		}
 		
 	}
-
+    //获取版本信息
 	public static void getBanBenInfo(String method, RequestParams params,
 			HCKHttpResponseHandler handler) {
-		getData(method, params, handler);
+		request(method, params, handler);
 		
+	}
+	//增加用户
+	public static void addUser(String method, RequestParams params,
+			HCKHttpResponseHandler handler){
+		request(method, params, handler);
 	}
 
 }

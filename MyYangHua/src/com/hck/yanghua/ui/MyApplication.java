@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import cn.sharesdk.framework.ShareSDK;
+
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -25,6 +27,7 @@ public class MyApplication extends Application {
 		LogUtil.isPrintLog = true;
 		context = this;
 		new MyPreferences(this);
+		 ShareSDK.initSDK(this);
 		initImagerLoder();
 	}
 

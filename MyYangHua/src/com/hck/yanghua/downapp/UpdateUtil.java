@@ -56,6 +56,7 @@ public class UpdateUtil {
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("error: " + content);
+						callBack.backAppInfo(null);
 					}
 				});
 	}

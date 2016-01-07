@@ -1,14 +1,23 @@
 package com.hck.yanghua.ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.hck.httpserver.HCKHttpClient;
+import com.hck.httpserver.HCKHttpResponseHandler;
+import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
+import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.fragment.HomeFragment;
 import com.hck.yanghua.fragment.MainMenuFragment;
+import com.hck.yanghua.util.LogUtil;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -23,9 +32,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 		initSlidingMenu(savedInstanceState);
 		initFragment();
 		initHome();
+		addImge();
 	}
 
 	private void initFragment() {
@@ -35,7 +46,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private void initHome() {
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.main_fragment, homFragment).commit();
-		mContent=homFragment;
+		mContent = homFragment;
 	}
 
 	private void initSlidingMenu(Bundle savedInstanceState) {
@@ -62,6 +73,46 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public void onClick(View v) {
+
+	}
+
+	private void addImge() {
+		// 01-06 21:21:50.020: D/hck(31169): dd: /storage/emulated/0
+
+		File sdDir = null;
+
+		sdDir = Environment.getExternalStorageDirectory();// 获取跟目录
+		LogUtil.D("dd: " + sdDir.toString());
+		RequestParams params = new RequestParams();
+		File file = new File(sdDir, "psb.jpg");
+		File file2 = new File(sdDir, "1.jpg");
+		File file3 = new File(sdDir, "2.jpg");
+		File file4 = new File(sdDir, "3.jpg");
+		LogUtil.D("fff: " + file.toString());
+		try {
+			params.put("file", file);
+			params.put("file2", file2);
+			params.put("file3", file3);
+			params.put("file4", file4);
+			new HCKHttpClient().post(Constant.MAINHOST + "addImageP", params,
+					new HCKHttpResponseHandler() {
+						@Override
+						public void onFinish(String url) {
+							// TODO Auto-generated method stub
+							super.onFinish(url);
+						}
+
+						@Override
+						public void onFailure(Throwable error, String content) {
+							// TODO Auto-generated method stub
+							super.onFailure(error, content);
+							LogUtil.D("失败: " + content + error);
+						}
+					});
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			LogUtil.D("ddd: " + e.toString());
+		}
 
 	}
 

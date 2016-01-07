@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:orientation="vertical"
-	android:background="#ffffff"
-	>
-	<TextView 
-	    android:layout_margin="5dp"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:text="软件正在下载中，请稍等...."
-	    />
-	<ProgressBar
-		android:id="@+id/update_progress"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		style="?android:attr/progressBarStyleHorizontal" />
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+     >
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:background="@drawable/update_view_bg_shap"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:gravity="center_vertical"
+            android:text="软件下载中,请稍等...."
+            android:textColor="@color/whilt"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:layout_marginTop="10dp"
+            android:id="@+id/update_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:progressDrawable="@drawable/progressbar_shap" />
+    </LinearLayout>
+
+</RelativeLayout>
