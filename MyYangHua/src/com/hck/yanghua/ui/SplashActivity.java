@@ -18,6 +18,9 @@ import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 
+import com.baidu.location.Address;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.hck.httpserver.HCKHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
@@ -26,6 +29,7 @@ import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.downapp.UpdateManager;
 import com.hck.yanghua.downapp.UpdateUtil;
 import com.hck.yanghua.downapp.UpdateUtil.UpdateAppCallBack;
+import com.hck.yanghua.location.MyLocation;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.AppManager;
 import com.hck.yanghua.util.LogUtil;
@@ -41,15 +45,30 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	private BanBenBean banBenBean; // 版本信息
 	private Button loginBtn; // 登录按钮
 	private View pBar; // 圈圈
+	private BDLocation bdLocation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getLocation();
 		setContentView(R.layout.activity_splash);
 		initView();
 		setListener();
 		new UpdateUtil().isUpdate(this); // 监测是否有新版本
 
+	}
+
+	private void getLocation() {
+		MyLocation.startLocation(this, new BDLocationListener() {
+
+			@Override
+			public void onReceiveLocation(BDLocation arg0) {
+				if (isFinishing()) {
+					return;
+				}
+				bdLocation = arg0;
+			}
+		});
 	}
 
 	private void initView() {
@@ -144,12 +163,6 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 		};
 	};
 
-	/**
-	 * userId:用户id 必需 String xingbie:用户性别 必需 touxiang:用户头像 必需 jingdu:定位经度
-	 * weidu:纬度 address:地址
-	 * 
-	 * @param platDB
-	 */
 	private void addUser(PlatformDb platDB) {
 		if (platDB == null) {
 			MyToast.showCustomerToast("登录失败");
@@ -160,20 +173,29 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 		params.put("xingbie", platDB.getUserGender());
 		params.put("touxiang", platDB.getUserIcon());
 		params.put("userName", platDB.getUserName());
-		params.put("jingdu", 38.12433+"");
-		params.put("weidu", 49.76455+"");
+		if (bdLocation != null) {
+			params.put("jingdu", bdLocation.getLongitude() + "");
+			params.put("weidu", bdLocation.getLatitude() + "");
+			params.put("address", bdLocation.getAddrStr()+"");
+			params.put("city", bdLocation.getCity()+"");
+		} else {
+			params.put("jingdu", 0 + "");
+			params.put("weidu", 0 + "");
+			params.put("address", "未知");
+		}
+		params.put("imei", MyTools.getImei(this) + "");
 		Request.addUser(Constant.METHOD_ADD_USER, params,
 				new HCKHttpResponseHandler() {
 					@Override
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
-						LogUtil.D("onFailure: "+content);
+						LogUtil.D("onFailure: " + content);
 					}
 
 					@Override
 					public void onSuccess(String content, String requestUrl) {
 						super.onSuccess(content, requestUrl);
-						LogUtil.D("onSuccess: "+content);
+						LogUtil.D("onSuccess: " + content);
 					}
 
 					@Override

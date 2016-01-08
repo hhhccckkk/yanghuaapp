@@ -36,8 +36,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 可选，开启BUG反馈时使用 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name="com.hck.yanghua.ui.MyApplication"
@@ -54,12 +54,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity"></activity>
-        
-        
-        
-        
-         <!-- 分享 -->
+        <activity android:name=".ui.MainActivity" >
+        </activity>
+
+        <!-- 分享 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -82,6 +80,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- 百度定位 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="MDdYlcDonFLf5OskpXNFpWB8" />
     </application>
 
 </manifest>
