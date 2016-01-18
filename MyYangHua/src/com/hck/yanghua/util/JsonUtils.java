@@ -40,7 +40,6 @@ public class JsonUtils {
 		return getMapper().writeValueAsString(object);
 	}
 
-	private static JSONArray jArray;
-	private static JSONObject jObject;
+
 
 }

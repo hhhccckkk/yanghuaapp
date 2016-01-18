@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TabHost
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <!-- 影藏TabWidget，太丑了，用我们的radiobutton代替 -->
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone" >
+            </TabWidget>
+            <!-- activity中间显示类容 -->
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/bottom_view" >
+            </FrameLayout>
+            <!-- 代替TabWidget，实现按钮选项卡 -->
+
+            <View
+                android:id="@+id/bottom_view"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true" />
+
+            <RadioGroup
+                android:id="@+id/RadioG"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/main_hight"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/main_buttom_bg"
+                android:gravity="bottom"
+                android:orientation="horizontal" >
+
+                <!-- 第一个button -->
+
+                <RadioButton
+                    android:id="@+id/home_id"
+                    style="@style/main_radio_botton"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:drawableTop="@drawable/main_bottom_home_selector"
+                    android:gravity="center"
+                    android:text="@string/main_buttom_home"
+                    android:textSize="12sp" />
+                <!-- 第2个button -->
+
+                <RadioButton
+                    android:id="@+id/baodian_id"
+                    style="@style/main_radio_botton"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/main_bottom_baodian_selector"
+                    android:gravity="center"
+                    android:text="@string/main_buttom_baodian"
+                    android:textSize="12sp" />
+                <!-- 第3个button -->
+
+                <RadioButton
+                    android:id="@+id/fatie_id"
+                    style="@style/main_radio_botton"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:drawableTop="@drawable/main_bottom_fatie"
+                    android:gravity="center"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/xiaoxi_id"
+                    style="@style/main_radio_botton"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/main_bottom_xinxi_selector"
+                    android:gravity="center"
+                    android:text="@string/main_buttom_xinxi"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/user_id"
+                    style="@style/main_radio_botton"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/main_bottom_user_selector"
+                    android:gravity="center"
+                    android:text="@string/main_buttom_user"
+                    android:textSize="12sp" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:id="@+id/view_remind"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </RelativeLayout>
+    </TabHost>
+
+</RelativeLayout>

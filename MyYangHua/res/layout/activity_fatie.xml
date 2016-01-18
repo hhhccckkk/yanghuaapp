@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whilt"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="请输入内容:"
+            android:textColor="#373737"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_color"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/fatie_content_ex"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="内容不超过600个字"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/text_color333"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="80dp" >
+
+            <LinearLayout
+                android:id="@+id/fatie_lay"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:padding="3dp" >
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="showPopChiceImage"
+                android:padding="3dp"
+                android:src="@drawable/biaoqing" />
+
+            <ImageView
+                android:layout_marginLeft="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="choicePicter"
+                android:padding="3dp"
+                android:src="@drawable/add_tupian" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="可添加5张图片"
+                android:textColor="@color/text_color999"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="bottom"
+            android:text="提示: 可添加5张图片 点击图片可删除"
+            android:textColor="#999"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</ScrollView>

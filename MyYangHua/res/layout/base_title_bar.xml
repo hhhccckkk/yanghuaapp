@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/title_color" >
+
+    <LinearLayout
+        android:id="@+id/titleBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@drawable/title_left_bt_selector"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:src="@drawable/back_img" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/titleCenterTV"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxWidth="200dp"
+        android:singleLine="true"
+        android:textColor="@color/whilt"
+        android:textSize="16sp" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/right_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/home_title_bt_shap"
+        android:gravity="center"
+        android:paddingBottom="3dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+        android:text="发送"
+        android:textColor="@color/red_anniu_bt_color"
+        android:textSize="14sp" />
+
+</FrameLayout>

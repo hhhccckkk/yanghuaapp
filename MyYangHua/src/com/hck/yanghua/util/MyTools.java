@@ -24,40 +24,62 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AnalogClock;
+
+import com.hck.yanghua.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class MyTools {
 	private static Context context;
 	private static Display display;
-	private static String TAG = "MyTools";
+
+	public static DisplayImageOptions getoptions() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheOnDisc(true).cacheInMemory(true)
+				.showImageOnFail(R.drawable.default_img)
+				.showImageForEmptyUri(R.drawable.default_img)
+				.displayer(new RoundedBitmapDisplayer(10))
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		return options;
+	}
+
+	public static DisplayImageOptions getImageOptions() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheOnDisc(true).cacheInMemory(true)
+				.showImageOnFail(R.drawable.default_img)
+				.showImageForEmptyUri(R.drawable.default_img)
+				.displayer(new RoundedBitmapDisplayer(5))
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		return options;
+	}
 
 	public MyTools(Context context) {
 		MyTools.context = context;
 	}
 
-	public static int getScreenHeight() // 获取屏幕高度
+	public static int getScreenHeight(Context context) // 获取屏幕高度
 	{
 		if (context == null) {
-			Log.e("hck", TAG + "  getScreenHeight: " + "context 不能为空");
 			return 800;
 		}
 		display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		return display.getHeight();
 	}
 
-	public static int getScreenWidth() // 获取屏幕宽度
+	public static int getScreenWidth(Context context) // 获取屏幕宽度
 	{
 		if (context == null) {
-			Log.e("hck", TAG + "  getScreenHeight: " + "context 不能为空");
 			return 480;
 		}
 		display = ((Activity) context).getWindowManager().getDefaultDisplay();
@@ -257,13 +279,13 @@ public class MyTools {
 																// jpge
 																// 的格式放入输出流中
 		byte[] byteArray = baos.toByteArray();
-		String saveDir = Environment.getExternalStorageDirectory()
-				.getAbsolutePath();
+		String saveDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+		Environment.getRootDirectory();
 		File dir = new File(saveDir + "/" + path); // 定义一个路径
 		if (!dir.exists()) { // 如果路径不存在,创建路径
 			dir.mkdir();
 		}
-		File file = new File(saveDir, name + ".png"); // 定义一个文件
+		File file = new File(dir, name); // 定义一个文件
 		if (file.exists())
 			file.delete(); // 删除原来有此名字文件,删除
 		try {
@@ -444,4 +466,51 @@ public class MyTools {
 		}
 		return null;
 	}
+
+	public static Bitmap getSmallBitmap(String filePath) {
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(filePath, options);
+		options.inSampleSize = calculateInSampleSize(options, 480, 800);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(filePath, options);
+	}
+
+	public static Bitmap getSmallBitmap2(String filePath) {
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(filePath, options);
+		options.inSampleSize = calculateInSampleSize(options, 90, 90);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(filePath, options);
+	}
+
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth, int reqHeight) {
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+			final int heightRatio = Math.round((float) height
+					/ (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		}
+		return inSampleSize;
+	}
+
+	public static String getSDPath() {
+		File sdDir = null;
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED);
+		if (sdCardExist) {
+			sdDir = Environment.getExternalStorageDirectory();// 获取跟目录
+		} else {
+			return null;
+		}
+		return sdDir.toString();
+
+	}
+
 }

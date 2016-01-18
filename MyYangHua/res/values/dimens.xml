@@ -14,5 +14,7 @@
     <dimen name="text_size_5">16dp</dimen>
     <dimen name="text_size_6">14dp</dimen>
     <dimen name="text_size_7">12dp</dimen>
+    
+    
 
 </resources>

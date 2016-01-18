@@ -39,22 +39,34 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <!-- 百度推送需要的权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 百度推送需要的权限 end -->
+
     <application
         android:name="com.hck.yanghua.ui.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name=".ui.SplashActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ui.MainActivity" >
         </activity>
 
         <!-- 分享 -->
@@ -84,6 +96,87 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="MDdYlcDonFLf5OskpXNFpWB8" />
+
+        <!-- push必须的receviver和service声明 -->
+        <receiver
+            android:name="com.baidu.android.pushservice.PushServiceReceiver"
+            android:process=":bdservice_v1" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.baidu.android.pushservice.action.notification.SHOW" />
+                <action android:name="com.baidu.android.pushservice.action.media.CLICK" />
+                <!-- 以下四项为可选的action声明，可大大提高service存活率和消息到达速度 -->
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.baidu.android.pushservice.RegistrationReceiver"
+            android:process=":bdservice_v1" >
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.METHOD" />
+                <action android:name="com.baidu.android.pushservice.action.BIND_SYNC" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.baidu.android.pushservice.PushService"
+            android:exported="true"
+            android:process=":bdservice_v1" >
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.baidu.android.pushservice.CommandService"
+            android:exported="true" />
+        <!-- push结束 -->
+
+        <meta-data
+            android:name="api_key"
+            android:value="SSU3w1mztIedmDXTBRcCsAPb" />
+        <!-- 我们自己的receiver，接受相关推送信息 -->
+        <receiver android:name="com.hck.yanghua.receiver.BaiduPushMsgReceiver" >
+            <intent-filter>
+
+                <!-- 接收push消息 -->
+                <action android:name="com.baidu.android.pushservice.action.MESSAGE" />
+                <!-- 接收bind、setTags等method的返回结果 -->
+                <action android:name="com.baidu.android.pushservice.action.RECEIVE" />
+                <!-- 接收通知点击事件，和通知自定义内容 -->
+                <action android:name="com.baidu.android.pushservice.action.notification.CLICK" />
+            </intent-filter>
+        </receiver>
+        <!-- push结束 -->
+        <!-- 百度推送结束 -->
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.HomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".ui.BaoDianActivity" />
+        <activity android:name=".ui.XiaoXiActivity" />
+        <activity android:name=".ui.UserActivity" />
+        <activity
+            android:name=".ui.FaTieActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".choiceimg.ShowImageListActivity" />
+        <activity android:name=".choiceimg.ImgsActivity" />
+        <activity android:name=".ui.TieZiXiangXiActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+        <activity android:name=".ui.ShowImageActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.HuiFuActivity" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

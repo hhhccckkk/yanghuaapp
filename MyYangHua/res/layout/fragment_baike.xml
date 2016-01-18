@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/whilt"
+    android:fillViewport="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whilt"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/whilt"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/baike_search_shap"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@null"
+                    android:paddingLeft="5dp" />
+
+                <LinearLayout
+                    android:id="@+id/baike_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/search" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:text="搜索"
+                        android:textColor="#c1c1c1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:text="按照花季查找"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/chun"
+                android:text="@string/baike_chun" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/xia"
+                android:text="@string/baike_xia" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/qiu"
+                android:text="@string/baike_qiu" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/dong"
+                android:text="@string/baike_dong" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:background="#f8f6f7" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/baike_seaarh_key2"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/shuisheng"
+                android:text="@string/baike_shuisheng" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/manteng"
+                android:text="@string/baike_manteng" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/shuzhuang"
+                android:text="@string/baike_shuzhuang" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/duorou"
+                android:text="@string/baike_duorou" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/xiangcao"
+                android:text="@string/baike_xiangcao" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/guanhua"
+                android:text="@string/baike_guanhua" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/guanguo"
+                android:text="@string/baike_guanguo" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/guanye"
+                android:text="@string/baike_guanye" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/zhongcaoyao"
+                android:text="@string/baike_caoyao" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/gongneng"
+                android:text="@string/baike_gongneng" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/liaoli"
+                android:text="@string/baike_liaoli" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                style="@style/baike_text_style"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/shucai"
+                android:text="@string/baike_shucai" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+    </LinearLayout>
+
+</ScrollView>

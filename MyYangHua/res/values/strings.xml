@@ -1,8 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MyYangHua</string>
+    <string name="app_name">养花社区</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-<string name="update">软件更新说明!!!</string>
+    <string name="update">软件更新说明!!!</string>
+    <string name="cebian_shouye">首页</string>
+    <string name="cebian_fujin">附近的人</string>
+    <string name="cebian_shop">花卉商铺</string>
+    <string name="cebian_youxi">看图填花名</string>
+    <string name="cebian_tuijian">应用推荐</string>
+    <string name="cebian_about">关于软件</string>
+    <string name="cebian_fankui">意见反馈</string>
+    <!-- 首页 -->
+    <string name="home_title_new">最新</string>
+    <string name="home_title_hot">热门</string>
+    <string name="home_title_sale">出售</string>
+    <string name="main_buttom_home">首页</string>
+    <string name="main_buttom_baodian">宝典</string>
+    <string name="main_buttom_xinxi">信息</string>
+    <string name="main_buttom_user">我的</string>
+
+    <!-- 百科 -->
+    <string name="baike_seaarh_key">按照花季查找</string>
+    <string name="baike_seaarh_key2">按照类别查找</string>
+    <string name="baike_chun">春</string>
+    <string name="baike_xia">夏</string>
+    <string name="baike_qiu">秋</string>
+    <string name="baike_dong">冬</string>
+    <string name="baike_shuisheng">水生植物</string>
+    <string name="baike_manteng">蔓藤植物</string>
+    <string name="baike_shuzhuang">树桩盆景</string>
+    <string name="baike_duorou">多肉植物</string>
+    <string name="baike_xiangcao">香草植物</string>
+    <string name="baike_guanhua">观花植物</string>
+    <string name="baike_guanguo">观果植物</string>
+    <string name="baike_guanye">观叶植物</string>
+    <string name="baike_caoyao">草药植物</string>
+    <string name="baike_gongneng">功能植物</string>
+    <string name="baike_liaoli">料理植物</string>
+    <string name="baike_shucai">蔬菜植物</string>
+    
+     <string name="release_to_refresh">松开可刷新…</string>
+    <string name="is_refreshing">正在刷新中…</string>
+    <string name="load_more">加载更多</string>
+    <string name="is_loading">努力加载中...</string>
+
 </resources>

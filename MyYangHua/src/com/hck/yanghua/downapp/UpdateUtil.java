@@ -33,7 +33,7 @@ public class UpdateUtil {
 					@Override
 					public void onFinish(String url) {
 						super.onFinish(url);
-						LogUtil.D("url: " + url);
+						LogUtil.D("onFinish: " + url);
 					}
 
 					@Override
@@ -55,7 +55,7 @@ public class UpdateUtil {
 					@Override
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
-						LogUtil.D("error: " + content);
+						LogUtil.D("error: " + content+ error);
 						callBack.backAppInfo(null);
 					}
 				});

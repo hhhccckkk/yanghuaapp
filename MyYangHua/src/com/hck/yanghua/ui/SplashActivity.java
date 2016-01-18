@@ -2,6 +2,9 @@ package com.hck.yanghua.ui;
 
 import java.util.HashMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,29 +12,34 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 
-import com.baidu.location.Address;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.hck.httpserver.HCKHttpResponseHandler;
+import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.BanBenBean;
+import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.downapp.UpdateManager;
 import com.hck.yanghua.downapp.UpdateUtil;
 import com.hck.yanghua.downapp.UpdateUtil.UpdateAppCallBack;
 import com.hck.yanghua.location.MyLocation;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.AppManager;
+import com.hck.yanghua.util.JsonUtils;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
@@ -50,25 +58,14 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getLocation();
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		ShareSDK.initSDK(this);
 		setContentView(R.layout.activity_splash);
 		initView();
 		setListener();
 		new UpdateUtil().isUpdate(this); // 监测是否有新版本
 
-	}
-
-	private void getLocation() {
-		MyLocation.startLocation(this, new BDLocationListener() {
-
-			@Override
-			public void onReceiveLocation(BDLocation arg0) {
-				if (isFinishing()) {
-					return;
-				}
-				bdLocation = arg0;
-			}
-		});
 	}
 
 	private void initView() {
@@ -78,9 +75,55 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	private void userLogin() {
 		Platform qq = ShareSDK.getPlatform(QQ.NAME);
-		if (qq != null && qq.isAuthValid()) {// QQ登录过没有过去，直接登录
-			loginQQ();
+		UserBean userBean = MyData.getData().getUserBean();
+		if (qq != null && qq.isAuthValid() && userBean != null) {// QQ登录过没有过去，直接登录
+			getUserData(userBean.getUid());
 		} else {
+			loginBtn.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void getUserData(long uid) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid + "");
+		Request.getUserData(Constant.METHOD_GET_USER_DATA, params,
+				new JsonHttpResponseHandler() {
+					public void onFinish(String url) {
+
+					};
+
+					public void onFailure(Throwable error, String content) {
+						MyToast.showCustomerToast("网络异常登录失败");
+						loginBtn.setVisibility(View.VISIBLE);
+					};
+
+					public void onSuccess(int statusCode, JSONObject response) {
+						pareUserData(response);
+					};
+				});
+	}
+
+	private void pareUserData(JSONObject response) {
+		try {
+			int code = response.getInt("code");
+			if (code == Request.REQUEST_SUCCESS) {
+				String userString = response.getString("data");
+				UserBean userBean = JsonUtils.parse(userString, UserBean.class);
+				if (userBean != null) {
+					MyPreferences.saveString("user", userString);
+					MyData.getData().setUserBean(userBean);
+					startMainActivity();
+				} else {
+					MyToast.showCustomerToast("网络异常登录失败");
+					loginBtn.setVisibility(View.VISIBLE);
+				}
+			} else {
+				MyToast.showCustomerToast("网络异常登录失败");
+				loginBtn.setVisibility(View.VISIBLE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			MyToast.showCustomerToast("网络异常登录失败");
 			loginBtn.setVisibility(View.VISIBLE);
 		}
 	}
@@ -91,6 +134,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			@Override
 			public void onClick(View arg0) {
 				loginBtn.setFocusable(false);
+				loginBtn.setVisibility(View.GONE);
 				loginQQ();
 			}
 		});
@@ -120,7 +164,9 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					HashMap<String, Object> arg2) {
 				Message message = new Message();
 				message.what = LOGIN_SUCCESS;
-				message.obj = arg0;
+
+				message.obj = getUserData(arg0, arg2);
+
 				handler.sendMessage(message);
 
 			}
@@ -137,6 +183,24 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	}
 
+	private UserBean getUserData(Platform arg0, HashMap<String, Object> data) {
+		UserBean userBean = new UserBean();
+		PlatformDb platDB = arg0.getDb();
+		userBean.setAddress(data.get("province").toString()
+				+ data.get("city").toString());
+		userBean.setUserId(platDB.getUserId());
+		userBean.setName(platDB.getUserName());
+		userBean.setTouxiang(data.get("figureurl_qq_2").toString());
+		userBean.setCity(data.get("city").toString());
+		String xingbie = data.get("gender").toString();
+		if (Constant.MAN.equals(xingbie)) {
+			userBean.setXingbie(Constant.NAN);
+		} else {
+			userBean.setXingbie(Constant.NV);
+		}
+		return userBean;
+	}
+
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if (isFinishing()) {
@@ -146,56 +210,62 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			if (msg == null || msg.what == LOGIN_ERROR
 					|| msg.what == LOGIN_CANCEL) {
 				MyToast.showCustomerToast("登录失败 您可以重新登录");
-				clearnUser();
+				loginBtn.setVisibility(View.VISIBLE);
 			} else if (msg.what == LOGIN_SUCCESS) {
 				loginBtn.setVisibility(View.GONE);
 				pBar.setVisibility(View.VISIBLE);
-				Platform platform = (Platform) msg.obj;
-				PlatformDb platDB = platform.getDb();
-				if (platDB != null) {
-					addUser(platDB);
+				UserBean userBean = (UserBean) msg.obj;
+				if (userBean != null) {
+					addUser(userBean);
 				} else {
+					loginBtn.setVisibility(View.VISIBLE);
 					MyToast.showCustomerToast("登录失败");
-					clearnUser();
 				}
 			}
 
 		};
 	};
 
-	private void addUser(PlatformDb platDB) {
-		if (platDB == null) {
+	private void addUser(UserBean userBean) {
+		if (userBean == null) {
 			MyToast.showCustomerToast("登录失败");
+			loginBtn.setVisibility(View.VISIBLE);
 			return;
 		}
 		RequestParams params = new RequestParams();
-		params.put("userId", platDB.getUserId());
-		params.put("xingbie", platDB.getUserGender());
-		params.put("touxiang", platDB.getUserIcon());
-		params.put("userName", platDB.getUserName());
+		params.put("userId", userBean.getUserId());
+		params.put("xingbie", userBean.getXingbie() + "");
+		params.put("touxiang", userBean.getTouxiang());
+		params.put("userName", userBean.getName());
+		if (MyData.bdLocation != null) {
+			bdLocation = MyData.bdLocation;
+		}
 		if (bdLocation != null) {
 			params.put("jingdu", bdLocation.getLongitude() + "");
 			params.put("weidu", bdLocation.getLatitude() + "");
-			params.put("address", bdLocation.getAddrStr()+"");
-			params.put("city", bdLocation.getCity()+"");
+			params.put("address", bdLocation.getAddrStr() + "");
+			params.put("city", bdLocation.getCity() + "");
 		} else {
 			params.put("jingdu", 0 + "");
 			params.put("weidu", 0 + "");
-			params.put("address", "未知");
+			params.put("address", userBean.getAddress());
+			params.put("city", userBean.getCity());
 		}
 		params.put("imei", MyTools.getImei(this) + "");
 		Request.addUser(Constant.METHOD_ADD_USER, params,
-				new HCKHttpResponseHandler() {
+				new JsonHttpResponseHandler() {
 					@Override
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
-						LogUtil.D("onFailure: " + content);
+						LogUtil.D("onFailure: " + content + error);
+						MyToast.showCustomerToast("网络异常登录失败");
+						loginBtn.setVisibility(View.VISIBLE);
 					}
 
 					@Override
-					public void onSuccess(String content, String requestUrl) {
-						super.onSuccess(content, requestUrl);
-						LogUtil.D("onSuccess: " + content);
+					public void onSuccess(int statusCode, JSONObject response) {
+						super.onSuccess(statusCode, response);
+						pareUserData(response);
 					}
 
 					@Override
@@ -206,13 +276,13 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	}
 
-	// 清楚用户登录信息
-	private void clearnUser() {
-		Platform qq = ShareSDK.getPlatform(QQ.NAME);
-		if (qq != null) {
-			qq.removeAccount();
-		}
-	}
+	// // 清楚用户登录信息
+	// private void clearnUser() {
+	// Platform qq = ShareSDK.getPlatform(QQ.NAME);
+	// if (qq != null) {
+	// qq.removeAccount();
+	// }
+	// }
 
 	private void startMainActivity() {
 		startActivity(new Intent(this, MainActivity.class));
@@ -221,6 +291,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	@Override
 	public void backAppInfo(BanBenBean bean) {
+		pBar.setVisibility(View.GONE);
 		this.banBenBean = bean;
 		try {
 			if (isUpdate()) {
