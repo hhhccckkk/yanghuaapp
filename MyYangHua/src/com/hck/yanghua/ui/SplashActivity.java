@@ -74,11 +74,8 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	}
 
 	private void login() {
-		// // hckyanghuab2291d06d4a3b16f52774659b1aeccef
-		// hckyanghuaa833ff80948b5a8716ce6dad3116efdd
 		UserBean userBean = MyData.getData().getUserBean();
 		if (userBean != null) {
-			LogUtil.D("login: " + userBean.getUserId().toLowerCase());
 			loginServer2(userBean.getUserId().toLowerCase());
 		}
 	}
@@ -115,12 +112,15 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					public void onFailure(Throwable error, String content) {
 						MyToast.showCustomerToast("网络异常登录失败");
 						loginBtn.setVisibility(View.VISIBLE);
+						
 					};
 
 					public void onSuccess(int statusCode, JSONObject response) {
+						LogUtil.D("onSuccess: "+response.toString());
 						pareUserData(response);
 					};
 				});
+		
 	}
 
 	private void pareUserData(JSONObject response) {

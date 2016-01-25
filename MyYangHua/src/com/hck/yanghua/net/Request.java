@@ -146,5 +146,16 @@ public class Request {
 				HCKHttpResponseHandler handler){
 			requestGet(Constant.METHOD_GETFRIEND, params, handler, true);
 		}
+		
+		//删除回复msg
+		public static void deleteHuiFuMsg(RequestParams params,
+				HCKHttpResponseHandler handler){
+			requestPost(Constant.METHOD_DELETE_HUIFU_MSG,false, params, handler);
+		}
+		
+		public static void getNearUser(RequestParams params,
+				HCKHttpResponseHandler handler){
+			requestGet(Constant.METHOD_GET_NEAR_USER, params, handler);
+		}
 
 }

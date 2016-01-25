@@ -33,17 +33,19 @@ public class TieZiAdapter extends BaseAdapter {
 	public List<TieZiBean> tieZiBeans;
 	private Context context;
 	private OnTouXiangCliceListener oCliceListener;
-    public interface OnTouXiangCliceListener
-    {
-    	void getUserId(String uid);
-    }
-	public TieZiAdapter(Context context, List<TieZiBean> tieZiBeans,OnTouXiangCliceListener onTouXiangCliceListener) {
+
+	public interface OnTouXiangCliceListener {
+		void getUserId(String uid);
+	}
+
+	public TieZiAdapter(Context context, List<TieZiBean> tieZiBeans,
+			OnTouXiangCliceListener onTouXiangCliceListener) {
 		this.tieZiBeans = tieZiBeans;
-		if (this.tieZiBeans==null) {
-			this.tieZiBeans=new ArrayList<>();
+		if (this.tieZiBeans == null) {
+			this.tieZiBeans = new ArrayList<>();
 		}
 		this.context = context;
-		this.oCliceListener=onTouXiangCliceListener;
+		this.oCliceListener = onTouXiangCliceListener;
 	}
 
 	@Override
@@ -95,7 +97,7 @@ public class TieZiAdapter extends BaseAdapter {
 			viewHolder.tuijianTextView = (TextView) convertView
 					.findViewById(R.id.tiezi_tuijian);
 			viewHolder.addressLayout = (RelativeLayout) convertView
-				.findViewById(R.id.tiezi_address_lay);
+					.findViewById(R.id.tiezi_address_lay);
 			viewHolder.addressTextView = (TextView) convertView
 					.findViewById(R.id.tiezi_address);
 			viewHolder.timeTextView = (TextView) convertView
@@ -111,7 +113,7 @@ public class TieZiAdapter extends BaseAdapter {
 		viewHolder.contentTextView.setText(spannableString);
 		viewHolder.dingTextView.setText(tieZiBean.getDingsize() + "");
 		viewHolder.pinglunTextView.setText(tieZiBean.getPinglunsize() + "");
-		viewHolder.fensiTextView.setText("丨粉丝:" + tieZiBean.getFensi());
+		viewHolder.fensiTextView.setText("粉丝:" + tieZiBean.getFensi());
 		if (!TextUtils.isEmpty(tieZiBean.getAddress())) {
 			viewHolder.addressTextView.setText(tieZiBean.getAddress());
 		} else {
@@ -137,42 +139,46 @@ public class TieZiAdapter extends BaseAdapter {
 		} else {
 			viewHolder.huoTextView.setVisibility(View.GONE);
 		}
-		viewHolder.timeTextView.setText(TimeUtil.forTime(tieZiBean
+		viewHolder.timeTextView.setText("丨"+TimeUtil.forTime(tieZiBean
 				.getHuifuTiem()));
 		String tupian6 = tieZiBean.getTupian6();
-		String tupian7= tieZiBean.getTupian7();
+		String tupian7 = tieZiBean.getTupian7();
 		if (!TextUtils.isEmpty(tupian6)) {
 			viewHolder.tupianImageView.setVisibility(View.VISIBLE);
 			viewHolder.layout.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageXiaoTu(tupian6,
-					viewHolder.tupianImageView);
+			GetImageUtil.showImageXiaoTu(tupian6, viewHolder.tupianImageView);
 		} else {
 			viewHolder.layout.setVisibility(View.GONE);
 		}
 		if (!TextUtils.isEmpty(tupian7)) {
 			viewHolder.layout.setVisibility(View.VISIBLE);
 			viewHolder.tupian2ImageView.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageXiaoTu(tupian7,
-					viewHolder.tupian2ImageView);
+			GetImageUtil.showImageXiaoTu(tupian7, viewHolder.tupian2ImageView);
 		} else {
 			viewHolder.tupian2ImageView.setVisibility(View.INVISIBLE);
 		}
 		ImageLoader.getInstance().displayImage(tieZiBean.getTouxiang(),
 				viewHolder.touxiangImageView, MyTools.getoptions());
 		viewHolder.touxiangImageView.setTag(tieZiBean.getUserId());
-		onTouXiangClick(viewHolder.touxiangImageView);
+		viewHolder.userNameTextView.setTag(tieZiBean.getUserId());
+		viewHolder.fensiTextView.setTag(tieZiBean.getUserId());
+		showUser(viewHolder.touxiangImageView);
+		showUser(viewHolder.userNameTextView);
+		showUser(viewHolder.fensiTextView);
 		return convertView;
 	}
-  private void onTouXiangClick(ImageView imageView){
-	  imageView.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-           	String uid=(String) v.getTag();	
-           	oCliceListener.getUserId(uid);
-		}
-	});
-  }
+
+	private void showUser(View View) {
+		View.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String uid = (String) v.getTag();
+				oCliceListener.getUserId(uid);
+			}
+		});
+	}
+
 	static class ViewHolder {
 		LinearLayout layout;
 		RelativeLayout addressLayout;
@@ -189,7 +195,7 @@ public class TieZiAdapter extends BaseAdapter {
 	}
 
 	public void addZan(int pos) {
-		if (pos>=1) {
+		if (pos >= 1) {
 			pos--;
 		}
 		TieZiBean tieZiBean = tieZiBeans.get(pos);
@@ -199,7 +205,7 @@ public class TieZiAdapter extends BaseAdapter {
 	}
 
 	public void addPl(int pos) {
-		if (pos>=1) {
+		if (pos >= 1) {
 			pos--;
 		}
 		TieZiBean tieZiBean = tieZiBeans.get(pos);

@@ -34,6 +34,7 @@
         android:src="@drawable/nan" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tiezi_user_dengji"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tiezi_userName"
-        android:layout_marginLeft="3dp"
         android:layout_toRightOf="@+id/tiezi_user_dengji"
         android:text="粉丝200"
         android:textColor="@color/text_color666"

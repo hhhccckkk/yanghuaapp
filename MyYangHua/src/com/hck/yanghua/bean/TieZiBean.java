@@ -26,15 +26,15 @@ public class TieZiBean extends UserBean implements Serializable{
 	@JsonProperty("time")
 	private String time;
 	@JsonProperty("pinglunsize")
-	private Integer pinglunsize;
+	private int pinglunsize;
 	@JsonProperty("dingsize")
-	private Integer dingsize;
+	private int dingsize;
 	@JsonProperty("isjinghua")
-	private Integer isjinghua;
+	private int isjinghua;
 	@JsonProperty("iszhiding")
-	private Integer iszhiding;
+	private int iszhiding;
 	@JsonProperty("istuijian")
-	private Integer istuijian;
+	private int istuijian;
 	@JsonProperty("tupian6")
 	private String tupian6;
 	@JsonProperty("tupian7")
@@ -156,43 +156,43 @@ public class TieZiBean extends UserBean implements Serializable{
 		this.tieZieType = tieZieType;
 	}
 
-	public Integer getPinglunsize() {
+	public int getPinglunsize() {
 		return pinglunsize;
 	}
 
-	public void setPinglunsize(Integer pinglunsize) {
+	public void setPinglunsize(int pinglunsize) {
 		this.pinglunsize = pinglunsize;
 	}
 
-	public Integer getDingsize() {
+	public int getDingsize() {
 		return dingsize;
 	}
 
-	public void setDingsize(Integer dingsize) {
+	public void setDingsize(int dingsize) {
 		this.dingsize = dingsize;
 	}
 
-	public Integer getIsjinghua() {
+	public int getIsjinghua() {
 		return isjinghua;
 	}
 
-	public void setIsjinghua(Integer isjinghua) {
+	public void setIsjinghua(int isjinghua) {
 		this.isjinghua = isjinghua;
 	}
 
-	public Integer getIszhiding() {
+	public int getIszhiding() {
 		return iszhiding;
 	}
 
-	public void setIszhiding(Integer iszhiding) {
+	public void setIszhiding(int iszhiding) {
 		this.iszhiding = iszhiding;
 	}
 
-	public Integer getIstuijian() {
+	public int getIstuijian() {
 		return istuijian;
 	}
 
-	public void setIstuijian(Integer istuijian) {
+	public void setIstuijian(int istuijian) {
 		this.istuijian = istuijian;
 	}
 

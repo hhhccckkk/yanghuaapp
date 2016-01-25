@@ -89,4 +89,11 @@ public class Constant {
 	
 	//获取好友
 	public static final String METHOD_GETFRIEND="getFriend";
+	
+	//删除回复msg
+	public static final String METHOD_DELETE_HUIFU_MSG="deleteMsg";
+	
+	
+	//获取附近的人
+	public static final String METHOD_GET_NEAR_USER="getNearUsers";
 }

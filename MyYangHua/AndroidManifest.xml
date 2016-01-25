@@ -209,6 +209,9 @@
         <activity
             android:name=".ui.ChatActivity"
             android:screenOrientation="portrait" />
+         <activity
+            android:name=".ui.ShowNearUserActivity"
+            android:screenOrientation="portrait" />
 
        <activity android:name=".ChatActivity" android:screenOrientation="portrait" />
          <meta-data android:name="EASEMOB_APPKEY"  android:value="hhhccckkk#yanghuashequ" />

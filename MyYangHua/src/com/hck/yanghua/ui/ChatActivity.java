@@ -26,7 +26,6 @@ public class ChatActivity extends EaseBaseActivity implements InitViewOk {
 		// 传入参数
 		userBean = (UserBean) getIntent().getSerializableExtra("user");
 		String fromImg = getIntent().getStringExtra("fromImg");
-		LogUtil.D("ChatActivity fromImg: "+fromImg);
 		String fromUserName=getIntent().getStringExtra("fromUserName");
 		Bundle bundle = new Bundle();
 		

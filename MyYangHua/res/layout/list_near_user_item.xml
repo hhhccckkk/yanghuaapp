@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/near_user_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/default_img" />
+
+    <TextView
+        android:id="@+id/near_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/near_user_img"
+        android:text="蝌蚪"
+        android:textColor="@color/text_color333"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_marginLeft="5dp"
+        android:id="@+id/xingbie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/near_user_name"
+        android:src="@drawable/nan" />
+
+    <TextView
+        android:id="@+id/near_fensi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/near_user_name"
+        android:layout_toRightOf="@+id/near_user_img"
+        android:textColor="@color/text_color666"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/near_juli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/text_color999"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/line_color" />
+
+</RelativeLayout>

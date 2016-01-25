@@ -51,6 +51,15 @@ public class UserBean implements Serializable{
 	private String city;
 	 @JsonProperty("pushid")
 	private String pushid;
+	 @JsonProperty("juli")
+	 private int juli; 
+	 
+	public int getJuli() {
+		return juli;
+	}
+	public void setJuli(int juli) {
+		this.juli = juli;
+	}
 	public Long getUid() {
 		return uid;
 	}

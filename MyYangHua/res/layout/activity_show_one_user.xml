@@ -11,10 +11,10 @@
         android:orientation="horizontal" >
 
         <ImageView
-            android:layout_margin="10dp"
             android:id="@+id/one_user_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_margin="10dp"
             android:src="@drawable/default_img" />
 
         <RelativeLayout
@@ -31,19 +31,21 @@
                 android:text="老科"
                 android:textColor="#363636"
                 android:textSize="16sp" />
-             <ImageView 
-                 android:id="@+id/one_user_xingbei"
-                 android:paddingTop="12dp"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="3dp"
-                 android:layout_toRightOf="@+id/one_user_name"
-                 android:src="@drawable/nan"
-                 />
-            <LinearLayout
+
+            <ImageView
+                android:id="@+id/one_user_xingbei"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@+id/one_user_name"
+                android:paddingTop="15dp"
+                android:src="@drawable/nan" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/one_user_name"
+                android:layout_toLeftOf="@+id/show_one_user_guanzhu"
                 android:orientation="vertical" >
 
                 <TextView
@@ -56,18 +58,18 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:singleLine="true"
-                    android:ellipsize="end"
+                    android:id="@+id/one_user_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:id="@+id/one_user_address"
+                    android:drawableLeft="@drawable/icon_activity_lbs"
+                    android:drawablePadding="3dp"
                     android:textColor="@color/text_color999"
                     android:textSize="12sp" />
             </LinearLayout>
 
-
             <Button
+                android:id="@+id/show_one_user_guanzhu"
                 android:layout_width="70dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -127,7 +129,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                     android:id="@+id/one_user_fensi"
+                    android:id="@+id/one_user_fensi"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_gravity="right"
@@ -160,7 +162,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                     android:id="@+id/one_user_guanzhu"
+                    android:id="@+id/one_user_guanzhu"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_gravity="right"
@@ -207,15 +209,15 @@
         </LinearLayout>
 
         <Button
-            android:layout_alignParentBottom="true"
             android:id="@+id/user_liaotian"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
             android:background="@drawable/liaotian_btn_selector"
             android:gravity="center"
-            android:textColor="@color/whilt"
             android:text="聊天"
+            android:textColor="@color/whilt"
             android:textSize="16sp" />
     </RelativeLayout>
 

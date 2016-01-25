@@ -35,6 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.google.android.gms.internal.el;
 import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
@@ -68,6 +69,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	public static final int HUO = 20; // 火
 	public static final int TUIJIAN = 1; // 推荐
 	public static final int TYPE_HUI_FU_LOU_ZHU = 1; // 回复楼主
+	public static final int TYPE_HUI_FU_USER = 2; // 回复用户
 	private static final String HAS_IMAGE = "1";
 	private LinearLayout layout, addressLayout;
 	private ImageView touxiangImageView, xingbieImageView;
@@ -311,7 +313,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				listfile = data.getStringArrayListExtra("files");
 				for (int i = 0; i < listfile.size(); i++) {
 					String imagePath = listfile.get(i);
-					LogUtil.D("imagePath: "+imagePath);
+					LogUtil.D("imagePath: " + imagePath);
 					addImagePath(imagePath);
 					Bitmap bitmap = MyTools.getSmallBitmap(imagePath);
 					if (bitmap != null) {
@@ -368,13 +370,13 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			if (userBean.getXingbie() == 1) {
 				huiTieBean.setXingbie(true);
 			}
-			if (huiTieBean1.getImage1()!=null) {
+			if (huiTieBean1.getImage1() != null) {
 				huiTieBean.setImage1(huiTieBean1.getImage1());
 			}
-			if (huiTieBean1.getIamge2()!=null) {
+			if (huiTieBean1.getIamge2() != null) {
 				huiTieBean.setImage1(huiTieBean1.getIamge2());
 			}
-			if (huiTieBean1.getIamge3()!=null) {
+			if (huiTieBean1.getIamge3() != null) {
 				huiTieBean.setImage1(huiTieBean1.getIamge3());
 			}
 			huiTieBean.setHuifuUserName(huiTieBean1.getName());
@@ -526,9 +528,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		SpannableString spannableString = ExpressionUtil.getExpressionString(
 				this, tieZiBean.getContent(), Constant.zhengze);
 		contentTextView.setText(spannableString);
-		// dingTextView.setText(tieZiBean.getDingsize() + "");
-		// pinglunTextView.setText(tieZiBean.getPinglunsize() + "");
-		fensiTextView.setText("丨粉丝:" + tieZiBean.getFensi());
+		fensiTextView.setText("粉丝:" + tieZiBean.getFensi());
 		if (!TextUtils.isEmpty(tieZiBean.getAddress())) {
 			addressTextView.setText(tieZiBean.getAddress());
 			addressLayout.setVisibility(View.VISIBLE);
@@ -555,7 +555,12 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		} else {
 			huoTextView.setVisibility(View.GONE);
 		}
-		timeTextView.setText(TimeUtil.forTime(tieZiBean.getHuifuTiem()));
+		if (TextUtils.isEmpty(tieZiBean.getHuifuTiem())) {
+			timeTextView.setText(tieZiBean.getTime());
+		} else {
+			timeTextView.setText(TimeUtil.forTime(tieZiBean.getHuifuTiem()));
+		}
+
 		ImageLoader.getInstance().displayImage(tieZiBean.getTouxiang(),
 				touxiangImageView, MyTools.getoptions());
 		String image1, image2, image3, image4, image5;
@@ -671,18 +676,16 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		if (imagePaths != null && !imagePaths.isEmpty()) {
 			content.append("&hasImg=" + HAS_IMAGE);
 		}
-		content.append("&yunatie="+tieZiBean.getContent());
-		content.append("&buid="+tieZiBean.getUid());
-		LogUtil.D("buidbuidbuidbuid: "+tieZiBean.getUid());
+		content.append("&yunatie=" + tieZiBean.getContent());
+		content.append("&buid=" + tieZiBean.getUid());
 		File file = null;
 		try {
 			for (int i = 0; i < imagePaths.size(); i++) {
-				LogUtil.D("imagePath22: "+imagePaths.get(i));
 				switch (i) {
 				case 0:
 					file = new File(imagePaths.get(0));
 					params.put("file", file);
-					
+
 					break;
 				case 1:
 					file = new File(imagePaths.get(1));
@@ -735,7 +738,9 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 								}
 
 								MyToast.showCustomerToast("回复成功");
-								sendBroadcast(pos, false);
+								if (pos > 0) {
+									sendBroadcast(pos, false);
+								}
 								hidenHuiTie();
 								destroyBitMap();
 								removeAllImagePath();
@@ -777,7 +782,10 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			}
 			intent.putExtra("tag", 2);
 		}
-		intent.putExtra("pos", pos);
+		if (pos > 0) {
+			intent.putExtra("pos", pos);
+		}
+
 		sendBroadcast(intent);
 	}
 

@@ -176,7 +176,6 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 					@Override
 					public void onSuccess(int statusCode, JSONObject response) {
 						super.onSuccess(statusCode, response);
-						LogUtil.D("onSuccess 帖子: " + response.toString());
 						MyPreferences
 								.saveBoolean(Constant.KEY_ISFATIEOK, false);
 						try {

@@ -1,5 +1,7 @@
 package com.hck.yanghua.ui;
 
+import org.json.JSONObject;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,13 +16,19 @@ import cn.sharesdk.tencent.qq.QQ;
 
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
+import com.baidu.location.BDLocation;
+import com.hck.httpserver.JsonHttpResponseHandler;
+import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.fragment.MainFragment;
 import com.hck.yanghua.fragment.MainMenuFragment;
 import com.hck.yanghua.liaotian.MainMsgReceiver;
 import com.hck.yanghua.liaotian.MainMsgReceiver.HasNewMsgGet;
+import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.AppManager;
+import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.view.CustomAlertDialog;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -94,9 +102,18 @@ public class MainActivity extends SlidingFragmentActivity implements
 		case R.id.exit:
 			alertExitD();
 			break;
+		case R.id.near_user:
+			startShowNearUserActivity();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void startShowNearUserActivity() {
+		Intent intent = new Intent();
+		intent.setClass(this, ShowNearUserActivity.class);
+		startActivity(intent);
 	}
 
 	private void alertExitD() {

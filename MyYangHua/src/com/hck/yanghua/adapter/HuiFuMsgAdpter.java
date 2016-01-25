@@ -3,28 +3,37 @@ package com.hck.yanghua.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hck.yanghua.R;
-import com.hck.yanghua.bean.MsgBean;
-import com.hck.yanghua.util.MyTools;
-import com.hck.yanghua.util.TimeUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hck.yanghua.R;
+import com.hck.yanghua.bean.MsgBean;
+import com.hck.yanghua.fragment.HuiFuMsgFragment;
+import com.hck.yanghua.util.MyTools;
+import com.hck.yanghua.util.TimeUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 public class HuiFuMsgAdpter extends BaseAdapter {
 	private Context context;
 	public List<MsgBean> msgBeans;
+	private LiaoTianCallBack callBack;
 
-	public HuiFuMsgAdpter(Context context, List<MsgBean> msgBeans) {
+	public interface LiaoTianCallBack {
+		void startLiaoTian(Object object);
+	}
+
+	public HuiFuMsgAdpter(Context context, List<MsgBean> msgBeans,
+			LiaoTianCallBack callBack) {
 		this.context = context;
 		this.msgBeans = msgBeans;
+		this.callBack = callBack;
 		if (this.msgBeans == null) {
 			this.msgBeans = new ArrayList<>();
 		}
@@ -60,11 +69,12 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 					.findViewById(R.id.msg_yuantie);
 			viewHolder.timeTextView = (TextView) convertView
 					.findViewById(R.id.msg_huifu_time);
-			viewHolder.liaotianButton = (Button) convertView
+			viewHolder.liaotianButton = (TextView) convertView
 					.findViewById(R.id.msg_huifu_liaotian);
 			viewHolder.nameTextView = (TextView) convertView
 					.findViewById(R.id.msg_huifu_name);
 			convertView.setTag(viewHolder);
+
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
@@ -75,7 +85,9 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 		viewHolder.nameTextView.setText(msgBeans.get(position).getUserName());
 		ImageLoader.getInstance().displayImage(
 				msgBeans.get(position).getTouxiang(),
-				viewHolder.touxiangImageView,MyTools.getoptions());
+				viewHolder.touxiangImageView, MyTools.getoptions());
+		viewHolder.liaotianButton.setTag(msgBeans.get(position));
+		setListener(viewHolder.liaotianButton);
 		return convertView;
 	}
 
@@ -83,7 +95,25 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 		ImageView touxiangImageView;
 		TextView nameTextView, timeTextView;
 		TextView yuantieTextView, contentTextView;
-		Button liaotianButton;
+		TextView liaotianButton;
+	}
+
+	private void setListener(View view) {
+		view.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (callBack != null) {
+					callBack.startLiaoTian(v.getTag());
+				}
+
+			}
+		});
+	}
+	
+	public void updateView(List<MsgBean> msgBeans){
+		this.msgBeans.addAll(msgBeans);
+		this.notifyDataSetChanged();
 	}
 
 }

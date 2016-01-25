@@ -15,11 +15,11 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:id="@+id/msg_huifu_tx"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/default_img" />
 
             <LinearLayout
@@ -47,14 +47,17 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <TextView
             android:id="@+id/msg_huifu_liaotian"
             android:layout_width="55dp"
             android:layout_height="25dp"
-            android:layout_marginRight="10dp"
-            android:padding="3dp"
             android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"
             android:background="@drawable/liaotian_bt_shap"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:padding="3dp"
             android:text="聊天"
             android:textColor="@color/whilt"
             android:textSize="12sp" />
@@ -72,7 +75,6 @@
         android:textSize="14sp" />
 
     <TextView
-        android:textSize="12sp"
         android:id="@+id/msg_yuantie"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -82,9 +84,10 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="20dp"
-        android:text="生活水水水水"
         android:paddingTop="5dp"
-        android:textColor="@color/text_color666" />
+        android:text="生活水水水水"
+        android:textColor="@color/text_color666"
+        android:textSize="12sp" />
 
     <View
         android:layout_width="fill_parent"

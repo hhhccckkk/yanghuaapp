@@ -63,6 +63,15 @@ public class MyTools {
 				.bitmapConfig(Bitmap.Config.RGB_565).build();
 		return options;
 	}
+	public static DisplayImageOptions getImageOptions(int size) {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheOnDisc(true).cacheInMemory(true)
+				.showImageOnFail(R.drawable.default_img)
+				.showImageForEmptyUri(R.drawable.default_img)
+				.displayer(new RoundedBitmapDisplayer(size))
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		return options;
+	}
 
 	public MyTools(Context context) {
 		MyTools.context = context;

@@ -85,7 +85,7 @@
                 android:layout_height="50dp" >
 
                 <LinearLayout
-                    android:id="@+id/order"
+                    android:id="@+id/near_user"
                     android:layout_width="fill_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/home_left_selector"

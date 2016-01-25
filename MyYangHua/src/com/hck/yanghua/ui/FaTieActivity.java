@@ -270,7 +270,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 
 	private void showImages(Bitmap bitmap, String path) {
 		final LinearLayout view = (LinearLayout) LayoutInflater.from(this)
-				.inflate(R.layout.image_item, null);
+				.inflate(R.layout.fatie_image_item, null);
 		ImageView imageView = (ImageView) view.findViewById(R.id.image);
 		view.setTag(path);
 		imageView.setImageBitmap(bitmap);

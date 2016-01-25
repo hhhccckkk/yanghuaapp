@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.easemob.chat.EMContactManager;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.exceptions.EaseMobException;
+import com.google.android.gms.internal.el;
 import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
@@ -36,6 +38,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 	private Button liaotianButton;
 	private UserBean userBean;
 	private String uid;
+	private Button guanzhuButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,16 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 		uid = getIntent().getStringExtra("uid");
 		initTitleView("用户信息");
 		initView();
-		getUserInfo();
+		UserBean myDataBean = MyData.getData().getUserBean();
+		if (myDataBean.getUserId().equals(uid)) {
+			userBean = myDataBean;
+			liaotianButton.setVisibility(View.GONE);
+			guanzhuButton.setVisibility(View.GONE);
+			updateView();
+		} else {
+			getUserInfo();
+		}
+
 	}
 
 	private void updateView() {
@@ -55,13 +67,14 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			userNameTextView.setText(userBean.getName());
 			fensiTextView.setText(userBean.getFensi() + "");
 			guanzhuTextView.setText(userBean.getGuanzhu() + "");
+			LogUtil.D("性别: " + userBean.getXingbie());
 			if (userBean.getXingbie() == 1) {
 				xingbieImageView.setImageResource(R.drawable.nan);
 			} else {
 				xingbieImageView.setImageResource(R.drawable.nv);
 			}
 			addressTextView.setText(userBean.getAddress());
-			if (userBean.getAihao() != null) {
+			if (!TextUtils.isEmpty(userBean.getAihao())) {
 				qianmingTextView.setText(userBean.getAihao());
 			}
 
@@ -77,6 +90,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 		fensiTextView = (TextView) findViewById(R.id.one_user_fensi);
 		guanzhuTextView = (TextView) findViewById(R.id.one_user_guanzhu);
 		addressTextView = (TextView) findViewById(R.id.one_user_address);
+		guanzhuButton = (Button) findViewById(R.id.show_one_user_guanzhu);
 
 		liaotianButton.setOnClickListener(this);
 	}
@@ -86,12 +100,12 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 		switch (v.getId()) {
 		case R.id.user_liaotian:
 			try {
-				UserBean userBean2=MyData.getData().getUserBean();
+				UserBean userBean2 = MyData.getData().getUserBean();
 				Intent intent = new Intent();
 				intent.putExtra("user", userBean);
 				intent.setClass(ShowOneUserActivity.this, ChatActivity.class);
-				intent.putExtra("fromImg",userBean2.getTouxiang());
-				intent.putExtra("fromUserName",userBean2.getName());
+				intent.putExtra("fromImg", userBean2.getTouxiang());
+				intent.putExtra("fromUserName", userBean2.getName());
 				startActivity(intent);
 			} catch (Exception e) {
 			}

@@ -44,7 +44,7 @@ public class MainMenuFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_main_menu, container,
 				false);
 		view.findViewById(R.id.home).setOnClickListener(mMainActivity);
-		view.findViewById(R.id.order).setOnClickListener(mMainActivity);
+		view.findViewById(R.id.near_user).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.safe).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.yunli).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.xiaoji).setOnClickListener(mMainActivity);
