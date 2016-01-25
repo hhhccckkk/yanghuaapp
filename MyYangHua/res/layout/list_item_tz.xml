@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilt"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            
+            android:id="@+id/tz_user_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/tz_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tz_user_img"
+            android:singleLine="true"
+            android:text="老科请求加您为好友"
+            android:textColor="@color/text_color333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/zt_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tz_userName"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/tz_user_img"
+            android:text="价格好友，谢谢"
+            android:textColor="@color/text_color666"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tz_caozuo"
+            android:gravity="center"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/liaotian_btn_selector"
+            android:text="操作"
+            android:textColor="@color/whilt"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color" />
+
+</LinearLayout>

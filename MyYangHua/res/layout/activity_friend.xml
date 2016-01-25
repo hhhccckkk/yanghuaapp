@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/whilt"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/line_color"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/friend_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whilt"
+        android:divider="@null"
+        android:headerDividersEnabled="true"
+        android:listSelector="@null"
+        android:scrollbars="none"
+        ptr:ptrDrawable="@drawable/jiazai_img"
+        ptr:ptrHeaderTextColor="@color/text_color999" />
+
+</LinearLayout>

@@ -62,5 +62,7 @@ public class BaseTitleActivity extends Activity {
 		mTitleBar = new BaseTitleBar(this);
 		centerTextView = mTitleBar.getCenterTextView();
 	}
+	
+	
 
 }

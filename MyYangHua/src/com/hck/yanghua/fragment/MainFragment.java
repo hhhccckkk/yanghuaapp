@@ -1,15 +1,17 @@
 package com.hck.yanghua.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.LocalActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,16 +20,17 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 
 import com.hck.yanghua.R;
-import com.hck.yanghua.R.color;
+import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.liaotian.MainMsgReceiver;
 import com.hck.yanghua.ui.BaoDianActivity;
 import com.hck.yanghua.ui.FaTieActivity;
 import com.hck.yanghua.ui.HomeActivity;
 import com.hck.yanghua.ui.UserActivity;
 import com.hck.yanghua.ui.XiaoXiActivity;
 import com.hck.yanghua.util.LogUtil;
-import com.hck.yanghua.view.BadgeView;
 import com.hck.yanghua.view.PopupWindowView;
 import com.hck.yanghua.view.PopupWindowView.PopCallBack;
 
@@ -46,11 +49,10 @@ public class MainFragment extends BaseFragment implements
 	private RadioGroup radioGroup;
 	private Activity activity;
 	private LocalActivityManager localActivityManager;
-	private BadgeView badgeView;
 	private int oldCheckId;
-	private View remindView;
 	private PopupWindowView pWindowView;
-
+	private  TextView remindTextView;
+    private ClearnMsgReceiver clearnMsgReceiver =new ClearnMsgReceiver();
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -65,14 +67,29 @@ public class MainFragment extends BaseFragment implements
 		}
 		return mRootView;
 	}
+    private void registerBroadcastReceiver(){
+    	IntentFilter intentFilter =new IntentFilter();
+    	intentFilter.addAction(Constant.CLEARN_NEW_MSG_SIZE);
+    	getActivity().registerReceiver(clearnMsgReceiver, intentFilter);
+    }
+    class ClearnMsgReceiver extends BroadcastReceiver{
 
+		@Override
+		public void onReceive(Context context, Intent intent) {
+         remind(0);			
+		}
+    	
+    }
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = activity;
+		registerBroadcastReceiver();
+		
 	}
 
 	private void initView(View view) {
+		LogUtil.D("initViewinitViewinitView");
 		tabHost = (TabHost) view.findViewById(R.id.tabHost);
 		tabHost.setup(localActivityManager);
 		radioGroup = (RadioGroup) view.findViewById(R.id.RadioG);
@@ -81,27 +98,28 @@ public class MainFragment extends BaseFragment implements
 		fatieButton = (RadioButton) view.findViewById(R.id.fatie_id);
 		newButton = (RadioButton) view.findViewById(R.id.xiaoxi_id);
 		userButton = (RadioButton) view.findViewById(R.id.user_id);
-		remindView = view.findViewById(R.id.view_remind);
+		remindTextView = (TextView) mRootView.findViewById(R.id.view_remind);
+		updateMsgSize();
 		addSpec();
-		badgeView = new BadgeView(this.getActivity(), remindView);
-		remind(badgeView, "12");
-
 	}
 
-	private void remind(BadgeView remindView, String size) {
-		if (remindView == null) {
-			return;
+	public void updateMsgSize() {
+		int size = MainMsgReceiver.getMainMsgReceiver(this.getActivity())
+				.getMsgSize();
+		remind(size);
+	}
+
+	private void remind(int size) {
+		if (size > 0) {
+			remindTextView.setText(size+"");
+			remindTextView.setVisibility(View.VISIBLE);
+			
+		} else {
+			remindTextView.setVisibility(View.INVISIBLE);
 		}
-		remindView.setText(size); // 需要显示的提醒类容
-		remindView.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
-		remindView.setTextColor(Color.WHITE); // 文本颜色
-		remindView.setBadgeBackgroundColor(Color.RED); // 提醒信息的背景颜色，自己设置
-		remindView.setTextSize(8); // 文本大小
-		remindView.setBadgeMargin(8); // 各边间隔
-		remindView.show();// 只有显示
 
 	}
-
+   
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +185,7 @@ public class MainFragment extends BaseFragment implements
 		case R.id.xiaoxi_id:
 			tabHost.setCurrentTab(3);
 			oldCheckId = R.id.xiaoxi_id;
+            remindTextView.setVisibility(View.GONE);
 			break;
 		case R.id.user_id:
 			tabHost.setCurrentTab(4);
@@ -181,7 +200,7 @@ public class MainFragment extends BaseFragment implements
 			hidenPop();
 		} else {
 			pWindowView = new PopupWindowView();
-			pWindowView.showFaTieView(fatieButton, this.getActivity(),this);
+			pWindowView.showFaTieView(fatieButton, this.getActivity(), this);
 		}
 
 	}
@@ -260,24 +279,24 @@ public class MainFragment extends BaseFragment implements
 
 	@Override
 	public void fatie() {
-		Intent intent=new Intent();
-		intent.putExtra("type", 1); //1一般分享帖子,2出售帖子,3视频
+		Intent intent = new Intent();
+		intent.putExtra("type", 1); // 1一般分享帖子,2出售帖子,3视频
 		intent.setClass(this.getActivity(), FaTieActivity.class);
 		startFaTieActivity(intent);
 	}
 
 	@Override
 	public void fatieSale() {
-		Intent intent=new Intent();
-		intent.putExtra("type", 1); //1一般分享帖子,2出售帖子
+		Intent intent = new Intent();
+		intent.putExtra("type", 2); // 1一般分享帖子,2出售帖子
 		intent.setClass(this.getActivity(), FaTieActivity.class);
 		startFaTieActivity(intent);
 	}
 
 	@Override
 	public void fatieVideo() {
-		Intent intent=new Intent();
-		intent.putExtra("type", 1); //1一般分享帖子,3视频
+		Intent intent = new Intent();
+		intent.putExtra("type", 3); // 1一般分享帖子,3视频
 		intent.setClass(this.getActivity(), FaTieActivity.class);
 		startFaTieActivity(intent);
 	}
@@ -286,5 +305,13 @@ public class MainFragment extends BaseFragment implements
 		hidenPop();
 		startActivity(intent);
 	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+        getActivity().unregisterReceiver(clearnMsgReceiver);
+	}
+
+
 
 }

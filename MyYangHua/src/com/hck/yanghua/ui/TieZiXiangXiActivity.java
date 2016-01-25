@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;
+import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupChoicePicter;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
@@ -96,6 +98,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private int page = 1;
 	private HuiTieData huiTieData = new HuiTieData();
 	private int pos;
+	private int type; // 1一般帖子 2出售帖子
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		tieZiXiangXiActivity = this;
 		setContentView(R.layout.activity_tiezixiangxi);
 		tieZiBean = (TieZiBean) getIntent().getSerializableExtra("tiezi");
+		type = getIntent().getIntExtra("type", -1);
 		pos = getIntent().getIntExtra("pos", -1);
 		tId = tieZiBean.getTid();
 		initView();
@@ -241,7 +245,8 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 											zanImageView.setEnabled(false);
 											MyToast.showCustomerToast("赞+1");
 											if (pos > 0) {
-												NewTieZiFragment.addZan(pos);
+
+												sendBroadcast(pos, true);
 											}
 										}
 									} catch (JSONException e) {
@@ -288,7 +293,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 	// 弹出选择图片界面
 	public void choicePicter(View view) {
-		if (imagePaths.size() >= 5) {
+		if (imagePaths.size() >= 3) {
 			MyToast.showCustomerToast("最多添加5张图片哦");
 			return;
 		}
@@ -306,6 +311,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				listfile = data.getStringArrayListExtra("files");
 				for (int i = 0; i < listfile.size(); i++) {
 					String imagePath = listfile.get(i);
+					LogUtil.D("imagePath: "+imagePath);
 					addImagePath(imagePath);
 					Bitmap bitmap = MyTools.getSmallBitmap(imagePath);
 					if (bitmap != null) {
@@ -361,6 +367,15 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			huiTieBean.setTouxiang(userBean.getTouxiang());
 			if (userBean.getXingbie() == 1) {
 				huiTieBean.setXingbie(true);
+			}
+			if (huiTieBean1.getImage1()!=null) {
+				huiTieBean.setImage1(huiTieBean1.getImage1());
+			}
+			if (huiTieBean1.getIamge2()!=null) {
+				huiTieBean.setImage1(huiTieBean1.getIamge2());
+			}
+			if (huiTieBean1.getIamge3()!=null) {
+				huiTieBean.setImage1(huiTieBean1.getIamge3());
 			}
 			huiTieBean.setHuifuUserName(huiTieBean1.getName());
 			huiTieBean.setYuantie(huiTieBean1.getYuantie());
@@ -642,6 +657,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			MyToast.showCustomerToast("评论不能为空");
 			return;
 		}
+		Pdialog.showDialog(this, "提交数据中..", false);
 		StringBuffer content = new StringBuffer("");
 		UserBean userBean = MyData.getData().getUserBean();
 		BDLocation bdLocation = MyData.bdLocation;
@@ -655,13 +671,18 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		if (imagePaths != null && !imagePaths.isEmpty()) {
 			content.append("&hasImg=" + HAS_IMAGE);
 		}
+		content.append("&yunatie="+tieZiBean.getContent());
+		content.append("&buid="+tieZiBean.getUid());
+		LogUtil.D("buidbuidbuidbuid: "+tieZiBean.getUid());
 		File file = null;
 		try {
 			for (int i = 0; i < imagePaths.size(); i++) {
+				LogUtil.D("imagePath22: "+imagePaths.get(i));
 				switch (i) {
 				case 0:
 					file = new File(imagePaths.get(0));
 					params.put("file", file);
+					
 					break;
 				case 1:
 					file = new File(imagePaths.get(1));
@@ -698,11 +719,23 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 										|| huiTieData.getHuiTieBeans().size() < 10) {
 									HuiTieBean huiTieBean = new HuiTieBean();
 									huiTieBean.setContent(data);
+									if (imagePaths.size() > 0) {
+										huiTieBean.setImage1(imagePaths.get(0));
+									}
+									if (imagePaths.size() > 1) {
+										huiTieBean.setImage1(imagePaths.get(0));
+										huiTieBean.setIamge2(imagePaths.get(1));
+									}
+									if (imagePaths.size() > 2) {
+										huiTieBean.setImage1(imagePaths.get(0));
+										huiTieBean.setIamge2(imagePaths.get(1));
+										huiTieBean.setIamge3(imagePaths.get(2));
+									}
 									addHuiFu(huiTieBean);
 								}
 
 								MyToast.showCustomerToast("回复成功");
-								NewTieZiFragment.addPL(pos);
+								sendBroadcast(pos, false);
 								hidenHuiTie();
 								destroyBitMap();
 								removeAllImagePath();
@@ -717,9 +750,35 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					@Override
 					public void onFinish(String url) {
 						super.onFinish(url);
+						Pdialog.hiddenDialog();
 
 					}
 				});
+	}
+
+	private void sendBroadcast(int pos, boolean isZAN) {
+		Intent intent = new Intent();
+		if (isZAN) {
+			if (type == Constant.NEW_TIE_ZI) {
+				intent.setAction(Constant.NEW_ADD_ZAN);
+			} else if (type == Constant.HOT_TIE_ZI) {
+				intent.setAction(Constant.HOT_ADD_ZAN);
+			} else if (type == Constant.SALE_TIE_ZI) {
+				intent.setAction(Constant.SALE_ADD_ZAN);
+			}
+			intent.putExtra("tag", 1);
+		} else {
+			if (type == Constant.NEW_TIE_ZI) {
+				intent.setAction(Constant.NEW_ADD_PL);
+			} else if (type == Constant.HOT_TIE_ZI) {
+				intent.setAction(Constant.HOT_ADD_PL);
+			} else if (type == Constant.SALE_TIE_ZI) {
+				intent.setAction(Constant.SALE_ADD_PL);
+			}
+			intent.putExtra("tag", 2);
+		}
+		intent.putExtra("pos", pos);
+		sendBroadcast(intent);
 	}
 
 	@Override
@@ -762,6 +821,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		Intent intent = new Intent();
 		intent.putExtra("data", huiTieBean);
 		intent.setClass(this, HuiFuActivity.class);
+		intent.putExtra("type", type);
 		startActivity(intent);
 	}
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/d_shap"
+    android:gravity="center"
+    android:minHeight="80dp"
+    android:minWidth="160dp"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/jiazai_img" />
+
+    <TextView
+        android:id="@+id/tipTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/text_color666"
+        android:textSize="16sp" />
+
+</LinearLayout>

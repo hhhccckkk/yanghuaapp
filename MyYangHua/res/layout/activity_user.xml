@@ -180,17 +180,19 @@
         android:background="#f8f6f7" />
 
     <FrameLayout
+        android:background="@drawable/user_item_selector"
         android:layout_width="fill_parent"
         android:layout_height="50dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
+            
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
+                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/user_huabao" />
@@ -218,17 +220,20 @@
         android:background="@color/line_color" />
 
     <FrameLayout
+        android:onClick="showMyFriend"
+        android:background="@drawable/user_item_selector"
         android:layout_width="fill_parent"
         android:layout_height="50dp" >
 
         <LinearLayout
+            
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
+                  android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/shezhi" />
@@ -237,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:text="设置提醒"
+                android:text="我的好友"
                 android:textColor="#686868"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -256,17 +261,20 @@
         android:background="@color/line_color" />
 
     <FrameLayout
+        android:background="@drawable/user_item_selector"
+        android:onClick="showMyMSG"
         android:layout_width="fill_parent"
         android:layout_height="50dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
+          
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
+                  android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/yijianfankui" />
@@ -294,17 +302,19 @@
         android:background="@color/line_color" />
 
     <FrameLayout
+        android:background="@drawable/user_item_selector"
         android:layout_width="fill_parent"
         android:layout_height="50dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
+          
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
+                  android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/share" />

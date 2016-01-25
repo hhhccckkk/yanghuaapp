@@ -46,9 +46,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/main_buttom_text_color</item>
     </style>
-    
-    
-    
+
     <style name="baike_text_style">
         <item name="android:paddingTop">15dp</item>
         <item name="android:gravity">center</item>
@@ -57,11 +55,18 @@
         <!-- 让3个button一样大小 -->
         <item name="android:textColor">#747474</item>
     </style>
-    
-     <style name="popwin_anim_style">  
-     <item name="android:windowEnterAnimation">@anim/iphone1</item>  
-    <item name="android:windowExitAnimation">@anim/iphone2</item>  
-   
-</style> 
+
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/iphone1</item>
+        <item name="android:windowExitAnimation">@anim/iphone2</item>
+    </style>
+
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/whilt</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 </resources>

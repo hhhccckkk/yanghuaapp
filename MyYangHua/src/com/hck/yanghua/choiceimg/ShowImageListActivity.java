@@ -16,7 +16,6 @@ import com.hck.yanghua.R;
 import com.hck.yanghua.ui.BaseTitleActivity;
 import com.hck.yanghua.ui.FaTieActivity;
 import com.hck.yanghua.ui.TieZiXiangXiActivity;
-import com.hck.yanghua.util.LogUtil;
 
 public class ShowImageListActivity extends BaseTitleActivity {
 	private ListView listView;
@@ -79,7 +78,6 @@ public class ShowImageListActivity extends BaseTitleActivity {
 							.startActivityForResult(intent,
 									FaTieActivity.GET_PICTER);
 				}
-
 				finish();
 				System.gc();
 			}

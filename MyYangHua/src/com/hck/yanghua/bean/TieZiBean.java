@@ -25,8 +25,6 @@ public class TieZiBean extends UserBean implements Serializable{
 	private String tupian5;
 	@JsonProperty("time")
 	private String time;
-	@JsonProperty("uid")
-	private Integer uid;
 	@JsonProperty("pinglunsize")
 	private Integer pinglunsize;
 	@JsonProperty("dingsize")

@@ -1,6 +1,9 @@
 package com.hck.yanghua.ui;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -8,6 +11,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+
+import com.hck.yanghua.util.AppManager;
+import com.hck.yanghua.util.MyPreferences;
+import com.hck.yanghua.view.CustomAlertDialog;
 import com.hck.yanghua.view.TitleBar;
 
 public class BaseActivity extends FragmentActivity {
@@ -22,6 +32,7 @@ public class BaseActivity extends FragmentActivity {
 	@Override
 	public void setContentView(int layout) {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		AppManager.getAppManager().addActivity(this);
 		initTitleBar();
 		ViewGroup root = getRootView();
 		View paramView = getLayoutInflater().inflate(layout, null);
@@ -63,6 +74,46 @@ public class BaseActivity extends FragmentActivity {
 
 	public String getStringData(int id) {
 		return getResources().getString(id);
+	}
+	public void alertExitD() {
+		CustomAlertDialog alertDialog = new CustomAlertDialog(this);
+		alertDialog.setCancelable(true);
+		alertDialog.setCanceledOnTouchOutside(true);
+		alertDialog.setLeftText("退出");
+		alertDialog.setRightText("好评");
+		alertDialog.setTitle("提示");
+		alertDialog.setMessage("确定要退出吗?");
+		alertDialog.setOnLeftListener(new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				exit();
+			}
+		});
+
+		alertDialog.setOnRightListener(new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				haoPing();
+			}
+		});
+		alertDialog.show();
+
+	}
+	private void haoPing() {
+		Uri uri = Uri.parse("market://details?id=" + getPackageName());
+		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+
+	}
+
+
+	private void exit() {
+		MyPreferences.saveString("user", null);
+		AppManager.getAppManager().AppExit();
+		finish();
 	}
 
 }

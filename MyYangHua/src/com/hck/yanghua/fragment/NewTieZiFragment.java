@@ -2,8 +2,10 @@ package com.hck.yanghua.fragment;
 
 import org.json.JSONObject;
 
-import android.R.integer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +22,20 @@ import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.adapter.TieZiAdapter;
+import com.hck.yanghua.adapter.TieZiAdapter.OnTouXiangCliceListener;
 import com.hck.yanghua.bean.TieZiBean;
 import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.TieZiData;
 import com.hck.yanghua.net.Request;
+import com.hck.yanghua.ui.ShowOneUserActivity;
 import com.hck.yanghua.ui.TieZiXiangXiActivity;
 import com.hck.yanghua.util.JsonUtils;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
+import com.hck.yanghua.view.Pdialog;
 
-public class NewTieZiFragment extends BaseFragment {
+public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceListener{
 	private static final int MAX_SIZE = 10;
 	public static final int ZAN = 1;
 	public static final int PING_LUN = 2;
@@ -38,23 +43,60 @@ public class NewTieZiFragment extends BaseFragment {
 	private int page = 1;
 	private boolean isUpdate;
 	private TieZiData tieZiBeans;
-	private static TieZiAdapter adapter;
+	private TieZiAdapter adapter;
+	private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		regestBrodCast();
 		if (mRootView == null) {
 			mRootView = inflater.inflate(R.layout.fragment_tiezi, null);
 			initView(mRootView);
 			setListener();
 			setEndLabel();
 			getData();
+			Pdialog.showLoading(getActivity(), true);
 		}
 		ViewGroup parent = (ViewGroup) mRootView.getParent();
 		if (parent != null) {
 			parent.removeView(mRootView);
 		}
 		return mRootView;
+	}
+
+	private void regestBrodCast() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constant.NEW_ADD_PL);
+		filter.addAction(Constant.NEW_ADD_ZAN);
+		filter.addAction(Constant.UPDATE_HOME_TIEZI_DATA);
+		this.getActivity().registerReceiver(myBroadcastReceiver, filter);
+	}
+
+	class MyBroadcastReceiver extends BroadcastReceiver {
+		// 1,增加赞，2增加评论数,3刷新数据
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			int tag = intent.getIntExtra("tag", -1);
+			if (tag == ZAN) {
+				int pos = intent.getIntExtra("pos", -1);
+				if (pos >= 0) {
+					addZan(pos);
+				}
+			} else if (tag == PING_LUN) {
+				int pos = intent.getIntExtra("pos", -1);
+				if (pos >= 0) {
+					addPL(pos);
+				}
+			} else if (tag == 3) {
+				getData();
+				page = 1;
+				isUpdate = true;
+			}
+		}
+
 	}
 
 	private void initView(View view) {
@@ -71,14 +113,13 @@ public class NewTieZiFragment extends BaseFragment {
 		endLabel.setRefreshingLabel(getString(R.string.is_loading));
 	}
 
-
-	public static void addZan(int pos) {
+	public void addZan(int pos) {
 		if (adapter != null) {
 			adapter.addZan(pos);
 		}
 	}
 
-	public static void addPL(int pos) {
+	public void addPL(int pos) {
 		if (adapter != null) {
 			adapter.addPl(pos);
 		}
@@ -112,7 +153,8 @@ public class NewTieZiFragment extends BaseFragment {
 				intent.putExtra("tiezi", tieZiBean);
 				intent.setClass(NewTieZiFragment.this.getActivity(),
 						TieZiXiangXiActivity.class);
-				intent.putExtra("pos",position);
+				intent.putExtra("pos", position);
+				intent.putExtra("type", Constant.NEW_TIE_ZI);
 				startActivity(intent);
 			}
 		});
@@ -122,6 +164,7 @@ public class NewTieZiFragment extends BaseFragment {
 		params = new RequestParams();
 		params.put("page", page + "");
 		params.put("maxSize", MAX_SIZE + "");
+		params.put("type", 1 + ""); // 1一般分享帖子
 		Request.getTieZi(Constant.METHOD_GET_TIEZI, params,
 				new JsonHttpResponseHandler() {
 					@Override
@@ -133,7 +176,7 @@ public class NewTieZiFragment extends BaseFragment {
 					@Override
 					public void onSuccess(int statusCode, JSONObject response) {
 						super.onSuccess(statusCode, response);
-						LogUtil.D("onSuccess 帖子: "+response.toString());
+						LogUtil.D("onSuccess 帖子: " + response.toString());
 						MyPreferences
 								.saveBoolean(Constant.KEY_ISFATIEOK, false);
 						try {
@@ -146,7 +189,9 @@ public class NewTieZiFragment extends BaseFragment {
 										&& tieZiBeans.getTieZiBeans() != null
 										&& !tieZiBeans.getTieZiBeans()
 												.isEmpty()) {
+									LogUtil.D("updateView111");
 									updateView();
+									
 								} else {
 									MyToast.showCustomerToast("没有更多数据了");
 								}
@@ -156,6 +201,7 @@ public class NewTieZiFragment extends BaseFragment {
 							}
 						} catch (Exception e) {
 							MyToast.showCustomerToast("获取数据失败");
+							LogUtil.D("ddd: " + e.toString());
 						}
 					}
 
@@ -165,6 +211,7 @@ public class NewTieZiFragment extends BaseFragment {
 						if (pullToRefreshListView != null) {
 							pullToRefreshListView.onRefreshComplete();
 						}
+						Pdialog.hiddenDialog();
 
 					}
 				});
@@ -172,17 +219,17 @@ public class NewTieZiFragment extends BaseFragment {
 	}
 
 	private void updateView() {
-		LogUtil.D("updateViewupdateViewupdateViewupdateView");
 		if (isUpdate) {
-			if (adapter.tieZiBeans != null) {
+			if (adapter!=null && adapter.tieZiBeans != null) {
 				adapter.tieZiBeans.clear();
 				adapter.tieZiBeans = null;
 			}
 			adapter = null;
 		}
 		if (adapter == null) {
+			
 			adapter = new TieZiAdapter(this.getActivity(),
-					tieZiBeans.getTieZiBeans());
+					tieZiBeans.getTieZiBeans(),this);
 			pullToRefreshListView.setAdapter(adapter);
 		} else {
 			adapter.addData(tieZiBeans.getTieZiBeans());
@@ -191,15 +238,15 @@ public class NewTieZiFragment extends BaseFragment {
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		boolean isFaTie = MyPreferences.getBoolean(Constant.KEY_ISFATIEOK,
-				false);
-		if (isFaTie) {
-			getData();
-			page = 1;
-			isUpdate = true;
-		}
+	public void onDestroy() {
+		super.onDestroy();
+		this.getActivity().unregisterReceiver(myBroadcastReceiver);
+		Pdialog.hiddenDialog();
+	}
+
+	@Override
+	public void getUserId(String uid) {
+       startShowOneUserActivity(getActivity(), uid);
 	}
 
 }

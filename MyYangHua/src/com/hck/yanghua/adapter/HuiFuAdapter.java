@@ -26,9 +26,7 @@ import com.hck.yanghua.util.TimeUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HuiFuAdapter extends BaseAdapter {
-	public HuiFuAdapter() {
-
-	}
+	
 
 	private Context context;
 	private List<HuiTieBean> huiTieBeans;
@@ -138,13 +136,13 @@ public class HuiFuAdapter extends BaseAdapter {
 			viewHolder.imageView2.setVisibility(View.GONE);
 		} else {
 			viewHolder.imageView2.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(imag1, viewHolder.imageView2);
+			GetImageUtil.showImageDaTu(imag2, viewHolder.imageView2);
 		}
 		if (TextUtils.isEmpty(imag3)) {
 			viewHolder.imageView3.setVisibility(View.GONE);
 		} else {
 			viewHolder.imageView3.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(imag1, viewHolder.imageView3);
+			GetImageUtil.showImageDaTu(imag3, viewHolder.imageView3);
 		}
 		viewHolder.tiemTextView.setText("丨"
 				+ TimeUtil.forTime(huiTieBean.getTime()));

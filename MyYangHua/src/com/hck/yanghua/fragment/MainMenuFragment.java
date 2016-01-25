@@ -49,6 +49,7 @@ public class MainMenuFragment extends Fragment {
 		view.findViewById(R.id.yunli).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.xiaoji).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.user).setOnClickListener(mMainActivity);
+		view.findViewById(R.id.exit).setOnClickListener(mMainActivity);
 		toxuiangImageView = (ImageView) view.findViewById(R.id.touxiang);
 		userNameTextView = (TextView) view.findViewById(R.id.userName);
 		setData();

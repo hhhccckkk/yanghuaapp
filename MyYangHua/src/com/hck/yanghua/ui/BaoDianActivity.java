@@ -21,7 +21,8 @@ public class BaoDianActivity extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.activity_baodian);
 		initTitle();
 		initFragmentView();
-		setData(zaiPeiFragment);
+		
+		setData(baiKeFragment);
 	}
 
 	private void setData(Fragment fragment) {

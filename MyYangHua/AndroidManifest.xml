@@ -39,6 +39,23 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <!-- 聊天 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <!-- 百度推送需要的权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -174,9 +191,48 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".choiceimg.ShowImageListActivity" />
         <activity android:name=".choiceimg.ImgsActivity" />
-        <activity android:name=".ui.TieZiXiangXiActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
-        <activity android:name=".ui.ShowImageActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.HuiFuActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TieZiXiangXiActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".ui.ShowImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.HuiFuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShowOneUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ChatActivity"
+            android:screenOrientation="portrait" />
+
+       <activity android:name=".ChatActivity" android:screenOrientation="portrait" />
+         <meta-data android:name="EASEMOB_APPKEY"  android:value="hhhccckkk#yanghuashequ" />
+        <!-- 声明sdk所需的service -->
+        <service
+            android:name="com.easemob.chat.EMChatService"
+            android:exported="true" />
+        <!-- 声明sdk所需的receiver -->
+        <receiver android:name="com.easemob.chat.EMMonitorReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.easemob.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

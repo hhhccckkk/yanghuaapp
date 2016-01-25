@@ -18,7 +18,7 @@ public class TimeUtil {
 		try {
 			date = format.parse(time);
 		} catch (ParseException e) {
-			return time.substring(0, 11);
+			return "未知";
 		}
 		long delta = new Date().getTime() - date.getTime();
 		if (delta < 1L * ONE_MINUTE) {

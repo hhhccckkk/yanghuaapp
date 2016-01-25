@@ -1,181 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:background="@color/whilt"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/tiezi_touxiang"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_img" />
+
+    <TextView
+        android:id="@+id/tiezi_userName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/tiezi_touxiang"
+        android:text="老科"
+        android:textColor="@color/text_color666"
+        android:textSize="12sp" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp" >
-
-            <ImageView
-                android:id="@+id/tiezi_touxiang"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/default_img" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/tiezi_touxiang"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:id="@+id/tiezi_userName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text_color666"
-                        android:textSize="12sp" />
-
-                    <ImageView
-                        android:id="@+id/tiezi_xingbie"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:background="@drawable/biaoqian_shap"
-                        android:paddingBottom="1dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingTop="1dp"
-                        android:text="LV.10"
-                        android:textColor="@color/whilt"
-                        android:textSize="8sp"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="学前班"
-                            android:textColor="@color/text_color999"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:id="@+id/tie_fensi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_color999"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tiez_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/text_color999"
-                        android:textSize="10sp" />
-                </FrameLayout>
-            </LinearLayout>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_margin="5dp"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="45dp"
-                android:layout_height="20dp"
-                android:background="@drawable/baike_search_shap"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="@color/red_anniu_bt_color"
-                android:textSize="12sp"
-                android:visibility="gone" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/tiezi_xingbie"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/tiezi_userName"
+        android:src="@drawable/nan" />
+
+    <TextView
+        android:id="@+id/tiezi_user_dengji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_userName"
+        android:layout_toRightOf="@+id/tiezi_touxiang"
+        android:text="学前班"
+        android:textColor="@color/text_color666"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/tie_fensi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_userName"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/tiezi_user_dengji"
+        android:text="粉丝200"
+        android:textColor="@color/text_color666"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/tiez_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_userName"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@+id/tie_fensi"
+        android:text="2016-3-5"
+        android:textColor="@color/text_color666"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/tiezi_huo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_touxiang"
+        android:layout_gravity="top"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
-        android:orientation="horizontal" >
+        android:background="@drawable/btn_all_orange_n"
+        android:padding="1dp"
+        android:paddingTop="0dp"
+        android:text="火"
+        android:textColor="@color/whilt"
+        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tiezi_huo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@drawable/btn_all_orange_n"
-            android:padding="1dp"
-            android:paddingTop="0dp"
-            android:text="火"
-            android:textColor="@color/whilt"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/tiezi_jing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_touxiang"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/tiezi_huo"
+        android:background="@drawable/btn_all_blue_n"
+        android:padding="1dp"
+        android:text="精华"
+        android:textColor="@color/whilt"
+        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tiezi_jing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:background="@drawable/btn_all_blue_n"
-            android:padding="1dp"
-            android:text="精华"
-            android:textColor="@color/whilt"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/tiezi_tuijian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_touxiang"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/tiezi_jing"
+        android:background="@drawable/btn_all_red_n"
+        android:padding="1dp"
+        android:text="推荐"
+        android:textColor="@color/whilt"
+        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tiezi_tuijian"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:background="@drawable/btn_all_red_n"
-            android:padding="1dp"
-            android:text="推荐"
-            android:textColor="@color/whilt"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/tiezi_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:padding="5dp"
-            android:textColor="@color/text_color333"
-            android:textSize="14sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tiezi_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_touxiang"
+        android:layout_toRightOf="@+id/tiezi_tuijian"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:padding="5dp"
+        android:textColor="@color/text_color333"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/tiezi_tupian_lay"
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tiezi_content"
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
@@ -195,69 +143,63 @@
             android:scaleType="fitXY" />
     </LinearLayout>
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/tiezi_address_lay"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" >
+        android:layout_below="@+id/tiezi_tupian_lay"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/tiezi_address_lay"
+        <ImageView
+            android:id="@+id/tiezi_addresee_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/icon_activity_lbs" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/icon_activity_lbs" />
-
-            <TextView
-                android:id="@+id/tiezi_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/text_color999"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tiezi_addresee_img"
+            android:id="@+id/tiezi_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/text_color999"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tiezi_ding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tiezi_pinglun"
+            android:drawableLeft="@drawable/zan"
+            android:drawablePadding="8dp"
+            android:paddingLeft="20dp"
+            android:text="111"
+            android:textColor="@color/text_color666"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tiezi_pinglun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/tiezi_ding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/zan"
-                android:drawablePadding="8dp"
-                android:paddingLeft="20dp"
-                android:text="111"
-                android:textColor="@color/text_color999"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tiezi_pinglun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:drawableLeft="@drawable/huihu"
-                android:drawablePadding="8dp"
-                android:text="111"
-                android:textColor="@color/text_color999"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </FrameLayout>
+            android:drawableLeft="@drawable/huihu"
+            android:drawablePadding="5dp"
+            android:text="111"
+            android:textColor="@color/text_color666"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <View
+        android:id="@+id/tiezi_line"
         android:layout_width="fill_parent"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
+        android:layout_below="@+id/tiezi_address_lay"
         android:background="#e2e2e2" />
 
-</LinearLayout>
+</RelativeLayout>

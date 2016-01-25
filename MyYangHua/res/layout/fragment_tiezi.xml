@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tieziList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/tieziList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/whilt"
-        android:divider="@null"
-        android:headerDividersEnabled="true"
-        android:listSelector="@null"
-        android:scrollbars="none"
-        ptr:ptrDrawable="@drawable/jiazai_img"
-        ptr:ptrHeaderTextColor="@color/text_color999" />
-
-</LinearLayout>
+    android:background="@color/whilt"
+    android:divider="@null"
+    android:headerDividersEnabled="true"
+    android:listSelector="@null"
+    android:scrollbars="none"
+    ptr:ptrDrawable="@drawable/jiazai_img"
+    ptr:ptrHeaderTextColor="@color/text_color999" />

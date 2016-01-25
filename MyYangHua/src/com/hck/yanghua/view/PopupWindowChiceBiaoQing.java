@@ -28,6 +28,7 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.SimpleAdapter;
 
 import com.hck.yanghua.R;
+import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyTools;
 
 public class PopupWindowChiceBiaoQing {
@@ -50,8 +51,15 @@ public class PopupWindowChiceBiaoQing {
 				R.layout.pop_chice_biaoqing, null);
 		this.getBiaoQing = getBiaoQing;
 		initView(pView, context);
-		popupWindow = new PopupWindow(pView, MyTools.getScreenWidth(context),
-				400);
+		int Width = MyTools.getScreenWidth(context);
+		int Height = MyTools.getScreenHeight(context);
+		LogUtil.D("hhh: "+Height);
+		if (Height > 800) {
+			Height = Height / 3 - 15;
+		} else {
+			Height = Height / 3;
+		}
+		popupWindow = new PopupWindow(pView, Width, Height);
 		popupWindow.setFocusable(true);
 		popupWindow.setBackgroundDrawable(new PaintDrawable());
 		popupWindow.setOutsideTouchable(true);

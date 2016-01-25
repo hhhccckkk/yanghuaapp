@@ -1,5 +1,6 @@
 package com.hck.yanghua.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -7,10 +8,12 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hck.yanghua.R;
@@ -21,9 +24,7 @@ import com.hck.yanghua.util.GetImageUtil;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class TieZiAdapter extends BaseAdapter {
 	public static final int JING_HUA = 1;
@@ -31,10 +32,18 @@ public class TieZiAdapter extends BaseAdapter {
 	public static final int TUIJIAN = 1;
 	public List<TieZiBean> tieZiBeans;
 	private Context context;
-
-	public TieZiAdapter(Context context, List<TieZiBean> tieZiBeans) {
+	private OnTouXiangCliceListener oCliceListener;
+    public interface OnTouXiangCliceListener
+    {
+    	void getUserId(String uid);
+    }
+	public TieZiAdapter(Context context, List<TieZiBean> tieZiBeans,OnTouXiangCliceListener onTouXiangCliceListener) {
 		this.tieZiBeans = tieZiBeans;
+		if (this.tieZiBeans==null) {
+			this.tieZiBeans=new ArrayList<>();
+		}
 		this.context = context;
+		this.oCliceListener=onTouXiangCliceListener;
 	}
 
 	@Override
@@ -85,8 +94,8 @@ public class TieZiAdapter extends BaseAdapter {
 					.findViewById(R.id.tiezi_jing);
 			viewHolder.tuijianTextView = (TextView) convertView
 					.findViewById(R.id.tiezi_tuijian);
-			viewHolder.addressLayout = (LinearLayout) convertView
-					.findViewById(R.id.tiezi_address_lay);
+			viewHolder.addressLayout = (RelativeLayout) convertView
+				.findViewById(R.id.tiezi_address_lay);
 			viewHolder.addressTextView = (TextView) convertView
 					.findViewById(R.id.tiezi_address);
 			viewHolder.timeTextView = (TextView) convertView
@@ -105,9 +114,8 @@ public class TieZiAdapter extends BaseAdapter {
 		viewHolder.fensiTextView.setText("丨粉丝:" + tieZiBean.getFensi());
 		if (!TextUtils.isEmpty(tieZiBean.getAddress())) {
 			viewHolder.addressTextView.setText(tieZiBean.getAddress());
-			viewHolder.addressLayout.setVisibility(View.VISIBLE);
 		} else {
-			viewHolder.addressLayout.setVisibility(View.GONE);
+			viewHolder.addressTextView.setText("");
 		}
 		if (tieZiBean.isNan()) {
 			viewHolder.xingbieImageView.setImageResource(R.drawable.nan);
@@ -131,31 +139,43 @@ public class TieZiAdapter extends BaseAdapter {
 		}
 		viewHolder.timeTextView.setText(TimeUtil.forTime(tieZiBean
 				.getHuifuTiem()));
-		String tupian1 = tieZiBean.getTupian1();
-		String tupian2 = tieZiBean.getTupian2();
-		if (!TextUtils.isEmpty(tupian1)) {
+		String tupian6 = tieZiBean.getTupian6();
+		String tupian7= tieZiBean.getTupian7();
+		if (!TextUtils.isEmpty(tupian6)) {
 			viewHolder.tupianImageView.setVisibility(View.VISIBLE);
 			viewHolder.layout.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(tieZiBean.getTupian1(),
+			GetImageUtil.showImageXiaoTu(tupian6,
 					viewHolder.tupianImageView);
 		} else {
 			viewHolder.layout.setVisibility(View.GONE);
 		}
-		if (!TextUtils.isEmpty(tupian2)) {
+		if (!TextUtils.isEmpty(tupian7)) {
 			viewHolder.layout.setVisibility(View.VISIBLE);
 			viewHolder.tupian2ImageView.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(tieZiBean.getTupian2(),
+			GetImageUtil.showImageXiaoTu(tupian7,
 					viewHolder.tupian2ImageView);
 		} else {
 			viewHolder.tupian2ImageView.setVisibility(View.INVISIBLE);
 		}
 		ImageLoader.getInstance().displayImage(tieZiBean.getTouxiang(),
 				viewHolder.touxiangImageView, MyTools.getoptions());
+		viewHolder.touxiangImageView.setTag(tieZiBean.getUserId());
+		onTouXiangClick(viewHolder.touxiangImageView);
 		return convertView;
 	}
-
+  private void onTouXiangClick(ImageView imageView){
+	  imageView.setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+           	String uid=(String) v.getTag();	
+           	oCliceListener.getUserId(uid);
+		}
+	});
+  }
 	static class ViewHolder {
-		LinearLayout layout, addressLayout;
+		LinearLayout layout;
+		RelativeLayout addressLayout;
 		ImageView touxiangImageView, tupianImageView, tupian2ImageView,
 				xingbieImageView;
 		TextView userNameTextView, contentTextView, dingTextView,

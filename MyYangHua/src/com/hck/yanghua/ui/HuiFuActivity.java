@@ -29,6 +29,7 @@ import com.hck.yanghua.util.GetImageUtil;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.TimeUtil;
+import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,12 +47,14 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 	private PopupWindowChiceBiaoQing pBiaoQing;
 	private EditText contentEditText;
 	private int pos;
+	private int type;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_huifu);
 		huiTieBean = (HuiTieBean) getIntent().getSerializableExtra("data");
+		type = getIntent().getIntExtra("type", -1);
 		pos = getIntent().getIntExtra("pos", pos);
 		initTitleView("回复");
 		centerTextView.setTextSize(14);
@@ -136,6 +139,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 			MyToast.showCustomerToast("评论不能为空");
 			return;
 		}
+		Pdialog.showDialog(this, "提交数据中...", false);
 		StringBuffer content = new StringBuffer("");
 		UserBean userBean = MyData.getData().getUserBean();
 		BDLocation bdLocation = MyData.bdLocation;
@@ -165,7 +169,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 							int code = response.getInt("code");
 							if (code == 0) {
 								MyToast.showCustomerToast("回复成功");
-								NewTieZiFragment.addPL(pos);
+								sendBroadcast(pos);
 								updateView(huiTieBean.getName(),
 										huiTieBean.getContent(), data);
 							} else {
@@ -181,6 +185,20 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 
 					}
 				});
+	}
+
+	private void sendBroadcast(int pos) {
+		Intent intent = new Intent();
+		if (type == Constant.NEW_TIE_ZI) {
+			intent.setAction(Constant.NEW_ADD_PL);
+		} else if (type == Constant.HOT_TIE_ZI) {
+			intent.setAction(Constant.HOT_ADD_PL);
+		} else if (type == Constant.SALE_TIE_ZI) {
+			intent.setAction(Constant.SALE_ADD_PL);
+		}
+		intent.putExtra("tag", 2);
+		intent.putExtra("pos", pos);
+		sendBroadcast(intent);
 	}
 
 	private void updateView(String userName, String yuanTie, String content) {

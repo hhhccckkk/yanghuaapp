@@ -1,23 +1,23 @@
 package com.hck.yanghua.ui;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.hck.yanghua.R;
-import com.hck.yanghua.fragment.NewTieZiFragment;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
+
+import com.hck.yanghua.R;
+import com.hck.yanghua.fragment.ChuShouTieZiFragment;
+import com.hck.yanghua.fragment.HotTieZiFragment;
+import com.hck.yanghua.fragment.NewTieZiFragment;
 
 public class HomeActivity extends BaseActivity implements OnClickListener {
 	private static final int NEW_TIEZI = 1;
 	private static final int HOT_TIEZI = 2;
 	private static final int SALE_TIEZI = 3;
 	private NewTieZiFragment tieZiFragment;
+	private HotTieZiFragment hotTieZiFragment;
+	private ChuShouTieZiFragment chuShouTieZiFragment;
 	private Fragment mFragment;
 
 	@Override
@@ -38,6 +38,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 
 	private void initFragment() {
 		tieZiFragment = new NewTieZiFragment();
+		hotTieZiFragment=new HotTieZiFragment();
+		chuShouTieZiFragment=new ChuShouTieZiFragment();
 	}
 
 	private void initTitle() {
@@ -51,7 +53,11 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 		centerTextView.setOnClickListener(this);
 		rightTextView.setOnClickListener(this);
 	}
-
+   private void changeFragment(Fragment fragment){
+	   getSupportFragmentManager().beginTransaction()
+		.replace(R.id.home_content, fragment).commit();
+        mFragment = fragment;
+   }
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -80,6 +86,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 			rightTextView.setTextColor(getResources().getColor(R.color.whilt));
 			centerTextView.setBackgroundResource(R.color.transparent);
 			rightTextView.setBackgroundResource(R.color.transparent);
+			changeFragment(tieZiFragment);
 			break;
 		case HOT_TIEZI:
 			leftTextView.setBackgroundResource(R.color.transparent);
@@ -89,6 +96,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 			rightTextView.setTextColor(getResources().getColor(R.color.whilt));
 			centerTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
 			rightTextView.setBackgroundResource(R.color.transparent);
+			changeFragment(hotTieZiFragment);
 			break;
 		case SALE_TIEZI:
 			leftTextView.setBackgroundResource(R.color.transparent);
@@ -98,10 +106,20 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 					R.color.red_anniu_bt_color));
 			centerTextView.setBackgroundResource(R.color.transparent);
 			rightTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
+			changeFragment(chuShouTieZiFragment);
 			break;
 		default:
 			break;
 		}
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && !MainActivity.mSlidingMenu.isMenuShowing()) {
+			alertExitD();
+			return false;
+		}
+		
+		return true;
 	}
 
 }

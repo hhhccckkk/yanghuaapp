@@ -34,6 +34,7 @@ import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
+import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupChoicePicter;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
@@ -52,11 +53,12 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 	private ArrayList<String> imagePaths = new ArrayList<>();
 	ArrayList<String> listfile = new ArrayList<String>();
 	public static Activity fatieActivity;
-    private int type=0;
+	private int type = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		type=getIntent().getIntExtra("type", 1);
+		type = getIntent().getIntExtra("type", 1); // type 1,一般帖子，2出售帖子
 		fatieActivity = this;
 		setContentView(R.layout.activity_fatie);
 		initTitle();
@@ -91,9 +93,11 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 			MyToast.showCustomerToast("内容不能超过600个文字");
 			return;
 		}
+		content=content.trim();
+		Pdialog.showDialog(this, "提交中...", false);
 		long uid = MyData.getData().getUserId();
 		data.append("uid=" + uid).append("&content=" + content);
-		data.append("&type="+type);
+		data.append("&type=" + type);
 		if (MyData.bdLocation != null) {
 			data.append("&address=" + MyData.bdLocation.getCity()
 					+ MyData.bdLocation.getDistrict()
@@ -154,8 +158,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 							int code = response.getInt("code");
 							if (code == Request.REQUEST_SUCCESS) {
 								MyToast.showCustomerToast("发帖成功");
-								MyPreferences.saveBoolean(
-										Constant.KEY_ISFATIEOK, true);
+								sendBroadcast();
 								finish();
 							} else {
 								MyToast.showCustomerToast("发帖失败");
@@ -169,10 +172,22 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 					public void onFinish(String url) {
 						super.onFinish(url);
 						LogUtil.D("onFinish: " + url);
+						Pdialog.hiddenDialog();
 
 					}
 				});
 
+	}
+
+	private void sendBroadcast() {
+		Intent intent = new Intent();
+		if (type == 1) {
+			intent.setAction(Constant.UPDATE_HOME_TIEZI_DATA);
+		} else {
+			intent.setAction(Constant.UPDATE_SALE_TIEZI_DATA);
+		}
+		intent.putExtra("tag", 3);
+		sendBroadcast(intent);
 	}
 
 	// 获取一个路径，保存拍照后获取的照片

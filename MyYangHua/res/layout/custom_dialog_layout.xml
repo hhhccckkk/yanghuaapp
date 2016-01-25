@@ -5,64 +5,87 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@drawable/popup_titlebar_bg"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:textColor="@color/gray"
-        android:textSize="18sp"
-        tool:text="标题" />
-
-    <RelativeLayout
-        android:id="@+id/content_view"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/whilt" >
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/d_shap"
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:textColor="@color/text_color333"
+            android:textSize="18sp"
+            tool:text="标题" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
+
+        <RelativeLayout
+            android:id="@+id/content_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="16dp"
-            android:textColor="@color/black"
-            android:textIsSelectable="false"
-            android:textSize="18sp"
-            tool:text="消息内容" />
-    </RelativeLayout>
+            android:background="@color/whilt" >
 
-    <LinearLayout
-        android:id="@+id/llButtonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:visibility="visible" >
+            <TextView
+                android:gravity="center"
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="16dp"
+                android:textColor="@color/text_color333"
+                android:textSize="14sp"
+                tool:text="消息内容" />
+        </RelativeLayout>
 
-        
-        <TextView
-            android:id="@+id/left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/popup_btn_left_selector"
-            android:gravity="center"
-            android:text="退出"
-            android:textColor="@color/gray" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_color" />
 
-        <TextView
-            android:id="@+id/right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/popup_btn_right_selector"
-            android:gravity="center"
-            android:text="确定"
-            android:textColor="#ff0000" />
+        <LinearLayout
+            android:id="@+id/llButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alert_left_selector"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/gray" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="fill_parent"
+                android:background="@color/line_color" />
+
+            <TextView
+                android:id="@+id/right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alert_right_selector"
+                android:gravity="center"
+                android:text="好评"
+                android:textColor="@color/red_anniu_bt_press" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

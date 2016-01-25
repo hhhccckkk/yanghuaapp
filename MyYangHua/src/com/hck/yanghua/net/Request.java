@@ -1,5 +1,7 @@
 package com.hck.yanghua.net;
 
+import android.R.bool;
+
 import com.hck.httpserver.HCKHttpClient;
 import com.hck.httpserver.HCKHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
@@ -35,6 +37,19 @@ public class Request {
 			client.get(Constant.MAINHOST + method, handler);
 		} else {
 			client.get(Constant.MAINHOST + method, params, handler);
+		}
+
+	}
+	private static void requestGet(String method, RequestParams params,
+			HCKHttpResponseHandler handler,boolean isNeedUserId) {
+		if (params == null) {
+			client.get(Constant.MAINHOST + method, handler);
+		} else {
+			UserBean userBean = MyData.getData().getUserBean();
+			if (isNeedUserId) {
+				params.put("uid", userBean.getUid() + "");
+			}
+			client.post(Constant.MAINHOST + method, params, handler);
 		}
 
 	}
@@ -102,5 +117,34 @@ public class Request {
 			HCKHttpResponseHandler handler) {
 		requestGet(method, params, handler);
 	}
+	
+	// 获取热帖
+		public static void getHotTieZi(String method, RequestParams params,
+				HCKHttpResponseHandler handler) {
+			requestGet(method, params, handler);
+		}
+		
+		//获取回复信息
+		public static void getHuiFuMsg(String method, RequestParams params,
+				HCKHttpResponseHandler handler) {
+			requestGet(method, params, handler,true);
+		}
+		//获取用户信息
+		public static void getUserInfoByStId(String method, RequestParams params,
+				HCKHttpResponseHandler handler){
+			client.get(Constant.MAINHOST + method, params,handler);
+			
+		}
+		//增加好友
+		public static void addFriend(String method, RequestParams params,
+				HCKHttpResponseHandler handler){
+			requestPost(Constant.METHOD_ADDFRIEND, true, params, handler);
+		}
+		
+		//获取好友
+		public static void getFriends(RequestParams params,
+				HCKHttpResponseHandler handler){
+			requestGet(Constant.METHOD_GETFRIEND, params, handler, true);
+		}
 
 }

@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.easeui.controller.EaseUI;
 import com.hck.yanghua.R;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.location.MyLocation;
@@ -17,16 +20,16 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-
-
 
 public class MyApplication extends Application {
 	public static Context context;
-    private static final int memoryCacheSize=1024*1024*5;
+	private static final int memoryCacheSize = 1024 * 1024 * 5;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		EaseUI.getInstance().init(this);
+		EMChat.getInstance().init(this);
 		// B.a(HCK());
 		getLocation();
 		LogUtil.isPrintLog = true;
@@ -52,8 +55,7 @@ public class MyApplication extends Application {
 				.threadPriority(Thread.NORM_PRIORITY - 2)
 				.memoryCache(new WeakMemoryCache())
 				.memoryCacheSize(memoryCacheSize)
-				.discCacheSize(50 * 1024 * 1024)
-				.discCacheFileCount(100)
+				.discCacheSize(50 * 1024 * 1024).discCacheFileCount(100)
 				.defaultDisplayImageOptions(options)
 				.denyCacheImageMultipleSizesInMemory()
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
@@ -62,12 +64,13 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().init(config2);
 
 	}
+
 	private void getLocation() {
 		MyLocation.startLocation(this, new BDLocationListener() {
 
 			@Override
 			public void onReceiveLocation(BDLocation arg0) {
-				MyData.bdLocation=arg0;
+				MyData.bdLocation = arg0;
 			}
 		});
 	}
