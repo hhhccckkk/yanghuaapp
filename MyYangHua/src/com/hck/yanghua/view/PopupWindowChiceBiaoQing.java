@@ -53,7 +53,6 @@ public class PopupWindowChiceBiaoQing {
 		initView(pView, context);
 		int Width = MyTools.getScreenWidth(context);
 		int Height = MyTools.getScreenHeight(context);
-		LogUtil.D("hhh: "+Height);
 		if (Height > 800) {
 			Height = Height / 3 - 15;
 		} else {

@@ -40,8 +40,18 @@ public class HuiTieBean implements Serializable {
 	@JsonProperty("yuanTie")
     private String yuantie;
 	@JsonProperty("huifuUserName")
-    private String huifuUserName;
+    private String huifuUserName;   
+	@JsonProperty("userIdString")
+    private String userIdString;
     
+	public String getUserIdString() {
+		return userIdString;
+	}
+
+	public void setUserIdString(String userIdString) {
+		this.userIdString = userIdString;
+	}
+
 	public String getHuifuUserName() {
 		return huifuUserName;
 	}

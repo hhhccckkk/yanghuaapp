@@ -3,6 +3,7 @@ package com.hck.yanghua.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,6 +64,16 @@ public class UserActivity extends BaseActivity {
 	public void showMyFriend(View view) {
 		startActivity(new Intent(this, FriendActivity.class));
 
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && !MainActivity.mSlidingMenu.isMenuShowing()) {
+			alertExitD();
+			return false;
+		}
+		
+		return true;
 	}
 
 }

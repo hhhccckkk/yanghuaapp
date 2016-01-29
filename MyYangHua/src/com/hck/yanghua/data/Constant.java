@@ -49,6 +49,8 @@ public class Constant {
 	public static final int NEW_TIE_ZI = 1;
 	public static final int HOT_TIE_ZI = 2;
 	public static final int SALE_TIE_ZI = 3;
+	
+	public static final int TYPE_ZAN=10;
 
 	public static String zhengze = "hck0[0-9]{2}|hck10[0-7]";
 	// 获取版本信息
@@ -96,4 +98,25 @@ public class Constant {
 	
 	//获取附近的人
 	public static final String METHOD_GET_NEAR_USER="getNearUsers";
+	
+	//获取活动信息
+	public static final String METHOD_GET_HUODONG="getHuoDongs";
+	
+	//获取活动url
+	public static final String METHOD_GET_HUO_DONG_URL="getHuoDongUrl";
+	
+	//获取兑换url
+	public static final String METHOD_GET_DUI_HUAN="getDuiHuanUrl";
+	
+	//增加关注
+	public static final String METHOD_ADD_GUANZHU="addGuanZhu";
+	
+	//获取关注ids
+	public static final String  METHOD_GET_GUANZHU_IDS="getGuanZhuId";
+	
+	//取消关注
+	public static final String  METHOD_DELETE_GUANZHU="deleteGuanZhu";
+	
+	//获取msg size
+	public static final String METHOD_GET_MSG_SIZE="getMsgSize";
 }

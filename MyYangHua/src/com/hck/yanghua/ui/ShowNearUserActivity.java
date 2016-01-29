@@ -116,7 +116,7 @@ public class ShowNearUserActivity extends BaseTitleActivity {
 					intent.setClass(ShowNearUserActivity.this,
 							ShowOneUserActivity.class);
 					intent.putExtra("uid", userData.getUserBeans().get(position)
-							.getUserId());
+							.getUid());
 					startActivity(intent);
 				} catch (Exception e) {
 				}

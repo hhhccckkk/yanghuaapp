@@ -15,7 +15,8 @@ public class MyData {
 	private UserBean userBean;
 	public static BDLocation bdLocation;
 	private List<FriendBean> friendBeans;
-
+	public static int gz;
+	public static int tz;
 	public List<FriendBean> getFriendBeans() {
 		if (friendBeans == null) {
 			String friendString = MyPreferences.getString("friend", null);
@@ -31,6 +32,8 @@ public class MyData {
 		}
 		return friendBeans;
 	}
+
+
 
 	public void setFriendBeans(List<FriendBean> friendBeans) {
 		this.friendBeans = friendBeans;

@@ -1,5 +1,9 @@
 package com.hck.yanghua.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -21,6 +25,7 @@ import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.data.GuanZhuData;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.JsonUtils;
@@ -37,25 +42,32 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			guanzhuTextView, addressTextView;
 	private Button liaotianButton;
 	private UserBean userBean;
-	private String uid;
 	private Button guanzhuButton;
+	private long uid;
+	private GuanZhuData guanZhuData;
+	private long gid;
+	private TextView fensiTextViewTitle, guanzhuTextViewTitle,
+			dongtaiTextViewTitle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_one_user);
 		userBean = new UserBean();
-		uid = getIntent().getStringExtra("uid");
+		uid = getIntent().getLongExtra("uid", -1);
+		LogUtil.D("uid: " + uid);
 		initTitleView("用户信息");
 		initView();
 		UserBean myDataBean = MyData.getData().getUserBean();
-		if (myDataBean.getUserId().equals(uid)) {
+		if (myDataBean.getUid() == uid) {
 			userBean = myDataBean;
 			liaotianButton.setVisibility(View.GONE);
 			guanzhuButton.setVisibility(View.GONE);
 			updateView();
+			initTitleLab("我");
 		} else {
 			getUserInfo();
+			getGuanZhu();
 		}
 
 	}
@@ -67,18 +79,24 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			userNameTextView.setText(userBean.getName());
 			fensiTextView.setText(userBean.getFensi() + "");
 			guanzhuTextView.setText(userBean.getGuanzhu() + "");
-			LogUtil.D("性别: " + userBean.getXingbie());
 			if (userBean.getXingbie() == 1) {
 				xingbieImageView.setImageResource(R.drawable.nan);
+				initTitleLab("他");
 			} else {
 				xingbieImageView.setImageResource(R.drawable.nv);
+				initTitleLab("她");
 			}
 			addressTextView.setText(userBean.getAddress());
 			if (!TextUtils.isEmpty(userBean.getAihao())) {
 				qianmingTextView.setText(userBean.getAihao());
 			}
-
 		}
+	}
+
+	private void initTitleLab(String title) {
+		fensiTextViewTitle.setText(title + "的粉丝");
+		guanzhuTextViewTitle.setText(title + "的关注");
+		dongtaiTextViewTitle.setText(title + "的动态");
 	}
 
 	private void initView() {
@@ -91,7 +109,10 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 		guanzhuTextView = (TextView) findViewById(R.id.one_user_guanzhu);
 		addressTextView = (TextView) findViewById(R.id.one_user_address);
 		guanzhuButton = (Button) findViewById(R.id.show_one_user_guanzhu);
-
+		fensiTextViewTitle = (TextView) findViewById(R.id.show_user_fensi_text);
+		guanzhuTextViewTitle = (TextView) findViewById(R.id.show_user_guanzhu_text);
+		dongtaiTextViewTitle = (TextView) findViewById(R.id.show_user_dongtai_text);
+		guanzhuButton.setOnClickListener(this);
 		liaotianButton.setOnClickListener(this);
 	}
 
@@ -111,18 +132,131 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			}
 
 			break;
+		case R.id.show_one_user_guanzhu:
+			String textString = guanzhuButton.getText().toString();
+			if ("关注".equals(textString)) {
+				addGuanZhu();
+			} else {
+				deleteGuanZhu();
 
+			}
+			break;
 		default:
 			break;
 		}
 	}
 
+	private void deleteGuanZhu() {
+		params = new RequestParams();
+		params.put("gid", gid + "");
+		params.put("buid", userBean.getUid() + "");
+		params.put("uid", MyData.getData().getUserId() + "");
+		Request.deleteGuanZhu(params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				LogUtil.D("onFailure: " + error + content);
+				MyToast.showCustomerToast("取消关注失败");
+			}
+
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				LogUtil.D("onSuccess: " + response.toString());
+				guanzhuButton.setText("关注");
+			}
+
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+			}
+		});
+	}
+
+	private void getGuanZhu() {
+		Pdialog.showLoading(this, false);
+		params = new RequestParams();
+		Request.getGuanZhuIds(params, new JsonHttpResponseHandler() {
+			public void onFinish(String url) {
+				Pdialog.hiddenDialog();
+			};
+
+			public void onFailure(Throwable error, String content) {
+				LogUtil.D("onFailure: " + error + content);
+				guanzhuButton.setVisibility(View.GONE);
+			};
+
+			public void onSuccess(int statusCode, JSONObject response) {
+				LogUtil.D("onSuccess: " + response);
+				try {
+					guanZhuData = JsonUtils.parse(response.toString(),
+							GuanZhuData.class);
+					updateGuanZhuBtn();
+				} catch (Exception e) {
+				}
+
+			};
+		});
+	}
+
+	private void updateGuanZhuBtn() {
+		if (guanZhuData == null || guanZhuData.getBeans() == null) {
+			guanzhuButton.setText("关注");
+			return;
+		}
+		for (int i = 0; i < guanZhuData.getBeans().size(); i++) {
+			if (guanZhuData.getBeans().get(i).getBuid() == uid) {
+				gid = guanZhuData.getBeans().get(i).getGid();
+				guanzhuButton.setText("取消关注");
+				return;
+			} else {
+				guanzhuButton.setText("关注");
+			}
+		}
+	}
+
+	private void addGuanZhu() {
+		Pdialog.showDialog(this, "处理中...", true);
+		params = new RequestParams();
+		params.put("buid", userBean.getUid() + "");
+		Request.addGuanZhu(params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				LogUtil.D("onSuccess: " + response.toString());
+				try {
+					int code = response.getInt("code");
+					if (code == 0) {
+						gid = response.getLong("gid");
+						guanzhuButton.setText("取消关注");
+					} else {
+						MyToast.showCustomerToast("网络异常 关注失败");
+					}
+				} catch (Exception e) {
+				}
+				Pdialog.hiddenDialog();
+			}
+
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				LogUtil.D("onFailure: " + error + content);
+				MyToast.showCustomerToast("网络异常 关注失败");
+			}
+		});
+	}
+
 	private void getUserInfo() {
 		Pdialog.showDialog(this, "正在获取用户信息", false);
 		params = new RequestParams();
-		params.put("uid", uid);
-		Request.getUserInfoByStId(Constant.METHOD_GET_USER_BY_STRING_ID,
-				params, new JsonHttpResponseHandler() {
+		params.put("uid", uid + "");
+		Request.getUserData(Constant.METHOD_GET_USER_DATA, false, params,
+				new JsonHttpResponseHandler() {
 					@Override
 					public void onFinish(String url) {
 						super.onFinish(url);
@@ -152,33 +286,4 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 				});
 	}
 
-	private void addFriend() {
-		Pdialog.showDialog(this, "处理中...", true);
-		new Thread() {
-			public void run() {
-				try {
-					LogUtil.D("getUserId: " + uid);
-					EMContactManager.getInstance().addContact(uid, "加个好友呗");
-					runOnUiThread(new Runnable() {
-						public void run() {
-							Pdialog.hiddenDialog();
-							Toast.makeText(getApplicationContext(),
-									"加好友请求发送成功", 4).show();
-						}
-					});
-				} catch (EaseMobException e) {
-					LogUtil.D("EaseMobException: " + e.toString());
-					runOnUiThread(new Runnable() {
-						public void run() {
-							Pdialog.hiddenDialog();
-							Toast.makeText(getApplicationContext(), "加好友请求失败",
-									4).show();
-						}
-					});
-
-				}
-			};
-		}.start();
-
-	}
 }

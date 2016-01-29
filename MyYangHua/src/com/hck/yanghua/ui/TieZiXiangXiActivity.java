@@ -1,18 +1,15 @@
 package com.hck.yanghua.ui;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,17 +22,18 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.EditText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.google.android.gms.internal.el;
 import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
@@ -48,7 +46,6 @@ import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.HuiTieData;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.data.ZanData;
-import com.hck.yanghua.fragment.NewTieZiFragment;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.GetImageUtil;
@@ -57,6 +54,8 @@ import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;
+import com.hck.yanghua.view.AlertDialog;
+import com.hck.yanghua.view.MyEditextView;
 import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupChoicePicter;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
@@ -71,6 +70,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	public static final int TYPE_HUI_FU_LOU_ZHU = 1; // 回复楼主
 	public static final int TYPE_HUI_FU_USER = 2; // 回复用户
 	private static final String HAS_IMAGE = "1";
+	private static final int TYPE_ZAN = 10; // 赞
 	private LinearLayout layout, addressLayout;
 	private ImageView touxiangImageView, xingbieImageView;
 	private TextView userNameTextView, contentTextView, timeTextView,
@@ -81,7 +81,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private ListView pListView;
 	private View convertView;
 	private HuiFuAdapter adapter;
-	private EditText editText;
+	private MyEditextView editText;
 	private View view = null;
 	ImageView imageView = null;
 	private ArrayList<String> imageStrings = new ArrayList<>();
@@ -101,6 +101,10 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private HuiTieData huiTieData = new HuiTieData();
 	private int pos;
 	private int type; // 1一般帖子 2出售帖子
+	private boolean isUpdateing;
+	private boolean isDataOver;
+	private View foodView;
+	private ImageView footerImageView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +125,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	}
 
 	private void getHuiTie() {
+		Pdialog.showDialog(this, "加载数据中..", false);
 		params = new RequestParams();
 		params.put("tid", tId + "");
 		params.put("page", page + "");
@@ -129,7 +134,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					@Override
 					public void onFailure(Throwable error, String content) {
 						LogUtil.D("onFailure: " + content);
-						updateView();
+						MyToast.showCustomerToast("获取评论失败");
 					}
 
 					@Override
@@ -137,20 +142,27 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 						super.onSuccess(statusCode, response);
 						LogUtil.D("onSuccess: getHuiTie" + response.toString());
 						try {
-							huiTieData = JsonUtils.parse(response.toString(),
-									HuiTieData.class);
-							LogUtil.D("ddd: "
-									+ huiTieData.getHuiTieBeans().size());
+							HuiTieData huiTieData1 = JsonUtils.parse(
+									response.toString(), HuiTieData.class);
+							if (huiTieData1 != null
+									&& huiTieData1.getHuiTieBeans() != null) {
+								huiTieData = huiTieData1;
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
-							LogUtil.D("ExceptionException: " + e.toString());
+							pListView.removeFooterView(foodView);
+							isDataOver = true;
 						}
 						updateView();
+
 					}
 
 					@Override
 					public void onFinish(String url) {
 						super.onFinish(url);
+						isUpdateing = false;
+						foodView.setVisibility(View.GONE);
+						Pdialog.hiddenDialog();
 					}
 				});
 	}
@@ -164,6 +176,8 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + content);
+						zanImageView.setEnabled(false);
+						
 					}
 
 					@Override
@@ -176,6 +190,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 						} catch (Exception e) {
 						}
+						zanImageView.setEnabled(true);
 						updateZan();
 
 					}
@@ -187,26 +202,34 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				});
 
 	}
-
+    
 	private void updateZan() {
 		if (zanData == null || zanData.getZanBean() == null) {
 			return;
 		}
+		UserBean userBean=MyData.getData().getUserBean();
 		zanLayout.setVisibility(View.VISIBLE);
 		ImageView imageView = null;
 		List<ZanBean> zanBean = zanData.getZanBean();
-		LayoutParams params = new LayoutParams(50, 50);
 		if (zanBean.size() > 0) {
 			zanSizeTextView.setText(zanBean.size() + "人赞过");
 			for (int i = 0; i < zanBean.size(); i++) {
-				if (i > 15) {
-					return;
+				if (userBean.getUid()==zanBean.get(i).getUid()) {
+					zanImageView.setEnabled(false);  //用户已赞过，则不能再赞
 				}
-				imageView = new ImageView(this);
-				imageView.setLayoutParams(params);
-				imageView.setPadding(15, 3, 0, 0);
-				GetImageUtil.showImage(zanBean.get(i).getImage(), imageView);
-				zanLayout.addView(imageView);
+				if (i > 15) {
+					continue;
+				}
+				View view = LayoutInflater.from(this).inflate(
+						R.layout.zan_img_item, null);
+				imageView = (ImageView) view.findViewById(R.id.zan_img);
+				imageView.setScaleType(ScaleType.FIT_XY);
+				ImageLoader.getInstance().displayImage(
+						zanBean.get(i).getImage(), imageView,
+						MyTools.getImageOptions(45));
+				imageView.setTag(zanData.getZanBean().get(i).getUid());
+				setOnClickTxListener(imageView);
+				zanLayout.addView(view);
 			}
 		} else {
 			zanLayout.setVisibility(View.GONE);
@@ -214,9 +237,26 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 	}
 
+	private void setOnClickTxListener(View view) {
+		view.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.putExtra("uid", (Long) v.getTag());
+				intent.setClass(TieZiXiangXiActivity.this,
+						ShowOneUserActivity.class);
+				startActivity(intent);
+			}
+		});
+	}
+
 	private void setListener() {
 		zanImageView.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * String yuantie=getStringData("yuantie"); long
+			 * beiZanUserId=getLongData("buid"); int type=getIntData("type");
+			 */
 			@Override
 			public void onClick(View v) {
 				try {
@@ -224,6 +264,9 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					params.put("id", tId + "");
 					params.put("img", MyData.getData().getUserBean()
 							.getTouxiang());
+					params.put("yuantie", tieZiBean.getContent());
+					params.put("buid", tieZiBean.getUid() + "");
+					params.put("type", Constant.TYPE_ZAN + "");
 					Request.addZan(Constant.METHOD_ADD_ZAN, params,
 							new JsonHttpResponseHandler() {
 								@Override
@@ -272,7 +315,34 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				return false;
 			}
 		});
+		pListView.setOnScrollListener(new OnScrollListener() {
 
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem + visibleItemCount == totalItemCount
+						&& !isUpdateing && totalItemCount >= 14 && !isDataOver) {
+					isUpdateing = true;
+					page++;
+					foodView.setVisibility(View.VISIBLE);
+					startAnimation();
+					getHuiTie();
+				}
+			}
+
+		});
+
+	}
+
+	private void startAnimation() {
+		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
+				TieZiXiangXiActivity.this, R.anim.loading_animation);
+		footerImageView.startAnimation(hyperspaceJumpAnimation);
 	}
 
 	private static final int GET_PHOTO = 1;
@@ -285,7 +355,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	// 弹出选择获取图片的pop
 	public void getPicter(View view, String path) {
 		PopupChoicePicter popupController = new PopupChoicePicter(this, path,
-				GET_PHOTO, GET_PICTER);
+				GET_PHOTO, GET_PICTER, 3);
 		popupController.checkPopupWindow();
 		popupController.getPopupWindow().setAnimationStyle(
 				R.style.popwin_anim_style);
@@ -299,7 +369,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			MyToast.showCustomerToast("最多添加5张图片哦");
 			return;
 		}
-
+		hideInput(view);
 		String path = getPath();
 		imagePath = path;
 		getPicter(view, path);
@@ -339,19 +409,17 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			}
 			bitmaps.add(photo);
 		} else if (requestCode == PINGLUN_OK) {
-			if (huiTieData.getHuiTieBeans().size() < 10) {
-				HuiTieBean huiTieBean = new HuiTieBean();
-				huiTieBean.setName(data.getStringExtra("name"));
-				huiTieBean.setYuantie(data.getStringExtra("yt"));
-				huiTieBean.setContent(data.getStringExtra("content"));
-				addHuiFu(huiTieBean);
-			}
+
+			HuiTieBean huiTieBean = new HuiTieBean();
+			huiTieBean.setName(data.getStringExtra("name"));
+			huiTieBean.setYuantie(data.getStringExtra("yt"));
+			huiTieBean.setContent(data.getStringExtra("content"));
+			addHuiFu(huiTieBean);
 
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	// 新增回复后，判断当前显示的回复数量书否大于10条，小于则显示刚添加的回复
 	private void addHuiFu(HuiTieBean huiTieBean1) {
 		try {
 			HuiTieBean huiTieBean = new HuiTieBean();
@@ -455,6 +523,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	// 弹出选择表情界面
 	public void showPopChiceImage(View view) {
 		if (pBiaoQing == null) {
+			hideInput(view);
 			pBiaoQing = new PopupWindowChiceBiaoQing();
 			pBiaoQing.showFaTieView(view, this, this);
 		}
@@ -480,11 +549,15 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private void initView() {
 		pListView = (ListView) findViewById(R.id.huifu_list_view);
 		findViewById(R.id.tiezi_xiangxi_hufu_btn).setOnClickListener(this);
-		editText = (EditText) findViewById(R.id.tiezi_huifu);
+		editText = (MyEditextView) findViewById(R.id.tiezi_huifu);
 		biaoqingLayout = (LinearLayout) findViewById(R.id.huifu_biaoqing_lay);
 		zanImageView = (ImageView) findViewById(R.id.huifu_zan);
+		zanImageView.setEnabled(false);
 		tupianLayout = (LinearLayout) findViewById(R.id.HuiTie_img);
 		tupianView = findViewById(R.id.huiFu_ScrollView);
+		foodView = LayoutInflater.from(this).inflate(R.layout.list_item_foot,
+				null);
+		footerImageView = (ImageView) foodView.findViewById(R.id.img);
 
 	}
 
@@ -635,10 +708,16 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 	private void updateView() {
 		pListView.addHeaderView(convertView);
+		pListView.addFooterView(foodView);
+		foodView.setVisibility(View.GONE);
 		if (adapter == null) {
 			adapter = new HuiFuAdapter(this, huiTieData.getHuiTieBeans());
 			pListView.setAdapter(adapter);
 		} else {
+			if (huiTieData != null && huiTieData.getHuiTieBeans() != null
+					&& !huiTieData.getHuiTieBeans().isEmpty()) {
+				adapter.updateView(huiTieData.getHuiTieBeans());
+			}
 		}
 
 	}
@@ -718,24 +797,22 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 						try {
 							int code = response.getInt("code");
 							if (code == 0) {
-								if (huiTieData.getHuiTieBeans() == null
-										|| huiTieData.getHuiTieBeans().size() < 10) {
-									HuiTieBean huiTieBean = new HuiTieBean();
-									huiTieBean.setContent(data);
-									if (imagePaths.size() > 0) {
-										huiTieBean.setImage1(imagePaths.get(0));
-									}
-									if (imagePaths.size() > 1) {
-										huiTieBean.setImage1(imagePaths.get(0));
-										huiTieBean.setIamge2(imagePaths.get(1));
-									}
-									if (imagePaths.size() > 2) {
-										huiTieBean.setImage1(imagePaths.get(0));
-										huiTieBean.setIamge2(imagePaths.get(1));
-										huiTieBean.setIamge3(imagePaths.get(2));
-									}
-									addHuiFu(huiTieBean);
+
+								HuiTieBean huiTieBean = new HuiTieBean();
+								huiTieBean.setContent(data);
+								if (imagePaths.size() > 0) {
+									huiTieBean.setImage1(imagePaths.get(0));
 								}
+								if (imagePaths.size() > 1) {
+									huiTieBean.setImage1(imagePaths.get(0));
+									huiTieBean.setIamge2(imagePaths.get(1));
+								}
+								if (imagePaths.size() > 2) {
+									huiTieBean.setImage1(imagePaths.get(0));
+									huiTieBean.setIamge2(imagePaths.get(1));
+									huiTieBean.setIamge3(imagePaths.get(2));
+								}
+								addHuiFu(huiTieBean);
 
 								MyToast.showCustomerToast("回复成功");
 								if (pos > 0) {
@@ -825,12 +902,49 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		hidenPop();
 	}
 
+	private HuiTieBean huiTieBean;
+
 	public void huiFu(HuiTieBean huiTieBean) {
+		this.huiTieBean = huiTieBean;
+		alertD();
+	}
+
+	private void startShowUserActivity() {
 		Intent intent = new Intent();
 		intent.putExtra("data", huiTieBean);
 		intent.setClass(this, HuiFuActivity.class);
 		intent.putExtra("type", type);
 		startActivity(intent);
+	}
+
+	public void alertD() {
+		AlertDialog alertDialog = new AlertDialog(this);
+		alertDialog.setCancelable(true);
+		alertDialog.setCanceledOnTouchOutside(true);
+		alertDialog.showAlert("选择你的操作", "回复帖子", "开启聊天", "举报帖子");
+		alertDialog.setOnBottomListener(new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+
+		alertDialog.setOnTopListener(new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				startShowUserActivity();
+			}
+		});
+
+		alertDialog.setOnCenterListener(new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
 	}
 
 }

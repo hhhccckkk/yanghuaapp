@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.HuiTieBean;
 import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.ui.ShowOneUserActivity;
 import com.hck.yanghua.ui.TieZiXiangXiActivity;
 import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.GetImageUtil;
@@ -91,6 +93,7 @@ public class HuiFuAdapter extends BaseAdapter {
 			viewHolder.huiTieLayout = (LinearLayout) convertView
 					.findViewById(R.id.huitie_huifu_lay);
 			setListener(viewHolder.huifuImageView);
+			viewHolder.headerLayout=(LinearLayout) convertView.findViewById(R.id.huitie_header);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -146,9 +149,13 @@ public class HuiFuAdapter extends BaseAdapter {
 		}
 		viewHolder.tiemTextView.setText("丨"
 				+ TimeUtil.forTime(huiTieBean.getTime()));
-		viewHolder.fensiTextView.setText("丨粉丝" + huiTieBean.getFensi());
+		viewHolder.fensiTextView.setText("粉丝" + huiTieBean.getFensi());
 		ImageLoader.getInstance().displayImage(huiTieBean.getTouxiang(),
 				viewHolder.toxuaingImageView, MyTools.getoptions());
+		viewHolder.toxuaingImageView.setTag(huiTieBean.getUid());
+		setShowUserActivity(viewHolder.toxuaingImageView);
+		viewHolder.headerLayout.setTag(huiTieBean.getUid());
+		setShowUserActivity(viewHolder.headerLayout);
 		return convertView;
 	}
 
@@ -158,6 +165,7 @@ public class HuiFuAdapter extends BaseAdapter {
 				addressTextView, fensiTextView, yuantieTextView, userTextView;
 		ImageView imageView1, imageView2, imageView3;
 		LinearLayout huiTieLayout;
+		LinearLayout headerLayout;
 	}
 
 	private void setListener(final ImageView imageView) {
@@ -170,14 +178,25 @@ public class HuiFuAdapter extends BaseAdapter {
 			}
 		});
 	}
-
+   private void setShowUserActivity(View view){
+	   view.setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			Intent intent =new Intent();
+			intent.putExtra("uid", (Long)v.getTag());
+			intent.setClass(context, ShowOneUserActivity.class);
+              context.startActivity(intent);			
+		}
+	});
+   }
 	public void updateView(List<HuiTieBean> huiTieBeans) {
 		this.huiTieBeans.addAll(huiTieBeans);
 		this.notifyDataSetChanged();
 	}
 
 	public void updateView(HuiTieBean huiTieBeans) {
-		this.huiTieBeans.add(huiTieBeans);
+		this.huiTieBeans.add(0,huiTieBeans);
 		this.notifyDataSetChanged();
 	}
 

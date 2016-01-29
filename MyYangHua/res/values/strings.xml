@@ -2,16 +2,14 @@
 <resources>
 
     <string name="app_name">养花社区</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="update">软件更新说明!!!</string>
     <string name="cebian_shouye">首页</string>
     <string name="cebian_fujin">附近的人</string>
-    <string name="cebian_shop">花卉商铺</string>
-    <string name="cebian_choujiang">每天抽奖</string>
-    <string name="cebian_tuijian">应用推荐</string>
+    <string name="cebian_shop">大棚商铺</string>
+    <string name="cebian_choujiang">兑换商城</string>
     <string name="cebian_about">关于软件</string>
     <string name="cebian_fankui">意见反馈</string>
+    <string name="cebian_jiqiren">小可机器人</string>
     <!-- 首页 -->
     <string name="home_title_new">最新</string>
     <string name="home_title_hot">热门</string>
@@ -40,15 +38,15 @@
     <string name="baike_gongneng">功能植物</string>
     <string name="baike_liaoli">料理植物</string>
     <string name="baike_shucai">蔬菜植物</string>
-    
-     <string name="release_to_refresh">松开可刷新…</string>
+    <string name="release_to_refresh">松开可刷新…</string>
     <string name="is_refreshing">正在刷新中…</string>
     <string name="load_more">加载更多</string>
     <string name="is_loading">努力加载中...</string>
-    
+
     <!-- 消息 -->
     <string name="xiaoxi_liaotian">聊天</string>
-    <string name="xiaoxi_huifu">回复</string>
+    <string name="xiaoxi_guanzhu">关注</string>
     <string name="xiaoxi_xitong">通知</string>
+
 
 </resources>

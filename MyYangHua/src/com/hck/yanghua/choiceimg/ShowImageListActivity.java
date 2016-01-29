@@ -22,11 +22,12 @@ public class ShowImageListActivity extends BaseTitleActivity {
 	private ImageUtil util;
 	private ImgFileListAdapter listAdapter;
 	List<FileTraversal> locallist;
-
+    private int maxSize;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_imgae_list);
+		maxSize=getIntent().getIntExtra("size", 3);
 		initTitleView();
 		setListener();
 		getImageData();
@@ -67,6 +68,7 @@ public class ShowImageListActivity extends BaseTitleActivity {
 					int position, long id) {
 				Intent intent = new Intent(ShowImageListActivity.this,
 						ImgsActivity.class);
+				intent.putExtra("size", maxSize);
 				Bundle bundle = new Bundle();
 				bundle.putParcelable("data", locallist.get(position));
 				intent.putExtras(bundle);

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilt"
+    android:orientation="vertical" >
+
+   
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/huitie_lay"
+            android:layout_marginBottom="5dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:listSelector="@null"
+            android:transcriptMode="alwaysScroll" >
+        </ListView>
+
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/huitie_lay"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:background="#f1f1f1" >
+
+            <EditText
+                android:layout_toLeftOf="@+id/btn_send"
+                android:id="@+id/huihu_huifu"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/huifu_huise_shap"
+                android:paddingLeft="3dp"
+                android:textColor="@color/text_color666"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/huifu_huise_shap"
+                android:gravity="center"
+                android:text="发送"
+                android:textColor="#abaeb3"
+                android:textSize="14sp" />
+        </RelativeLayout>
+  
+
+</RelativeLayout>

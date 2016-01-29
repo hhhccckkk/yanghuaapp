@@ -244,7 +244,7 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 	}
 
 	@Override
-	public void getUserId(String uid) {
+	public void getUserId(Long uid) {
        startShowOneUserActivity(getActivity(), uid);
 	}
 

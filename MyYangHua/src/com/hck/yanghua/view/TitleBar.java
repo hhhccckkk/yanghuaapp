@@ -6,12 +6,14 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hck.yanghua.R;
 import com.hck.yanghua.ui.MainActivity;
+import com.hck.yanghua.util.MyTools;
 
 /**
  * 公用title.
@@ -22,6 +24,8 @@ public class TitleBar extends LinearLayout {
 	private TextView mLeftTextV; // 中间文本.
 	private TextView mRightTextV; // 中间文本.
 	private Context mContext;
+	private ImageView tongzhiImageView, guanzhuImageView;
+	private FrameLayout frameLayout;
 
 	public TitleBar(Context context) {
 		super(context);
@@ -46,6 +50,9 @@ public class TitleBar extends LinearLayout {
 		mCenterTextV = (TextView) findViewById(R.id.home_title_center);
 		mRightTextV = (TextView) findViewById(R.id.home_title_right);
 		mLeftTextV = (TextView) findViewById(R.id.home_title_left);
+		tongzhiImageView = (ImageView) findViewById(R.id.title_tongzhi_img);
+		guanzhuImageView = (ImageView) findViewById(R.id.title_guanzhu_img);
+		frameLayout = (FrameLayout) findViewById(R.id.title_right_fr);
 		setListener();
 	}
 
@@ -102,6 +109,31 @@ public class TitleBar extends LinearLayout {
 
 	public void setRightTextColor(int color) {
 		mRightTextV.setTextColor(color);
+	}
+
+
+	public void hidenTongZhiImg() {
+		tongzhiImageView.setVisibility(View.GONE);
+		tongzhiImageView.clearAnimation();
+	}
+
+	public void hidenGuanZhuImg() {
+		guanzhuImageView.setVisibility(View.GONE);
+		guanzhuImageView.clearAnimation();
+	}
+
+	public void showTongzhiImg() {
+		tongzhiImageView.setVisibility(View.VISIBLE);
+		MyTools.startAna(tongzhiImageView);
+	}
+
+	public void showGuanZhuImg() {
+		guanzhuImageView.setVisibility(View.VISIBLE);
+		MyTools.startAna(guanzhuImageView);
+	}
+
+	public void hiddenFra() {
+		frameLayout.setVisibility(View.GONE);
 	}
 
 }

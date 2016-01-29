@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilt"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/huodong_img"
+            android:layout_width="150dp"
+            android:layout_height="110dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:layout_marginRight="20dp"
+            android:id="@+id/huodong_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/huodong_img"
+            android:textColor="@color/text_color333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/huodong_jiantou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/right_jiantou"
+            android:textColor="@color/text_color666"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/line_color" />
+
+</LinearLayout>

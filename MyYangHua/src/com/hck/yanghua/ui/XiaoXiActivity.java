@@ -21,6 +21,7 @@ import com.hck.yanghua.fragment.HuiFuMsgFragment;
 import com.hck.yanghua.fragment.TongZhiMsgFragment;
 import com.hck.yanghua.liaotian.MainMsgReceiver;
 import com.hck.yanghua.liaotian.MainMsgReceiver.HasNewMsgGet;
+import com.hck.yanghua.util.MyPreferences;
 
 public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 		HasNewMsgGet {
@@ -30,7 +31,7 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 	private EaseConversationListFragment conversationListFragment;
 	private HuiFuMsgFragment huiFuMsgFragment;
 	private TongZhiMsgFragment xiTongMsgFragment;
-   
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,9 +41,21 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 		setListener();
 		MainMsgReceiver.getMainMsgReceiver(this).setHasNewMsgListener(this);
 		changeFragment(conversationListFragment);
+		showHongDian();
+
 	}
 
-	
+	private void showHongDian() {
+		boolean isNewTz = MyPreferences.getBoolean("tz", false);
+		boolean isNewGz = MyPreferences.getBoolean("gz", false);
+		if (isNewTz) {
+			mTitleBar.showTongzhiImg();
+
+		}
+		if (isNewGz) {
+			mTitleBar.showGuanZhuImg();
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -63,8 +76,9 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 
 	private void initTitle() {
 		leftTextView.setText(R.string.xiaoxi_liaotian);
-		centerTextView.setText(R.string.xiaoxi_huifu);
-		rightTextView.setText(R.string.xiaoxi_xitong);
+		centerTextView.setText(R.string.xiaoxi_xitong);
+		rightTextView.setText(R.string.xiaoxi_guanzhu);
+
 	}
 
 	private void setListener() {
@@ -122,9 +136,11 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 			break;
 		case R.id.home_title_center:
 			changeBg(HUIFU_MSG);
+			mTitleBar.hidenTongZhiImg();
 			break;
 		case R.id.home_title_right:
 			changeBg(XITONG_MSG);
+			mTitleBar.hidenGuanZhuImg();
 			break;
 		default:
 			break;
@@ -152,6 +168,8 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 			centerTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
 			rightTextView.setBackgroundResource(R.color.transparent);
 			changeFragment(huiFuMsgFragment);
+			MyPreferences.saveBoolean("tz",false);
+			MyPreferences.saveInt("tzSize", MyData.tz);
 			break;
 		case XITONG_MSG:
 			leftTextView.setBackgroundResource(R.color.transparent);
@@ -162,6 +180,7 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 			centerTextView.setBackgroundResource(R.color.transparent);
 			rightTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
 			changeFragment(xiTongMsgFragment);
+			MyPreferences.saveInt("gzSize", MyData.gz);
 			break;
 		default:
 			break;
@@ -178,16 +197,16 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 
 		return true;
 	}
-    
+
 	@Override
 	public void haseNewMsg() {
 		if (conversationListFragment != null) {
 			conversationListFragment.refresh();
 		}
 	}
-	
-	private void sendClearnMsgSizeBroadcast(){
-		Intent intent =new Intent();
+
+	private void sendClearnMsgSizeBroadcast() {
+		Intent intent = new Intent();
 		intent.setAction(Constant.CLEARN_NEW_MSG_SIZE);
 		sendBroadcast(intent);
 	}

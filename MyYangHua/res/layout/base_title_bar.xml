@@ -31,7 +31,7 @@
         android:maxWidth="200dp"
         android:singleLine="true"
         android:textColor="@color/whilt"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
     <Button
         android:visibility="gone"

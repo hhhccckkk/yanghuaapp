@@ -103,7 +103,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			params.put("jingdu", bdLocation.getLongitude() + "");
 			params.put("weidu", bdLocation.getLatitude() + "");
 		}
-		Request.getUserData(Constant.METHOD_GET_USER_DATA, params,
+		Request.getUserData(Constant.METHOD_GET_USER_DATA,true, params,
 				new JsonHttpResponseHandler() {
 					public void onFinish(String url) {
 

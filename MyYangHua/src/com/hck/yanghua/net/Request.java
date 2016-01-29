@@ -2,6 +2,7 @@ package com.hck.yanghua.net;
 
 import android.R.bool;
 
+import com.google.android.gms.internal.el;
 import com.hck.httpserver.HCKHttpClient;
 import com.hck.httpserver.HCKHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
@@ -40,8 +41,9 @@ public class Request {
 		}
 
 	}
+
 	private static void requestGet(String method, RequestParams params,
-			HCKHttpResponseHandler handler,boolean isNeedUserId) {
+			HCKHttpResponseHandler handler, boolean isNeedUserId) {
 		if (params == null) {
 			client.get(Constant.MAINHOST + method, handler);
 		} else {
@@ -74,10 +76,14 @@ public class Request {
 	}
 
 	// 获取用户信息
-	public static void getUserData(String method, RequestParams params,
-			HCKHttpResponseHandler handler) {
+	public static void getUserData(String method, Boolean isMy,
+			RequestParams params, HCKHttpResponseHandler handler) {
+		if (isMy) {
+			requestPost(method, true, params, handler);
+		} else {
+			requestPost(method, false, params, handler);
+		}
 
-		requestPost(method, true, params, handler);
 	}
 
 	// 添加帖子信息
@@ -117,45 +123,90 @@ public class Request {
 			HCKHttpResponseHandler handler) {
 		requestGet(method, params, handler);
 	}
-	
+
 	// 获取热帖
-		public static void getHotTieZi(String method, RequestParams params,
-				HCKHttpResponseHandler handler) {
-			requestGet(method, params, handler);
-		}
-		
-		//获取回复信息
-		public static void getHuiFuMsg(String method, RequestParams params,
-				HCKHttpResponseHandler handler) {
-			requestGet(method, params, handler,true);
-		}
-		//获取用户信息
-		public static void getUserInfoByStId(String method, RequestParams params,
-				HCKHttpResponseHandler handler){
-			client.get(Constant.MAINHOST + method, params,handler);
-			
-		}
-		//增加好友
-		public static void addFriend(String method, RequestParams params,
-				HCKHttpResponseHandler handler){
-			requestPost(Constant.METHOD_ADDFRIEND, true, params, handler);
-		}
-		
-		//获取好友
-		public static void getFriends(RequestParams params,
-				HCKHttpResponseHandler handler){
-			requestGet(Constant.METHOD_GETFRIEND, params, handler, true);
-		}
-		
-		//删除回复msg
-		public static void deleteHuiFuMsg(RequestParams params,
-				HCKHttpResponseHandler handler){
-			requestPost(Constant.METHOD_DELETE_HUIFU_MSG,false, params, handler);
-		}
-		
-		public static void getNearUser(RequestParams params,
-				HCKHttpResponseHandler handler){
-			requestGet(Constant.METHOD_GET_NEAR_USER, params, handler);
-		}
+	public static void getHotTieZi(String method, RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(method, params, handler);
+	}
+
+	// 获取回复信息
+	public static void getHuiFuMsg(String method, RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(method, params, handler, true);
+	}
+
+	// 获取用户信息
+	public static void getUserInfoByStId(String method, RequestParams params,
+			HCKHttpResponseHandler handler) {
+		client.get(Constant.MAINHOST + method, params, handler);
+
+	}
+
+	// 增加好友
+	public static void addFriend(String method, RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestPost(Constant.METHOD_ADDFRIEND, true, params, handler);
+	}
+
+	// 获取好友
+	public static void getFriends(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GETFRIEND, params, handler, true);
+	}
+
+	// 删除回复msg
+	public static void deleteHuiFuMsg(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestPost(Constant.METHOD_DELETE_HUIFU_MSG, false, params, handler);
+	}
+
+	// 获取附近的人
+	public static void getNearUser(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_NEAR_USER, params, handler);
+	}
+
+	// 获取娱乐活动信息
+	public static void getHuoDongs(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_HUODONG, params, handler);
+	}
+
+	// 获取活动url
+	public static void getHuoDongUrl(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_HUO_DONG_URL, params, handler, true);
+	}
+
+	// 获取兑换url
+	public static void getDuiHuanUrl(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_DUI_HUAN, params, handler);
+	}
+
+	// 增加关注
+	public static void addGuanZhu(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestPost(Constant.METHOD_ADD_GUANZHU, true, params, handler);
+	}
+
+	// 获取关注ids
+	public static void getGuanZhuIds(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_GUANZHU_IDS, params, handler, true);
+	}
+
+	// 删除关注
+	public static void deleteGuanZhu(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestPost(Constant.METHOD_DELETE_GUANZHU, false, params, handler);
+	}
+
+	// 获取回复信息size
+	public static void getMsgSize(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_MSG_SIZE, params, handler, true);
+	}
 
 }

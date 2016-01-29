@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -31,9 +30,9 @@ import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.LogUtil;
-import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
+import com.hck.yanghua.view.MyEditextView;
 import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupChoicePicter;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
@@ -45,7 +44,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 	public static final int GET_PICTER = 2;
 	private static final String IMAGEFILE = "/yanghua/";
 	private static final String HAS_IMAGE = "1";
-	private EditText contentEditText;
+	private MyEditextView contentEditText;
 	private PopupWindowChiceBiaoQing pBiaoQing;
 	private List<Bitmap> bitmaps = new ArrayList<>();
 	private String imagePath;
@@ -66,7 +65,10 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 	}
 
 	private void initView() {
-		contentEditText = (EditText) findViewById(R.id.fatie_content_ex);
+		contentEditText = (MyEditextView) findViewById(R.id.fatie_content_ex);
+		contentEditText.setBackgroundColor(getResources().getColor(
+				R.color.transparent));
+		contentEditText.setHint("内容不超过500个字");
 		imageLayout = (LinearLayout) findViewById(R.id.fatie_lay);
 	}
 
@@ -93,7 +95,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 			MyToast.showCustomerToast("内容不能超过600个文字");
 			return;
 		}
-		content=content.trim();
+		content = content.trim();
 		Pdialog.showDialog(this, "提交中...", false);
 		long uid = MyData.getData().getUserId();
 		data.append("uid=" + uid).append("&content=" + content);
@@ -290,7 +292,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 	// 弹出选择获取图片的pop
 	public void getPicter(View view, String path) {
 		PopupChoicePicter popupController = new PopupChoicePicter(this, path,
-				GET_PHOTO, GET_PICTER);
+				GET_PHOTO, GET_PICTER, 5);
 		popupController.checkPopupWindow();
 		popupController.getPopupWindow().setAnimationStyle(
 				R.style.popwin_anim_style);
@@ -304,6 +306,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 			MyToast.showCustomerToast("最多添加5张图片哦");
 			return;
 		}
+		hideInput(view);
 		String path = getPath();
 		imagePath = path;
 		getPicter(view, path);
@@ -312,6 +315,7 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 	// 弹出选择表情界面
 	public void showPopChiceImage(View view) {
 		if (pBiaoQing == null) {
+			hideInput(view);
 			pBiaoQing = new PopupWindowChiceBiaoQing();
 			pBiaoQing.showFaTieView(view, this, this);
 		}

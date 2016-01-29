@@ -209,12 +209,25 @@
         <activity
             android:name=".ui.ChatActivity"
             android:screenOrientation="portrait" />
-         <activity
+        <activity
             android:name=".ui.ShowNearUserActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hck.yanghua.jiqiren.JiqirenMainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.YuLeActivity"
+            android:screenOrientation="portrait" />
+         <activity
+            android:name=".ui.CreditActivity"
+            android:screenOrientation="portrait" />
 
-       <activity android:name=".ChatActivity" android:screenOrientation="portrait" />
-         <meta-data android:name="EASEMOB_APPKEY"  android:value="hhhccckkk#yanghuashequ" />
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="hhhccckkk#yanghuashequ" />
         <!-- 声明sdk所需的service -->
         <service
             android:name="com.easemob.chat.EMChatService"

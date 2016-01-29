@@ -7,6 +7,7 @@ import com.hck.yanghua.fragment.ZaiPeiFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -41,6 +42,7 @@ public class BaoDianActivity extends BaseActivity implements OnClickListener {
 		leftTextView.setText("栽培领经");
 		centerTextView.setText("花卉百科");
 		rightTextView.setVisibility(View.GONE);
+		mTitleBar.hiddenFra();
 		leftTextView.setOnClickListener(this);
 		centerTextView.setOnClickListener(this);
 	}
@@ -83,5 +85,14 @@ public class BaoDianActivity extends BaseActivity implements OnClickListener {
 		default:
 			break;
 		}
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && !MainActivity.mSlidingMenu.isMenuShowing()) {
+			alertExitD();
+			return false;
+		}
+		
+		return true;
 	}
 }

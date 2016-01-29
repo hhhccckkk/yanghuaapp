@@ -35,7 +35,7 @@ public class TieZiAdapter extends BaseAdapter {
 	private OnTouXiangCliceListener oCliceListener;
 
 	public interface OnTouXiangCliceListener {
-		void getUserId(String uid);
+		void getUserId(Long uid);
 	}
 
 	public TieZiAdapter(Context context, List<TieZiBean> tieZiBeans,
@@ -110,6 +110,7 @@ public class TieZiAdapter extends BaseAdapter {
 		viewHolder.userNameTextView.setText(tieZiBean.getName());
 		SpannableString spannableString = ExpressionUtil.getExpressionString(
 				context, tieZiBean.getContent(), Constant.zhengze);
+		
 		viewHolder.contentTextView.setText(spannableString);
 		viewHolder.dingTextView.setText(tieZiBean.getDingsize() + "");
 		viewHolder.pinglunTextView.setText(tieZiBean.getPinglunsize() + "");
@@ -159,9 +160,9 @@ public class TieZiAdapter extends BaseAdapter {
 		}
 		ImageLoader.getInstance().displayImage(tieZiBean.getTouxiang(),
 				viewHolder.touxiangImageView, MyTools.getoptions());
-		viewHolder.touxiangImageView.setTag(tieZiBean.getUserId());
-		viewHolder.userNameTextView.setTag(tieZiBean.getUserId());
-		viewHolder.fensiTextView.setTag(tieZiBean.getUserId());
+		viewHolder.touxiangImageView.setTag(tieZiBean.getUid());
+		viewHolder.userNameTextView.setTag(tieZiBean.getUid());
+		viewHolder.fensiTextView.setTag(tieZiBean.getUid());
 		showUser(viewHolder.touxiangImageView);
 		showUser(viewHolder.userNameTextView);
 		showUser(viewHolder.fensiTextView);
@@ -173,7 +174,7 @@ public class TieZiAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				String uid = (String) v.getTag();
+				Long uid = (Long) v.getTag();
 				oCliceListener.getUserId(uid);
 			}
 		});

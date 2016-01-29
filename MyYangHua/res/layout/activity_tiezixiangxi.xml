@@ -83,7 +83,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" >
 
-                <EditText
+                <com.hck.yanghua.view.MyEditextView
                     android:id="@+id/tiezi_huifu"
                     android:layout_width="fill_parent"
                     android:layout_height="35dp"
@@ -91,10 +91,9 @@
                     android:layout_marginTop="5dp"
                     android:layout_toLeftOf="@+id/tiezi_xiangxi_hufu_btn"
                     android:background="@drawable/huifu_huise_shap"
-                    android:paddingLeft="3dp"
+                    android:paddingLeft="5dp"
                     android:textColor="@color/text_color666"
-                    android:textSize="14sp" />
-
+                    android:textSize="16sp" />
                 <Button
                     android:id="@+id/tiezi_xiangxi_hufu_btn"
                     android:layout_width="55dp"

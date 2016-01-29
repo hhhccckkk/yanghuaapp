@@ -75,12 +75,12 @@
                         android:orientation="horizontal" >
 
                         <TextView
-                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="学前班"
                             android:textColor="@color/text_color666"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tiezi_xiangxi_fensi"
@@ -165,10 +165,10 @@
             android:id="@+id/tiezi_xiangxi_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
+            android:lineSpacingExtra="3dp"
             android:padding="5dp"
             android:textColor="@color/text_color333"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -184,10 +184,11 @@
         android:id="@+id/tiezi_zan_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="1dp"
         android:paddingLeft="12dp"
-        android:textColor="@color/text_color666"
-        android:textSize="14sp" />
+        android:textColor="@color/red_anniu_bt_color"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:id="@+id/tiezi_zan"
@@ -195,7 +196,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="8dp"
         android:visibility="gone" >
     </LinearLayout>
 

@@ -239,7 +239,7 @@ public class ChuShouTieZiFragment extends BaseFragment implements OnTouXiangClic
 		this.getActivity().unregisterReceiver(myBroadcastReceiver);
 	}
 	@Override
-	public void getUserId(String uid) {
+	public void getUserId(Long uid) {
        startShowOneUserActivity(getActivity(), uid);
 	}
 

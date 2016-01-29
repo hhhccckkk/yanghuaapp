@@ -16,20 +16,22 @@ import cn.sharesdk.tencent.qq.QQ;
 
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
-import com.baidu.location.BDLocation;
 import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
+import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.fragment.MainFragment;
 import com.hck.yanghua.fragment.MainMenuFragment;
+import com.hck.yanghua.jiqiren.JiqirenMainActivity;
 import com.hck.yanghua.liaotian.MainMsgReceiver;
 import com.hck.yanghua.liaotian.MainMsgReceiver.HasNewMsgGet;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.AppManager;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
+import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.view.CustomAlertDialog;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -45,6 +47,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MainMsgReceiver.getMainMsgReceiver(this).initReceiver();
+		
 		startBaiDuPushServices();
 		setContentView(R.layout.activity_main);
 		initSlidingMenu(savedInstanceState);
@@ -105,9 +108,61 @@ public class MainActivity extends SlidingFragmentActivity implements
 		case R.id.near_user:
 			startShowNearUserActivity();
 			break;
+		case R.id.jiqiren:
+			startJiQiRenActivity();
+			break;
+		case R.id.yule:
+			getDuiHuanUrl();
+			break;
+		case R.id.dapeng:
+			MyToast.showCustomerToast("暂未开放");
 		default:
 			break;
 		}
+	}
+
+	private void getDuiHuanUrl() {
+		RequestParams params = new RequestParams();
+		UserBean userBean = MyData.getData().getUserBean();
+		params.put("uid", userBean.getUid() + "");
+		params.put("point", userBean.getJinbi() + "");
+		Request.getDuiHuanUrl(params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+			}
+
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				MyToast.showCustomerToast("网络异常");
+				LogUtil.D("onFailure: " + content + ": " + error);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				LogUtil.D("onSuccess: " + response.toString());
+				try {
+					String url = response.getString("url");
+					startDuiHuanActivity(url);
+				} catch (Exception e) {
+				}
+			}
+		});
+	}
+
+	private void startDuiHuanActivity(String url) {
+		Intent intent = new Intent();
+		intent.putExtra("url", url);
+		intent.setClass(this, CreditActivity.class);
+		startActivity(intent);
+	}
+
+	private void startJiQiRenActivity() {
+		Intent intent = new Intent();
+		intent.setClass(this, JiqirenMainActivity.class);
+		startActivity(intent);
 	}
 
 	private void startShowNearUserActivity() {
@@ -185,5 +240,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		handler.sendEmptyMessage(0);
 
 	}
+
+	
 
 }

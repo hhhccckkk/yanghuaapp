@@ -240,7 +240,7 @@ public class HotTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 		this.getActivity().unregisterReceiver(myBroadcastReceiver);
 	}
 	@Override
-	public void getUserId(String uid) {
+	public void getUserId(Long uid) {
        startShowOneUserActivity(getActivity(), uid);
 	}
 }

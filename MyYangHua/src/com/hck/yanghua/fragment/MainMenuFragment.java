@@ -45,9 +45,9 @@ public class MainMenuFragment extends Fragment {
 				false);
 		view.findViewById(R.id.home).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.near_user).setOnClickListener(mMainActivity);
-		view.findViewById(R.id.safe).setOnClickListener(mMainActivity);
-		view.findViewById(R.id.yunli).setOnClickListener(mMainActivity);
-		view.findViewById(R.id.xiaoji).setOnClickListener(mMainActivity);
+		view.findViewById(R.id.jiqiren).setOnClickListener(mMainActivity);
+		view.findViewById(R.id.yule).setOnClickListener(mMainActivity);
+		view.findViewById(R.id.dapeng).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.user).setOnClickListener(mMainActivity);
 		view.findViewById(R.id.exit).setOnClickListener(mMainActivity);
 		toxuiangImageView = (ImageView) view.findViewById(R.id.touxiang);

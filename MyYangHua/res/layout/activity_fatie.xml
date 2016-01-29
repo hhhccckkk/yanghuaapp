@@ -26,24 +26,17 @@
             android:background="@color/line_color"
             android:visibility="gone" />
 
-        <LinearLayout
+        <com.hck.yanghua.view.MyEditextView
+            android:id="@+id/fatie_content_ex"
             android:layout_width="fill_parent"
-            android:layout_height="190dp"
+            android:layout_height="220dp"
             android:layout_marginTop="10dp"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/fatie_content_ex"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@null"
-                android:gravity="top"
-                android:hint="内容不超过600个字"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:textColor="@color/text_color333"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:background="@null"
+            android:gravity="top"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/text_color333"
+            android:textSize="16sp" />
 
         <HorizontalScrollView
             android:layout_width="fill_parent"
@@ -77,9 +70,9 @@
                 android:src="@drawable/biaoqing" />
 
             <ImageView
-                android:layout_marginLeft="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:onClick="choicePicter"
                 android:padding="3dp"
                 android:src="@drawable/add_tupian" />

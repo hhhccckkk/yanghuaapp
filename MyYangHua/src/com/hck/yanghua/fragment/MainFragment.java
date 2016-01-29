@@ -1,20 +1,21 @@
 package com.hck.yanghua.fragment;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.LocalActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -22,15 +23,21 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.hck.httpserver.JsonHttpResponseHandler;
+import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.data.Constant;
+import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.liaotian.MainMsgReceiver;
+import com.hck.yanghua.net.Request;
 import com.hck.yanghua.ui.BaoDianActivity;
 import com.hck.yanghua.ui.FaTieActivity;
 import com.hck.yanghua.ui.HomeActivity;
 import com.hck.yanghua.ui.UserActivity;
 import com.hck.yanghua.ui.XiaoXiActivity;
 import com.hck.yanghua.util.LogUtil;
+import com.hck.yanghua.util.MyPreferences;
+import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.view.PopupWindowView;
 import com.hck.yanghua.view.PopupWindowView.PopCallBack;
 
@@ -51,12 +58,15 @@ public class MainFragment extends BaseFragment implements
 	private LocalActivityManager localActivityManager;
 	private int oldCheckId;
 	private PopupWindowView pWindowView;
-	private  TextView remindTextView;
-    private ClearnMsgReceiver clearnMsgReceiver =new ClearnMsgReceiver();
+	private TextView remindTextView;
+	private ImageView tixingImageView;
+	private ClearnMsgReceiver clearnMsgReceiver = new ClearnMsgReceiver();
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (mRootView == null) {
+			getMsgSize();
 			mRootView = inflater.inflate(R.layout.fragment_main, null);
 			initView(mRootView);
 			setListener();
@@ -67,29 +77,31 @@ public class MainFragment extends BaseFragment implements
 		}
 		return mRootView;
 	}
-    private void registerBroadcastReceiver(){
-    	IntentFilter intentFilter =new IntentFilter();
-    	intentFilter.addAction(Constant.CLEARN_NEW_MSG_SIZE);
-    	getActivity().registerReceiver(clearnMsgReceiver, intentFilter);
-    }
-    class ClearnMsgReceiver extends BroadcastReceiver{
+
+	private void registerBroadcastReceiver() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Constant.CLEARN_NEW_MSG_SIZE);
+		getActivity().registerReceiver(clearnMsgReceiver, intentFilter);
+	}
+
+	class ClearnMsgReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-         remind(0);			
+			remind(0);
 		}
-    	
-    }
+
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = activity;
 		registerBroadcastReceiver();
-		
+
 	}
 
 	private void initView(View view) {
-		LogUtil.D("initViewinitViewinitView");
 		tabHost = (TabHost) view.findViewById(R.id.tabHost);
 		tabHost.setup(localActivityManager);
 		radioGroup = (RadioGroup) view.findViewById(R.id.RadioG);
@@ -99,8 +111,17 @@ public class MainFragment extends BaseFragment implements
 		newButton = (RadioButton) view.findViewById(R.id.xiaoxi_id);
 		userButton = (RadioButton) view.findViewById(R.id.user_id);
 		remindTextView = (TextView) mRootView.findViewById(R.id.view_remind);
+		tixingImageView = (ImageView) view.findViewById(R.id.view_remind2);
 		updateMsgSize();
 		addSpec();
+	}
+
+	public void remindTzOrGz() {
+		if (remindTextView.getVisibility() == View.VISIBLE) {
+			return;
+		}
+		tixingImageView.setVisibility(View.VISIBLE);
+		MyTools.startAna(tixingImageView);
 	}
 
 	public void updateMsgSize() {
@@ -111,15 +132,17 @@ public class MainFragment extends BaseFragment implements
 
 	private void remind(int size) {
 		if (size > 0) {
-			remindTextView.setText(size+"");
+			remindTextView.setText(size + "");
 			remindTextView.setVisibility(View.VISIBLE);
-			
+			tixingImageView.setVisibility(View.GONE);
+			tixingImageView.clearAnimation();
+
 		} else {
 			remindTextView.setVisibility(View.INVISIBLE);
 		}
 
 	}
-   
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -185,7 +208,9 @@ public class MainFragment extends BaseFragment implements
 		case R.id.xiaoxi_id:
 			tabHost.setCurrentTab(3);
 			oldCheckId = R.id.xiaoxi_id;
-            remindTextView.setVisibility(View.GONE);
+			remindTextView.setVisibility(View.GONE);
+			tixingImageView.setVisibility(View.GONE);
+			tixingImageView.clearAnimation();
 			break;
 		case R.id.user_id:
 			tabHost.setCurrentTab(4);
@@ -309,9 +334,53 @@ public class MainFragment extends BaseFragment implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-        getActivity().unregisterReceiver(clearnMsgReceiver);
+		getActivity().unregisterReceiver(clearnMsgReceiver);
 	}
 
+	private void getMsgSize() {
+		RequestParams params = new RequestParams();
+		Request.getMsgSize(params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				LogUtil.D("onFailure: " + error + ": " + content);
+			}
 
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				LogUtil.D("onSuccess: " + response.toString());
+				try {
+					MyData.gz = response.getInt("gz");
+					MyData.tz = response.getInt("tz");
+					int oldGz = MyPreferences.getInt("gzSize", -1);
+					int oldTz = MyPreferences.getInt("tzSize", -1);
+
+					if (MyData.gz > oldGz) {
+						MyPreferences.saveBoolean("gz", true);
+						remindTzOrGz();
+					} else {
+						MyPreferences.saveBoolean("gz", false);
+					}
+
+					if (MyData.tz > oldTz) {
+						MyPreferences.saveBoolean("tz", true);
+						remindTzOrGz();
+					} else {
+						MyPreferences.saveBoolean("tz", false);
+					}
+
+				} catch (Exception e) {
+
+				}
+
+			}
+
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+			}
+		});
+	}
 
 }

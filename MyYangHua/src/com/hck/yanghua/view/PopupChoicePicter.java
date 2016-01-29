@@ -33,12 +33,13 @@ public class PopupChoicePicter {
 	private Button cancelBtn;
 	private String path;
 	private File file;
-
+    private int imageSize;
 	public PopupChoicePicter(Activity activity, String path,
-			int take_photo_code, int REQUEST_CODE_TAKE_PICTER) {
+			int take_photo_code, int REQUEST_CODE_TAKE_PICTER,int size) {
 		this.activity = activity;
 		this.REQUEST_CODE_TAKE_PHOTO = take_photo_code;
 		this.REQUEST_CODE_TAKE_PICTER = REQUEST_CODE_TAKE_PICTER;
+		this.imageSize=size;
 		this.path = path;
 	}
 
@@ -115,8 +116,10 @@ public class PopupChoicePicter {
 				// REQUEST_CODE_TAKE_PICTER);
 				popupWindow.dismiss();
 				popupWindow = null;
-				activity.startActivityForResult(new Intent(activity,
-						ShowImageListActivity.class),REQUEST_CODE_TAKE_PICTER);
+				Intent intent =new Intent();
+				intent.putExtra("size", imageSize);
+				intent.setClass(activity, ShowImageListActivity.class);
+				activity.startActivityForResult(intent,REQUEST_CODE_TAKE_PICTER);
 			}
 		});
 		// 关闭

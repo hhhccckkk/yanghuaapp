@@ -34,6 +34,8 @@ import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AnalogClock;
 
 import com.hck.yanghua.R;
@@ -521,5 +523,19 @@ public class MyTools {
 		return sdDir.toString();
 
 	}
+	 public static void startAna(View view){
+		   AlphaAnimation alphaAnimation1 = new AlphaAnimation(0.01f, 1.0f);  
+
+		   alphaAnimation1.setDuration(500);  
+
+		   alphaAnimation1.setRepeatCount(Animation.INFINITE);  
+
+		   alphaAnimation1.setRepeatMode(Animation.REVERSE);  
+
+		   view.setAnimation(alphaAnimation1);  
+
+		   alphaAnimation1.start();  
+
+	   }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.MsgBean;
+import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.fragment.HuiFuMsgFragment;
+import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -73,6 +76,8 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 					.findViewById(R.id.msg_huifu_liaotian);
 			viewHolder.nameTextView = (TextView) convertView
 					.findViewById(R.id.msg_huifu_name);
+			viewHolder.xingbieImageView = (ImageView) convertView
+					.findViewById(R.id.msg_huifu_xingbei);
 			convertView.setTag(viewHolder);
 
 		} else {
@@ -80,19 +85,30 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 		}
 		viewHolder.timeTextView.setText(TimeUtil.forTime(msgBeans.get(position)
 				.getTime()));
-		viewHolder.yuantieTextView.setText(msgBeans.get(position).getYuantie());
-		viewHolder.contentTextView.setText(msgBeans.get(position).getContent());
+		SpannableString spannableString1 = ExpressionUtil.getExpressionString(
+				context, msgBeans.get(position).getYuantie(), Constant.zhengze);
+		viewHolder.yuantieTextView.setText(spannableString1);
+
+		SpannableString spannableString = ExpressionUtil.getExpressionString(
+				context, msgBeans.get(position).getContent(), Constant.zhengze);
+		viewHolder.contentTextView.setText(spannableString);
+
 		viewHolder.nameTextView.setText(msgBeans.get(position).getUserName());
 		ImageLoader.getInstance().displayImage(
 				msgBeans.get(position).getTouxiang(),
 				viewHolder.touxiangImageView, MyTools.getoptions());
 		viewHolder.liaotianButton.setTag(msgBeans.get(position));
+		if (msgBeans.get(position).getXingbie() == 1) {
+			viewHolder.xingbieImageView.setBackgroundResource(R.drawable.nan);
+		} else {
+			viewHolder.xingbieImageView.setBackgroundResource(R.drawable.nv);
+		}
 		setListener(viewHolder.liaotianButton);
 		return convertView;
 	}
 
 	class ViewHolder {
-		ImageView touxiangImageView;
+		ImageView touxiangImageView, xingbieImageView;
 		TextView nameTextView, timeTextView;
 		TextView yuantieTextView, contentTextView;
 		TextView liaotianButton;
@@ -110,8 +126,8 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 			}
 		});
 	}
-	
-	public void updateView(List<MsgBean> msgBeans){
+
+	public void updateView(List<MsgBean> msgBeans) {
 		this.msgBeans.addAll(msgBeans);
 		this.notifyDataSetChanged();
 	}

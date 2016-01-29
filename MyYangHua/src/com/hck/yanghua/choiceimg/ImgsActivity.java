@@ -40,18 +40,19 @@ public class ImgsActivity extends BaseTitleActivity {
 	private TextView showChoiceSizeTextView;
 	private int size;
 	private static final int CHOICE_IMG_OK = 2;
-
+    private int maxImgSize;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.photogrally);
+		maxImgSize=getIntent().getIntExtra("size", 3);
 		initView();
 		initTitleView();
 
 	}
 
 	private void initTitleView() {
-		mTitleBar.setCenterText("可选5张图片");
+		mTitleBar.setCenterText("可选"+maxImgSize+"张图片");
 		mTitleBar.righButton.setText("取消");
 	}
 
@@ -139,6 +140,7 @@ public class ImgsActivity extends BaseTitleActivity {
 		public void OnItemClick(View v, int Position, CheckBox checkBox) {
 
 			String filapath = fileTraversal.filecontent.get(Position);
+			
 			if (checkBox.isChecked()) {
 				checkBox.setChecked(false);
 				filelist.remove(filapath);
@@ -146,6 +148,9 @@ public class ImgsActivity extends BaseTitleActivity {
 				showChoiceSize();
 			} else {
 				try {
+					if (size>=maxImgSize) {
+						return;
+					}
 					checkBox.setChecked(true);
 					ImageView imageView = iconImage(filapath, Position,
 							checkBox);
@@ -163,7 +168,7 @@ public class ImgsActivity extends BaseTitleActivity {
 	};
 
 	private void showChoiceSize() {
-		showChoiceSizeTextView.setText("已选(" + size + "/5)");
+		showChoiceSizeTextView.setText("确定(" + size + "/5)");
 	}
 
 	public void sendfiles() {

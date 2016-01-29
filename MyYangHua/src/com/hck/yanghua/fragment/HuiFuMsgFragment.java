@@ -34,6 +34,7 @@ import com.hck.yanghua.ui.TieZiXiangXiActivity;
 import com.hck.yanghua.util.JsonUtils;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
+import com.hck.yanghua.view.BadgeView;
 import com.hck.yanghua.view.CustomAlertDialog;
 import com.hck.yanghua.view.Pdialog;
 
@@ -43,7 +44,7 @@ public class HuiFuMsgFragment extends BaseFragment implements LiaoTianCallBack {
 	private MsgData msgDatas = new MsgData();
 	private boolean isUpdate;
 	private HuiFuMsgAdpter adapter;
-
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

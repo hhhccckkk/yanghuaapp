@@ -115,10 +115,10 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:layout_marginTop="10dp"
                         android:id="@+id/huifu_yuantie"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/yuantie_shap"
                         android:gravity="center"
                         android:padding="15dp"
@@ -195,72 +195,69 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/huitie_lay"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#f1f1f1"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:onClick="showPopChiceImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:src="@drawable/biaoqing" />
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <EditText
-                android:id="@+id/huihu_huifu"
-                android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@+id/huifu_add_huifu"
-                android:background="@drawable/huifu_huise_shap"
-                android:paddingLeft="3dp"
-                android:textColor="@color/text_color666"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/huifu_add_huifu"
-               android:onClick="huifu"
-                android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="3dp"
-                android:background="@drawable/huifu_huise_shap"
-                android:gravity="center"
-                android:text="回复"
-                android:textColor="#abaeb3"
-                android:textSize="14sp" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_color" />
-
-    <HorizontalScrollView
-        android:id="@+id/huifu_ScrollView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" >
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/huifu_img"
+            android:id="@+id/huitie_lay"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            
+            android:background="#f1f1f1"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:onClick="showPopChiceImage"
+                android:src="@drawable/biaoqing" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <com.hck.yanghua.view.MyEditextView
+                    android:id="@+id/huihu_huifu"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_toLeftOf="@+id/huifu_add_huifu"
+                    android:background="@drawable/huifu_huise_shap"
+                    android:paddingLeft="3dp"
+                    android:textColor="@color/text_color666"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/huifu_add_huifu"
+                    android:layout_width="55dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="3dp"
+                    android:background="@drawable/huifu_huise_shap"
+                    android:gravity="center"
+                    android:onClick="huifu"
+                    android:text="回复"
+                    android:textColor="#abaeb3"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/huifu_view"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:padding="3dp" >
-        </LinearLayout>
-    </HorizontalScrollView>
+        </View>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -19,9 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/tiezi_touxiang"
-        android:text="老科"
         android:textColor="@color/text_color666"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/tiezi_xingbie"
@@ -34,7 +33,6 @@
         android:src="@drawable/nan" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tiezi_user_dengji"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +40,8 @@
         android:layout_toRightOf="@+id/tiezi_touxiang"
         android:text="学前班"
         android:textColor="@color/text_color666"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tie_fensi"
@@ -50,9 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tiezi_userName"
         android:layout_toRightOf="@+id/tiezi_user_dengji"
-        android:text="粉丝200"
+        android:text="粉丝:200"
         android:textColor="@color/text_color666"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tiez_time"
@@ -65,7 +64,7 @@
         android:layout_toRightOf="@+id/tie_fensi"
         android:text="2016-3-5"
         android:textColor="@color/text_color666"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tiezi_huo"
@@ -73,13 +72,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tiezi_touxiang"
         android:layout_gravity="top"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:background="@drawable/btn_all_orange_n"
         android:padding="1dp"
-        android:paddingTop="0dp"
-        android:text="火"
+        android:text="火爆"
+         android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tiezi_jing"
@@ -91,8 +90,9 @@
         android:background="@drawable/btn_all_blue_n"
         android:padding="1dp"
         android:text="精华"
+        android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tiezi_tuijian"
@@ -104,8 +104,9 @@
         android:background="@drawable/btn_all_red_n"
         android:padding="1dp"
         android:text="推荐"
+         android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tiezi_content"
@@ -114,10 +115,13 @@
         android:layout_below="@+id/tiezi_touxiang"
         android:layout_toRightOf="@+id/tiezi_tuijian"
         android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:lineSpacingMultiplier="1.1"
         android:maxLines="3"
-        android:padding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/text_color333"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:id="@+id/tiezi_tupian_lay"
@@ -160,12 +164,12 @@
             android:src="@drawable/icon_activity_lbs" />
 
         <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/tiezi_addresee_img"
             android:id="@+id/tiezi_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tiezi_addresee_img"
             android:textColor="@color/text_color999"
             android:textSize="10sp" />
 

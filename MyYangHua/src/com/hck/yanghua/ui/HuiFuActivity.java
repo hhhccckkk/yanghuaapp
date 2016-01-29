@@ -1,7 +1,5 @@
 package com.hck.yanghua.ui;
 
-import java.io.File;
-
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -10,7 +8,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,13 +19,13 @@ import com.hck.yanghua.bean.HuiTieBean;
 import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.MyData;
-import com.hck.yanghua.fragment.NewTieZiFragment;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.GetImageUtil;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.TimeUtil;
+import com.hck.yanghua.view.MyEditextView;
 import com.hck.yanghua.view.Pdialog;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
 import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
@@ -45,10 +42,10 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 	private LinearLayout addressLayout;
 	private String imag1, imag2, imag3;
 	private PopupWindowChiceBiaoQing pBiaoQing;
-	private EditText contentEditText;
+	private MyEditextView contentEditText;
 	private int pos;
 	private int type;
-
+    private View buttomView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,14 +72,15 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 		contentTextView = (TextView) findViewById(R.id.huifu_content);
 		addressLayout = (LinearLayout) findViewById(R.id.huifu_address_lay);
 		addressTextView = (TextView) findViewById(R.id.huifu_address);
-		contentEditText = (EditText) findViewById(R.id.huihu_huifu);
+		contentEditText = (MyEditextView) findViewById(R.id.huihu_huifu);
+		buttomView=findViewById(R.id.huifu_view);
 	}
 
 	private void initData() {
 		ImageLoader.getInstance().displayImage(huiTieBean.getTouxiang(),
 				touxiangImageView);
 		userTextView.setText(huiTieBean.getName());
-		fensiTextView.setText("丨粉丝" + huiTieBean.getFensi());
+		fensiTextView.setText("粉丝" + huiTieBean.getFensi());
 		timeTextView.setText(TimeUtil.forTime(huiTieBean.getTime()));
 		SpannableString spannableString = ExpressionUtil.getExpressionString(
 				this, huiTieBean.getContent(), Constant.zhengze);
@@ -144,6 +142,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 		UserBean userBean = MyData.getData().getUserBean();
 		BDLocation bdLocation = MyData.bdLocation;
 		content.append("uid=" + userBean.getUid());
+		content.append("&buid=" + huiTieBean.getUid());
 		if (bdLocation != null) {
 			content.append("&address=" + bdLocation.getCity()
 					+ bdLocation.getDistrict() + bdLocation.getStreet());
@@ -159,6 +158,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + error + content);
 						MyToast.showCustomerToast("回复失败");
+						Pdialog.hiddenDialog();
 					}
 
 					@Override
@@ -217,6 +217,8 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 		if (pBiaoQing == null) {
 			pBiaoQing = new PopupWindowChiceBiaoQing();
 			pBiaoQing.showFaTieView(view, this, this);
+			hideInput(view);
+			buttomView.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -225,6 +227,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 	private void hidenPop() {
 		if (pBiaoQing != null && pBiaoQing.popupWindow != null) {
 			pBiaoQing.popupWindow.dismiss();
+			buttomView.setVisibility(View.GONE);
 		}
 		pBiaoQing = null;
 	}
@@ -234,7 +237,10 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 		if (spannableString != null) {
 			contentEditText.append(spannableString);
 		}
-		hidenPop();
+		if (spannableString==null) {
+			pBiaoQing=null;
+		}
+		
 	}
 
 	@Override

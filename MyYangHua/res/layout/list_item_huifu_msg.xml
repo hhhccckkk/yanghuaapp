@@ -28,14 +28,27 @@
                 android:layout_marginLeft="5dp"
                 android:orientation="vertical" >
 
-                <TextView
-                    android:id="@+id/msg_huifu_name"
+                <LinearLayout
+                     android:layout_marginTop="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="老科"
-                    android:textColor="@color/text_color333"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/msg_huifu_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="老科"
+                        android:textColor="@color/text_color333"
+                        android:textSize="14sp" />
+                   <ImageView 
+                       android:layout_marginLeft="3dp"
+                       android:layout_gravity="center_vertical"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:id="@+id/msg_huifu_xingbei"
+                       />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/msg_huifu_time"

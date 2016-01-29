@@ -87,7 +87,7 @@
                 <LinearLayout
                     android:id="@+id/near_user"
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/home_left_selector"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -123,9 +123,9 @@
                 android:layout_height="50dp" >
 
                 <LinearLayout
-                    android:id="@+id/safe"
+                    android:id="@+id/jiqiren"
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/home_left_selector"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -140,7 +140,7 @@
                         style="@style/home_menu_tex_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cebian_shop" />
+                        android:text="@string/cebian_jiqiren" />
                 </LinearLayout>
 
                 <ImageView
@@ -161,9 +161,9 @@
                 android:layout_height="50dp" >
 
                 <LinearLayout
-                    android:id="@+id/yunli"
+                    android:id="@+id/yule"
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/home_left_selector"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -199,9 +199,9 @@
                 android:layout_height="50dp" >
 
                 <LinearLayout
-                    android:id="@+id/xiaoji"
+                    android:id="@+id/dapeng"
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/home_left_selector"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -216,7 +216,7 @@
                         style="@style/home_menu_tex_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cebian_tuijian" />
+                        android:text="@string/cebian_shop" />
                 </LinearLayout>
 
                 <ImageView
@@ -239,7 +239,7 @@
                 <LinearLayout
                     android:id="@+id/user"
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/home_left_selector"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
