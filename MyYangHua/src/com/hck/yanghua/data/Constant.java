@@ -16,16 +16,16 @@ public class Constant {
 	public static final int NAN = 1;
 	public static final int NV = 2;
 	public static final String KEY_ISFATIEOK = "isFaTieOk";
-	
-	//Preferences
-	public static final String PREFERENCES_KEY_MSG_ALL_SIZE="preferences_key_msg_all_size";
-	public static final String PREFERENCES_KEY_MSG_LIAOTIAN_SIZE="preferences_key_msg_liaotian_size";
-	public static final String PREFERENCES_KEY_MSG_HUIFU_SIZE="preferences_key_msg_huifu_size";
-	public static final String PREFERENCES_KEY_MSG_TONGZHI_SIZE="preferences_key_msg_tz_size";
-    
-	//广播事件，有新的加好友信息
+
+	// Preferences
+	public static final String PREFERENCES_KEY_MSG_ALL_SIZE = "preferences_key_msg_all_size";
+	public static final String PREFERENCES_KEY_MSG_LIAOTIAN_SIZE = "preferences_key_msg_liaotian_size";
+	public static final String PREFERENCES_KEY_MSG_HUIFU_SIZE = "preferences_key_msg_huifu_size";
+	public static final String PREFERENCES_KEY_MSG_TONGZHI_SIZE = "preferences_key_msg_tz_size";
+
+	// 广播事件，有新的加好友信息
 	public static final String MSG_INVENT = "new.msg.invitation.friend";
-	
+
 	// 广播事件,首尔最新帖子
 	public static final String NEW_ADD_ZAN = "new.tiezi.add.zan";
 	public static final String NEW_ADD_PL = "new.tiezi.add.pl";
@@ -40,17 +40,17 @@ public class Constant {
 	public static final String UPDATE_SALE_TIEZI_DATA = "sale.tiezi.update.ui";
 	public static final String SALE_ADD_ZAN = "sale.tiezi.add.zan";
 	public static final String SALE_ADD_PL = "sale.tiezi.add.pl";
-	
+
 	public static final String HAS_NEW_MSG = "com.has.new.msg";
-	
+
 	public static final String CLEARN_NEW_MSG_SIZE = "com.clearn.msg.size";
 
 	// 1,新帖，2热门排行帖子，3出售帖子
 	public static final int NEW_TIE_ZI = 1;
 	public static final int HOT_TIE_ZI = 2;
 	public static final int SALE_TIE_ZI = 3;
-	
-	public static final int TYPE_ZAN=10;
+
+	public static final int TYPE_ZAN = 10;
 
 	public static String zhengze = "hck0[0-9]{2}|hck10[0-7]";
 	// 获取版本信息
@@ -82,41 +82,48 @@ public class Constant {
 
 	// 获取回复消息
 	public static final String METHOD_GET_HUIFU_MSG = "getHuiFuMsg";
+
+	// 使用String uid获取用户
+	public static final String METHOD_GET_USER_BY_STRING_ID = "getUserByStringId";
+
+	// 添加好友
+	public static final String METHOD_ADDFRIEND = "addFriend";
+
+	// 获取好友
+	public static final String METHOD_GETFRIEND = "getFriend";
+
+	// 删除回复msg
+	public static final String METHOD_DELETE_HUIFU_MSG = "deleteMsg";
+
+	// 获取附近的人
+	public static final String METHOD_GET_NEAR_USER = "getNearUsers";
+
+	// 获取活动信息
+	public static final String METHOD_GET_HUODONG = "getHuoDongs";
+
+	// 获取活动url
+	public static final String METHOD_GET_HUO_DONG_URL = "getHuoDongUrl";
+
+	// 获取兑换url
+	public static final String METHOD_GET_DUI_HUAN = "getDuiHuanUrl";
+
+	// 增加关注
+	public static final String METHOD_ADD_GUANZHU = "addGuanZhu";
+
+	// 获取关注ids
+	public static final String METHOD_GET_GUANZHU_IDS = "getGuanZhuId";
+
+	// 取消关注
+	public static final String METHOD_DELETE_GUANZHU = "deleteGuanZhu";
+
+	// 获取msg size
+	public static final String METHOD_GET_MSG_SIZE = "getMsgSize";
+	// 获取关注我的人的消息
+	public static final String METHOD_GET_GUANZHU_MSG = "getGuanZhus";
 	
-	//使用String uid获取用户
-	public static final String METHOD_GET_USER_BY_STRING_ID="getUserByStringId";
-	
-	//添加好友
-	public static final String METHOD_ADDFRIEND="addFriend";
-	
-	//获取好友
-	public static final String METHOD_GETFRIEND="getFriend";
-	
-	//删除回复msg
-	public static final String METHOD_DELETE_HUIFU_MSG="deleteMsg";
-	
-	
-	//获取附近的人
-	public static final String METHOD_GET_NEAR_USER="getNearUsers";
-	
-	//获取活动信息
-	public static final String METHOD_GET_HUODONG="getHuoDongs";
-	
-	//获取活动url
-	public static final String METHOD_GET_HUO_DONG_URL="getHuoDongUrl";
-	
-	//获取兑换url
-	public static final String METHOD_GET_DUI_HUAN="getDuiHuanUrl";
-	
-	//增加关注
-	public static final String METHOD_ADD_GUANZHU="addGuanZhu";
-	
-	//获取关注ids
-	public static final String  METHOD_GET_GUANZHU_IDS="getGuanZhuId";
-	
-	//取消关注
-	public static final String  METHOD_DELETE_GUANZHU="deleteGuanZhu";
-	
-	//获取msg size
-	public static final String METHOD_GET_MSG_SIZE="getMsgSize";
+	public static final String METHOD_GET_MY_TIEZI_SIZE="getMyTieZiSize";
+	//获取我的帖子
+	public static final String METHOD_GET_MY_TIEZI="getMyTieZi";
+	//获取我的关注
+	public static final String METHOD_GET_MY_GUANZHU="getMyGuanZhu";
 }

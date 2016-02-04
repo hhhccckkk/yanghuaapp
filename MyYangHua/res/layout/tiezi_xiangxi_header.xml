@@ -110,6 +110,7 @@
             android:orientation="vertical" >
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="45dp"
                 android:layout_height="20dp"
                 android:background="@drawable/baike_search_shap"

@@ -29,10 +29,6 @@ public class MyPreferences {
 	}
 
 	public static void saveString(String key, String data) {
-		if (key == null || "".equals(key) || data == null || "".equals(data)) {
-			Log.e("hck", "MyPreferences saveString null");
-			return;
-		}
 		if (preference != null) {
 			editor = preference.edit();
 			editor.putString(key, data);

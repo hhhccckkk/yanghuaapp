@@ -111,7 +111,6 @@ public class BaseActivity extends FragmentActivity {
 
 
 	private void exit() {
-		MyPreferences.saveString("user", null);
 		AppManager.getAppManager().AppExit();
 		finish();
 	}

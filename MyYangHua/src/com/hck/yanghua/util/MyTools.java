@@ -480,7 +480,6 @@ public class MyTools {
 
 	public static Bitmap getSmallBitmap(String filePath) {
 		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(filePath, options);
 		options.inSampleSize = calculateInSampleSize(options, 480, 800);
 		options.inJustDecodeBounds = false;
@@ -489,10 +488,9 @@ public class MyTools {
 
 	public static Bitmap getSmallBitmap2(String filePath) {
 		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(filePath, options);
-		options.inSampleSize = calculateInSampleSize(options, 90, 90);
 		options.inJustDecodeBounds = false;
+		BitmapFactory.decodeFile(filePath, options);
+		options.inSampleSize = calculateInSampleSize(options, 90,120);
 		return BitmapFactory.decodeFile(filePath, options);
 	}
 

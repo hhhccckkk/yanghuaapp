@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.MsgBean;
 import com.hck.yanghua.data.Constant;
-import com.hck.yanghua.fragment.HuiFuMsgFragment;
+import com.hck.yanghua.fragment.TongZhiMsgFragment;
 import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;

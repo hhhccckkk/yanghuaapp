@@ -25,7 +25,7 @@ import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
 import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
-import com.hck.yanghua.data.GuanZhuData;
+import com.hck.yanghua.data.GuanZhuMsgData;
 import com.hck.yanghua.data.MyData;
 import com.hck.yanghua.net.Request;
 import com.hck.yanghua.util.JsonUtils;
@@ -44,7 +44,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 	private UserBean userBean;
 	private Button guanzhuButton;
 	private long uid;
-	private GuanZhuData guanZhuData;
+	private GuanZhuMsgData guanZhuData;
 	private long gid;
 	private TextView fensiTextViewTitle, guanzhuTextViewTitle,
 			dongtaiTextViewTitle;
@@ -164,6 +164,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 				super.onSuccess(statusCode, response);
 				LogUtil.D("onSuccess: " + response.toString());
 				guanzhuButton.setText("关注");
+				updateUser(-1);
 			}
 
 			@Override
@@ -190,7 +191,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 				LogUtil.D("onSuccess: " + response);
 				try {
 					guanZhuData = JsonUtils.parse(response.toString(),
-							GuanZhuData.class);
+							GuanZhuMsgData.class);
 					updateGuanZhuBtn();
 				} catch (Exception e) {
 				}
@@ -234,6 +235,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 					if (code == 0) {
 						gid = response.getLong("gid");
 						guanzhuButton.setText("取消关注");
+						updateUser(1);
 					} else {
 						MyToast.showCustomerToast("网络异常 关注失败");
 					}
@@ -250,6 +252,11 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			}
 		});
 	}
+private void updateUser(int size){
+	UserBean userBean=MyData.getData().getUserBean();
+	userBean.setGuanzhu(userBean.getGuanzhu()+size);
+	MyData.getData().setUserBean(userBean);
+}
 
 	private void getUserInfo() {
 		Pdialog.showDialog(this, "正在获取用户信息", false);

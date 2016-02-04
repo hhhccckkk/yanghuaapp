@@ -5,18 +5,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,17 +53,17 @@ import com.hck.yanghua.util.JsonUtils;
 import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
+import com.hck.yanghua.util.ShareUtil;
 import com.hck.yanghua.util.TimeUtil;
 import com.hck.yanghua.view.AlertDialog;
 import com.hck.yanghua.view.MyEditextView;
+import com.hck.yanghua.view.MyGridView;
+import com.hck.yanghua.view.MyGridView.GetBiaoQingCallBack;
 import com.hck.yanghua.view.Pdialog;
-import com.hck.yanghua.view.PopupChoicePicter;
-import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
-import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class TieZiXiangXiActivity extends BaseTitleActivity implements
-		android.view.View.OnClickListener, GetBiaoQing {
+		android.view.View.OnClickListener, GetBiaoQingCallBack {
 	public static final int JING_HUA = 1; // 精华
 	public static final int HUO = 20; // 火
 	public static final int TUIJIAN = 1; // 推荐
@@ -92,7 +92,6 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private ZanData zanData;
 	private LinearLayout zanLayout;
 	private TextView zanSizeTextView;
-	private PopupWindowChiceBiaoQing pBiaoQing;
 	private static final String IMAGEFILE = "/yanghua/";
 	ArrayList<String> listfile = new ArrayList<String>();
 	private LinearLayout tupianLayout;
@@ -105,6 +104,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private boolean isDataOver;
 	private View foodView;
 	private ImageView footerImageView;
+	private MyGridView gridView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + content);
 						zanImageView.setEnabled(false);
-						
+
 					}
 
 					@Override
@@ -202,20 +202,20 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				});
 
 	}
-    
+
 	private void updateZan() {
 		if (zanData == null || zanData.getZanBean() == null) {
 			return;
 		}
-		UserBean userBean=MyData.getData().getUserBean();
+		UserBean userBean = MyData.getData().getUserBean();
 		zanLayout.setVisibility(View.VISIBLE);
 		ImageView imageView = null;
 		List<ZanBean> zanBean = zanData.getZanBean();
 		if (zanBean.size() > 0) {
 			zanSizeTextView.setText(zanBean.size() + "人赞过");
 			for (int i = 0; i < zanBean.size(); i++) {
-				if (userBean.getUid()==zanBean.get(i).getUid()) {
-					zanImageView.setEnabled(false);  //用户已赞过，则不能再赞
+				if (userBean.getUid() == zanBean.get(i).getUid()) {
+					zanImageView.setEnabled(false); // 用户已赞过，则不能再赞
 				}
 				if (i > 15) {
 					continue;
@@ -251,7 +251,26 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		});
 	}
 
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			if (msg.what == 1) {
+				MyToast.showCustomerToast("分享成功");
+			}
+		};
+	};
+
 	private void setListener() {
+		righButton.setText("分享");
+		righButton.setVisibility(View.VISIBLE);
+		righButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ShareUtil.share(TieZiXiangXiActivity.this,
+						tieZiBean.getContent(),
+						(String[]) imagePaths.toArray(new String[imagePaths.size()]), handler);
+			}
+		});
 		zanImageView.setOnClickListener(new OnClickListener() {
 			/**
 			 * String yuantie=getStringData("yuantie"); long
@@ -311,7 +330,6 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			public boolean onTouch(View v, MotionEvent event) {
 				zanImageView.setVisibility(View.GONE);
 				biaoqingLayout.setVisibility(View.VISIBLE);
-				tupianView.setVisibility(View.VISIBLE);
 				return false;
 			}
 		});
@@ -350,65 +368,30 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	public static final int PINGLUN_OK = 3;
 	private ArrayList<String> imagePaths = new ArrayList<>();
 	private List<Bitmap> bitmaps = new ArrayList<>();
-	private String imagePath;
 
-	// 弹出选择获取图片的pop
-	public void getPicter(View view, String path) {
-		PopupChoicePicter popupController = new PopupChoicePicter(this, path,
-				GET_PHOTO, GET_PICTER, 3);
-		popupController.checkPopupWindow();
-		popupController.getPopupWindow().setAnimationStyle(
-				R.style.popwin_anim_style);
-		popupController.getPopupWindow().showAtLocation(view, Gravity.BOTTOM,
-				0, 0);
-	}
+	private ArrayList<String> mSelectPath;
 
 	// 弹出选择图片界面
 	public void choicePicter(View view) {
+		hidenPop();
 		if (imagePaths.size() >= 3) {
-			MyToast.showCustomerToast("最多添加5张图片哦");
+			MyToast.showCustomerToast("最多3张图，点击可删除");
 			return;
 		}
-		hideInput(view);
-		String path = getPath();
-		imagePath = path;
-		getPicter(view, path);
+		int imageSize = imagePaths.size();
+
+		Intent intent = new Intent(this, MultiImageSelectorActivity.class);
+		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT,
+				3 - imageSize);
+		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE,
+				MultiImageSelectorActivity.MODE_MULTI);
+		startActivityForResult(intent, 1);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		LogUtil.D("requestCode: " + requestCode + ": " + requestCode);
-		if (requestCode == GET_PICTER) {
-			if (data != null) {
-				listfile = data.getStringArrayListExtra("files");
-				for (int i = 0; i < listfile.size(); i++) {
-					String imagePath = listfile.get(i);
-					LogUtil.D("imagePath: " + imagePath);
-					addImagePath(imagePath);
-					Bitmap bitmap = MyTools.getSmallBitmap(imagePath);
-					if (bitmap != null) {
-						showImages(bitmap, imagePath);
-					}
-					bitmaps.add(bitmap);
-				}
-			} else {
-			}
-
-		} else if (requestCode == GET_PHOTO) {
-			Bitmap photo = null;
-			File file = new File(imagePath);
-			if (file != null && file.exists()) {
-				BitmapFactory.Options option = new BitmapFactory.Options();
-				option.inSampleSize = 8;
-				photo = BitmapFactory.decodeFile(file.getPath(), option);
-				addImagePath(imagePath);
-			}
-			if (photo != null) {
-				showImages(photo, imagePath);
-
-			}
-			bitmaps.add(photo);
-		} else if (requestCode == PINGLUN_OK) {
+		if (requestCode == PINGLUN_OK) {
 
 			HuiTieBean huiTieBean = new HuiTieBean();
 			huiTieBean.setName(data.getStringExtra("name"));
@@ -416,6 +399,20 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			huiTieBean.setContent(data.getStringExtra("content"));
 			addHuiFu(huiTieBean);
 
+		}
+		if (requestCode == 1) {
+			if (resultCode == RESULT_OK) {
+				mSelectPath = data
+						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+				for (String imgPath : mSelectPath) {
+					Bitmap bitmap = MyTools.getSmallBitmap2(imgPath);
+					if (bitmap != null) {
+						addImagePath(imgPath);
+						showImages(bitmap, imgPath);
+					}
+					bitmaps.add(bitmap);
+				}
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -442,14 +439,15 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 				huiTieBean.setImage1(huiTieBean1.getImage1());
 			}
 			if (huiTieBean1.getIamge2() != null) {
-				huiTieBean.setImage1(huiTieBean1.getIamge2());
+				huiTieBean.setIamge2(huiTieBean1.getIamge2());
 			}
 			if (huiTieBean1.getIamge3() != null) {
-				huiTieBean.setImage1(huiTieBean1.getIamge3());
+				huiTieBean.setIamge3(huiTieBean1.getIamge3());
 			}
 			huiTieBean.setHuifuUserName(huiTieBean1.getName());
 			huiTieBean.setYuantie(huiTieBean1.getYuantie());
 			huiTieBean.setContent(huiTieBean1.getContent());
+			huiTieBean.setBenDi(true);
 			if (adapter != null) {
 				adapter.updateView(huiTieBean);
 			}
@@ -475,6 +473,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			}
 		});
 		tupianLayout.addView(view);
+		tupianView.setVisibility(View.VISIBLE);
 	}
 
 	private void addImagePath(String ptah) {
@@ -497,45 +496,23 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		}
 	}
 
-	// 获取一个路径，保存拍照后获取的照片
-	public String getPath() {
-		File sdDir = null;
-		String path2;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		if (sdCardExist) {
-			sdDir = Environment.getExternalStorageDirectory();
-			File file = null;
-			File dir = new File(sdDir + IMAGEFILE);
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
-			file = new File(dir, System.currentTimeMillis() + ".jpg");
-			path2 = file.toString();
-			return path2;
-		} else {
-			MyToast.showCustomerToast("没有sdcard");
-			return null;
-		}
-
-	}
-
 	// 弹出选择表情界面
 	public void showPopChiceImage(View view) {
-		if (pBiaoQing == null) {
-			hideInput(view);
-			pBiaoQing = new PopupWindowChiceBiaoQing();
-			pBiaoQing.showFaTieView(view, this, this);
-		}
+		tupianView.setVisibility(View.GONE);
+		if (gridView.getVisibility() == View.VISIBLE) {
+			gridView.setVisibility(View.GONE);
+		} else {
+			gridView.setVisibility(View.VISIBLE);
 
+		}
 	}
 
 	// 隐藏选择表情界面
 	private void hidenPop() {
-		if (pBiaoQing != null && pBiaoQing.popupWindow != null) {
-			pBiaoQing.popupWindow.dismiss();
+		gridView.setVisibility(View.GONE);
+		if (imagePaths.size() > 0) {
+			tupianView.setVisibility(View.VISIBLE);
 		}
-		pBiaoQing = null;
 	}
 
 	private void hidenHuiTie() {
@@ -558,6 +535,8 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		foodView = LayoutInflater.from(this).inflate(R.layout.list_item_foot,
 				null);
 		footerImageView = (ImageView) foodView.findViewById(R.id.img);
+		gridView = (MyGridView) findViewById(R.id.fatie_gridview);
+		gridView.setGetBiaoQingCallBackListener(this);
 
 	}
 
@@ -706,6 +685,25 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 		});
 	}
 
+	public void onclickImg(HuiTieBean huiTieBean) {
+		ArrayList<String> dataArrayList = new ArrayList<>();
+		if (!TextUtils.isEmpty(huiTieBean.getImage1())) {
+			dataArrayList.add(huiTieBean.getImage1());
+		}
+		if (!TextUtils.isEmpty(huiTieBean.getIamge2())) {
+			dataArrayList.add(huiTieBean.getIamge2());
+		}
+		if (!TextUtils.isEmpty(huiTieBean.getIamge3())) {
+			dataArrayList.add(huiTieBean.getIamge3());
+		}
+
+		Intent intent = new Intent();
+		intent.putExtra("isBenDi", huiTieBean.isBenDi());
+		intent.putStringArrayListExtra("images", dataArrayList);
+		intent.setClass(TieZiXiangXiActivity.this, ShowImageActivity.class);
+		startActivity(intent);
+	}
+
 	private void updateView() {
 		pListView.addHeaderView(convertView);
 		pListView.addFooterView(foodView);
@@ -799,19 +797,23 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 							if (code == 0) {
 
 								HuiTieBean huiTieBean = new HuiTieBean();
+								huiTieBean.setBenDi(true);
 								huiTieBean.setContent(data);
-								if (imagePaths.size() > 0) {
-									huiTieBean.setImage1(imagePaths.get(0));
+								LogUtil.D("imagesize: " + imagePaths.size());
+
+								for (int i = 0; i < imagePaths.size(); i++) {
+									if (i == 0) {
+										String img1 = imagePaths.get(0);
+										huiTieBean.setImage1(img1);
+									} else if (i == 1) {
+										String img1 = imagePaths.get(1);
+										huiTieBean.setIamge2(img1);
+									} else if (i == 2) {
+										String img1 = imagePaths.get(2);
+										huiTieBean.setIamge3(img1);
+									}
 								}
-								if (imagePaths.size() > 1) {
-									huiTieBean.setImage1(imagePaths.get(0));
-									huiTieBean.setIamge2(imagePaths.get(1));
-								}
-								if (imagePaths.size() > 2) {
-									huiTieBean.setImage1(imagePaths.get(0));
-									huiTieBean.setIamge2(imagePaths.get(1));
-									huiTieBean.setIamge3(imagePaths.get(2));
-								}
+
 								addHuiFu(huiTieBean);
 
 								MyToast.showCustomerToast("回复成功");
@@ -826,6 +828,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 								MyToast.showCustomerToast("回复失败");
 							}
 						} catch (Exception e) {
+							LogUtil.D("eeeeeeeeeeeeeeeeee: " + e.toString());
 						}
 					}
 
@@ -869,15 +872,21 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (biaoqingLayout.getVisibility() == View.VISIBLE) {
+			if (gridView.getVisibility() == View.VISIBLE) {
+				LogUtil.D("111111111111");
+				hidenPop();
+				return false;
+			} else if (tupianView.getVisibility() == View.VISIBLE) {
+				tupianView.setVisibility(View.GONE);
+				LogUtil.D("22222222222222");
+				return false;
+			} else {
+				LogUtil.D("3333333333333");
 				hidenHuiTie();
 				destroyBitMap();
 				removeAllImagePath();
 				hidenPop();
-				return false;
-			} else {
 				finish();
-				return true;
 			}
 		}
 		return true;
@@ -892,14 +901,6 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 			tupianLayout.removeAllViews();
 		}
 
-	}
-
-	@Override
-	public void getImage(SpannableString spannableString) {
-		if (spannableString != null) {
-			editText.append(spannableString);
-		}
-		hidenPop();
 	}
 
 	private HuiTieBean huiTieBean;
@@ -945,6 +946,14 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 			}
 		});
+	}
+
+	@Override
+	public void getBiaoQing(SpannableString data) {
+		if (data != null) {
+			editText.append(data);
+		}
+		hidenPop();
 	}
 
 }

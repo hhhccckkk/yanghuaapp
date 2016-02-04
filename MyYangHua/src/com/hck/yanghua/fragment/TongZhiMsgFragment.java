@@ -1,55 +1,60 @@
 package com.hck.yanghua.fragment;
 
-import java.util.List;
+import org.json.JSONObject;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ListView;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.exceptions.EaseMobException;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hck.httpserver.JsonHttpResponseHandler;
+import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
-import com.hck.yanghua.adapter.ZhongZhiAdpter;
-import com.hck.yanghua.adapter.ZhongZhiAdpter.OnTongZhiListener;
+import com.hck.yanghua.adapter.HuiFuMsgAdpter;
+import com.hck.yanghua.adapter.HuiFuMsgAdpter.LiaoTianCallBack;
+import com.hck.yanghua.bean.MsgBean;
+import com.hck.yanghua.bean.TieZiBean;
+import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
-import com.hck.yanghua.db.DBUtil;
-import com.hck.yanghua.db.MsgInviteBean;
+import com.hck.yanghua.data.MsgData;
+import com.hck.yanghua.data.MyData;
+import com.hck.yanghua.net.Request;
+import com.hck.yanghua.ui.ChatActivity;
+import com.hck.yanghua.ui.TieZiXiangXiActivity;
+import com.hck.yanghua.util.JsonUtils;
 import com.hck.yanghua.util.LogUtil;
-import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
-import com.hck.yanghua.view.AlertDialog;
+import com.hck.yanghua.view.BadgeView;
 import com.hck.yanghua.view.CustomAlertDialog;
+import com.hck.yanghua.view.Pdialog;
 
-public class TongZhiMsgFragment extends BaseFragment implements
-		OnTongZhiListener {
+public class TongZhiMsgFragment extends BaseFragment implements LiaoTianCallBack {
 	private PullToRefreshListView pullToRefreshListView;
-	private List<MsgInviteBean> msgInviteBeans;
-	private ZhongZhiAdpter adpter;
-	public static final int TONGYI = 1;
-	public static final int JUJUE = 2;
-	public static final int ERROR = -1;
-
+	private int page = 1;
+	private MsgData msgDatas = new MsgData();
+	private boolean isUpdate;
+	private HuiFuMsgAdpter adapter;
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (mRootView == null) {
-			mRootView = inflater.inflate(R.layout.fragment_tz, null);
+			mRootView = inflater.inflate(R.layout.fragment_huifu_meg, null);
 			initView(mRootView);
 			setListener();
 			setEndLabel();
 			getData();
-			getData();
+			Pdialog.showLoading(getActivity(), true);
 		}
 		ViewGroup parent = (ViewGroup) mRootView.getParent();
 		if (parent != null) {
@@ -59,12 +64,71 @@ public class TongZhiMsgFragment extends BaseFragment implements
 	}
 
 	private void getData() {
-		msgInviteBeans = new DBUtil(this.getActivity()).getInviteBeans();
-		adpter = null;
-		adpter = new ZhongZhiAdpter(msgInviteBeans, this.getActivity(), this);
-		pullToRefreshListView.setAdapter(adpter);
-		pullToRefreshListView.onRefreshComplete();
+		Pdialog.showLoading(this.getActivity(), true);
+		params = new RequestParams();
+		params.put("page", page + "");
+		Request.getHuiFuMsg(Constant.METHOD_GET_HUIFU_MSG, params,
+				new JsonHttpResponseHandler() {
+					@Override
+					public void onFinish(String url) {
+						super.onFinish(url);
+						Pdialog.hiddenDialog();
+						pullToRefreshListView.onRefreshComplete();
+					}
 
+					@Override
+					public void onSuccess(int statusCode, JSONObject response) {
+						super.onSuccess(statusCode, response);
+						LogUtil.D("onSuccess: " + response.toString());
+						try {
+							int code = response.getInt("code");
+							if (code == 0) {
+								msgDatas = JsonUtils.parse(response.toString(),
+										MsgData.class);
+								updateView();
+							}
+						} catch (Exception e) {
+
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable error, String content) {
+						super.onFailure(error, content);
+						LogUtil.D("onFailure: " + content);
+						MyToast.showCustomerToast("网络异常获取数据失败");
+					}
+				});
+
+	}
+
+	private void updateView() {
+		if (isUpdate && msgDatas.getMsgBeans() != null
+				&& !msgDatas.getMsgBeans().isEmpty()) {
+			if (adapter != null && adapter != null) {
+				adapter.msgBeans.clear();
+				adapter.msgBeans = null;
+			}
+			adapter = null;
+		}
+		if (adapter == null) {
+			adapter = new HuiFuMsgAdpter(this.getActivity(),
+					msgDatas.getMsgBeans(), this);
+			pullToRefreshListView.setAdapter(adapter);
+		} else {
+			if (msgDatas.getMsgBeans() != null) {
+				adapter.updateView(msgDatas.getMsgBeans());
+			}
+		}
+		pullToRefreshListView.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				pullToRefreshListView.onRefreshComplete();
+			}
+		}, 1000);
+
+		isUpdate = false;
 	}
 
 	private void setEndLabel() {
@@ -76,150 +140,153 @@ public class TongZhiMsgFragment extends BaseFragment implements
 	}
 
 	private void setListener() {
+		pullToRefreshListView.setOnRefreshListener(new OnRefreshListener2() {
+
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+				page = 1;
+				isUpdate = true;
+				getData();
+
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+				page++;
+				getData();
+			}
+		});
+
 		pullToRefreshListView.getRefreshableView().setOnItemLongClickListener(
 				new OnItemLongClickListener() {
 
 					@Override
 					public boolean onItemLongClick(AdapterView<?> parent,
 							View view, int position, long id) {
-						MsgInviteBean msgInviteBean = (MsgInviteBean) adpter
+						MsgBean msgBean = (MsgBean) adapter
 								.getItem(position - 1);
-						alertD(msgInviteBean);
+						alertDeleteD(msgBean.getId(), position - 1);
 						return false;
 					}
 				});
 
-		pullToRefreshListView
-				.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		pullToRefreshListView.getRefreshableView().setOnItemClickListener(
+				new OnItemClickListener() {
 
 					@Override
-					public void onRefresh(
-							PullToRefreshBase<ListView> refreshView) {
-						getData();
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						LogUtil.D("onItemClickonItemClickonItemClick");
+						MsgBean msgBean = (MsgBean) adapter
+								.getItem(position - 1);
+						TieZiBean tieZiBean = new TieZiBean();
+						tieZiBean.setName(msgBean.getTieziUserName());
+						tieZiBean.setTouxiang(msgBean.getFatieUserTX());
+						tieZiBean.setFensi(msgBean.getFensi());
+						tieZiBean.setContent(msgBean.getYuantie());
+						tieZiBean.setTupian1(msgBean.getImage1());
+						tieZiBean.setTupian2(msgBean.getImage2());
+						tieZiBean.setTupian3(msgBean.getImage3());
+						tieZiBean.setTupian4(msgBean.getImage4());
+						tieZiBean.setTupian5(msgBean.getImage5());
+						tieZiBean.setAddress(msgBean.getAddress());
+						tieZiBean.setTime(msgBean.getTime().substring(0, 11));
+						tieZiBean.setTid(msgBean.getTid());
+						Intent intent = new Intent();
+						intent.putExtra("tiezi", tieZiBean);
+						intent.setClass(TongZhiMsgFragment.this.getActivity(),
+								TieZiXiangXiActivity.class);
+						intent.putExtra("type", msgBean.getSaleOrNorm());
+						startActivity(intent);
+
 					}
-
 				});
-
 	}
 
-	private void alertD(final MsgInviteBean msgInviteBean) {
-		final CustomAlertDialog alertDialog = new CustomAlertDialog(
-				getActivity());
+	private void alertDeleteD(final Long msgId, final int pos) {
+		CustomAlertDialog alertDialog = new CustomAlertDialog(
+				this.getActivity());
+		alertDialog.setTitle("提示");
 		alertDialog.setCancelable(true);
 		alertDialog.setCanceledOnTouchOutside(true);
 		alertDialog.setLeftText("取消");
 		alertDialog.setRightText("删除");
 		alertDialog.setMessage("确定删除吗?");
-		alertDialog.setTitle("提示");
-		alertDialog.setOnLeftListener(new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				alertDialog.dismiss();
-			}
-		});
 		alertDialog.setOnRightListener(new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				new DBUtil(getActivity()).deleteMsgInviteMsg(msgInviteBean);
-				getData();
+				deleteMsg(msgId, pos);
 			}
 		});
 		alertDialog.show();
 	}
 
-	private void initView(View mRootView) {
-		pullToRefreshListView = (PullToRefreshListView) mRootView
-				.findViewById(R.id.tongzhi_tieziList);
-		pullToRefreshListView.setMode(Mode.PULL_FROM_START);
+	private void deleteMsg(long msgId, final int pos) {
+		Pdialog.showDialog(getActivity(), "删除中...", true);
+		params = new RequestParams();
+		params.put("msgId", msgId + "");
+		Request.deleteHuiFuMsg(params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				MyToast.showCustomerToast("删除失败");
+			}
+
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				LogUtil.D("onSuccess: " + response.toString());
+				try {
+					int code = response.getInt("code");
+					if (code == 0) {
+						adapter.msgBeans.remove(pos);
+						adapter.notifyDataSetChanged();
+					} else {
+						MyToast.showCustomerToast("删除失败");
+					}
+				} catch (Exception e) {
+					LogUtil.D("eee: " + e.toString());
+				}
+
+			}
+
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+				Pdialog.hiddenDialog();
+			}
+		});
+
 	}
 
-	public void onClickListener(MsgInviteBean msgInviteBean) {
+	private void initView(View mRootView) {
+		pullToRefreshListView = (PullToRefreshListView) mRootView
+				.findViewById(R.id.huifu_list);
+		pullToRefreshListView.setMode(Mode.BOTH);
+	}
+
+	public void startChatActivity(Object data) {
 
 	}
 
 	@Override
-	public void caozuo(MsgInviteBean msgInviteBean) {
-		LogUtil.D("msgInviteBean: " + msgInviteBean.getUserName());
-		this.msgInviteBean = msgInviteBean;
-		showAlertD(msgInviteBean);
+	public void startLiaoTian(Object object) {
+		MsgBean msgBean = (MsgBean) object;
+		UserBean userBean = new UserBean();
+		if (msgBean != null) {
+			userBean.setName(msgBean.getUserName());
+			userBean.setTouxiang(msgBean.getTouxiang());
+			userBean.setUserId(msgBean.getUserMsgId());
+		}
+		Intent intent = new Intent();
+		intent.putExtra("user", userBean);
 
-	}
-
-	private void showAlertD(final MsgInviteBean msgInviteBean) {
-		AlertDialog alertDialog = new AlertDialog(getActivity());
-		alertDialog.showAlert("是否加为好友", "同意", "拒绝", null);
-		alertDialog.setOnTopListener(new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				LogUtil.D("同意");
-				tongyi(msgInviteBean.getUserMsgId());
-			}
-		});
-		alertDialog.setOnCenterListener(new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				LogUtil.D("拒绝");
-				juJue(msgInviteBean.getUserMsgId());
-			}
-		});
-		
-	}
-
-	private MsgInviteBean msgInviteBean = null;
-
-	private void updateMsgState(MsgInviteBean msgInviteBean) {
-		new DBUtil(getActivity()).updateMsgInviteMsg(msgInviteBean);
-		getData();
-	}
-
-	Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			if (msg.what == ERROR) {
-				MyToast.showCustomerToast("处理失败");
-			} else if (msg.what == JUJUE) {
-				msgInviteBean.setState(JUJUE);
-				updateMsgState(msgInviteBean);
-			} else if (msg.what == TONGYI) {
-				msgInviteBean.setState(TONGYI);
-				updateMsgState(msgInviteBean);
-			}
-		};
-	};
-
-	private void tongyi(final String userName) {
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					EMChatManager.getInstance().acceptInvitation(userName);
-					handler.sendEmptyMessage(TONGYI);
-					LogUtil.D("通过一同意");
-				} catch (EaseMobException e) {
-					e.printStackTrace();
-					handler.sendEmptyMessage(ERROR);
-				}
-			}
-		}.start();
-
-	}
-
-	private void juJue(final String userName) {
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					EMChatManager.getInstance().refuseInvitation(userName);
-					handler.sendEmptyMessage(JUJUE);
-				} catch (EaseMobException e) {
-					e.printStackTrace();
-					handler.sendEmptyMessage(ERROR);
-				}
-			}
-		}.start();
+		UserBean myDataBean = MyData.getData().getUserBean();
+		intent.putExtra("fromImg", myDataBean.getTouxiang());
+		intent.putExtra("fromUserName", myDataBean.getName());
+		intent.setClass(this.getActivity(), ChatActivity.class);
+		startActivity(intent);
 
 	}
 

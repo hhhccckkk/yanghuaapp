@@ -353,21 +353,27 @@ public class MainFragment extends BaseFragment implements
 				try {
 					MyData.gz = response.getInt("gz");
 					MyData.tz = response.getInt("tz");
-					int oldGz = MyPreferences.getInt("gzSize", -1);
-					int oldTz = MyPreferences.getInt("tzSize", -1);
+					int oldGz = MyPreferences.getInt(MyData.getData()
+							.getUserId() + "gzSize", -1);
+					int oldTz = MyPreferences.getInt(MyData.getData()
+							.getUserId() + "tzSize", -1);
 
 					if (MyData.gz > oldGz) {
-						MyPreferences.saveBoolean("gz", true);
+						MyPreferences.saveBoolean(MyData.getData().getUserId()
+								+ "gz", true);
 						remindTzOrGz();
 					} else {
-						MyPreferences.saveBoolean("gz", false);
+						MyPreferences.saveBoolean(MyData.getData().getUserId()
+								+ "gz", false);
 					}
 
 					if (MyData.tz > oldTz) {
-						MyPreferences.saveBoolean("tz", true);
+						MyPreferences.saveBoolean(MyData.getData().getUserId()
+								+ "tz", true);
 						remindTzOrGz();
 					} else {
-						MyPreferences.saveBoolean("tz", false);
+						MyPreferences.saveBoolean(MyData.getData().getUserId()
+								+ "tz", false);
 					}
 
 				} catch (Exception e) {

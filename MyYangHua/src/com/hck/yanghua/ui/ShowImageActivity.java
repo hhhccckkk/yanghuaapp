@@ -31,6 +31,7 @@ public class ShowImageActivity extends Activity {
 	private TextView sizeTextView;
 	private int imageSize = 0;
 	private int pos;
+	private boolean isBenDi;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class ShowImageActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_image);
 		imageList = getIntent().getStringArrayListExtra("images");
+		isBenDi = getIntent().getBooleanExtra("isBenDi", false);
 		imageSize = imageList.size();
 		initView();
 		mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
@@ -56,7 +58,7 @@ public class ShowImageActivity extends Activity {
 		if (photoView != null) {
 			Bitmap bitmap = photoView.getDrawingCache();
 			if (bitmap != null) {
-				new SaveImageUtil(this, bitmap,imageList.get(pos)).execute();
+				new SaveImageUtil(this, bitmap, imageList.get(pos)).execute();
 			}
 		} else {
 			Toast.makeText(this, "保存失败", Toast.LENGTH_LONG).show();
@@ -104,16 +106,14 @@ public class ShowImageActivity extends Activity {
 			final PhotoView photoView = new PhotoView(container.getContext());
 			photoView.setId(position);
 			photoView.setDrawingCacheEnabled(true);
-			GetImageUtil.showImageDaTu(imageList.get(position), photoView);
+			if (isBenDi) {
+				ImageLoader.getInstance().displayImage(
+						"file://" + imageList.get(position), photoView);
+			} else {
+				GetImageUtil.showImageDaTu(imageList.get(position), photoView);
+			}
 			container.addView(photoView, LayoutParams.MATCH_PARENT,
 					LayoutParams.MATCH_PARENT);
-			photoView.setOnLongClickListener(new OnLongClickListener() {
-
-				@Override
-				public boolean onLongClick(View v) {
-					return false;
-				}
-			});
 
 			return photoView;
 		}

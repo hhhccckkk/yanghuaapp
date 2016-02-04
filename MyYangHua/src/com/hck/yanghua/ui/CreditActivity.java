@@ -252,7 +252,7 @@ public class CreditActivity extends BaseTitleActivity {
         initWebView();
         mLinearLayout.addView(mWebView);
         setContentView(mLinearLayout);
-        initTitleView("兑换中心");
+        initTitleView("活动兑换");
         if (type == 0) {
           //  mTitleBar.hidenRightBtn();
             try {
@@ -429,7 +429,7 @@ public class CreditActivity extends BaseTitleActivity {
                     @Override
                     public void onReceiveValue(String value) {
                       //  initTitle(title);
-                    	initTitleView("兑换中心");
+                    	initTitleView("活动兑换");
                     }
                 });
             } else {

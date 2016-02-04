@@ -35,7 +35,8 @@ import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.view.Pdialog;
 
-public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceListener{
+public class NewTieZiFragment extends BaseFragment implements
+		OnTouXiangCliceListener {
 	private static final int MAX_SIZE = 10;
 	public static final int ZAN = 1;
 	public static final int PING_LUN = 2;
@@ -45,6 +46,7 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 	private TieZiData tieZiBeans;
 	private TieZiAdapter adapter;
 	private MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+	private long uid;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +54,9 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 		regestBrodCast();
 		if (mRootView == null) {
 			mRootView = inflater.inflate(R.layout.fragment_tiezi, null);
+			if (getArguments() != null) {
+				uid = getArguments().getLong("uid");
+			}
 			initView(mRootView);
 			setListener();
 			setEndLabel();
@@ -154,7 +159,7 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 				intent.setClass(NewTieZiFragment.this.getActivity(),
 						TieZiXiangXiActivity.class);
 				intent.putExtra("pos", position);
-				intent.putExtra("type", Constant.NEW_TIE_ZI);
+				intent.putExtra("type", tieZiBean.getTieZieType());
 				startActivity(intent);
 			}
 		});
@@ -165,72 +170,77 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 		params.put("page", page + "");
 		params.put("maxSize", MAX_SIZE + "");
 		params.put("type", 1 + ""); // 1一般分享帖子
-		Request.getTieZi(Constant.METHOD_GET_TIEZI, params,
-				new JsonHttpResponseHandler() {
-					@Override
-					public void onFailure(Throwable error, String content) {
-						super.onFailure(error, content);
-						LogUtil.D("onFailure: " + content + error);
-					}
+		params.put("uid", uid + "");
+		String method = null;
+		if (uid > 0) {
+			method = Constant.METHOD_GET_MY_TIEZI;
+		} else {
+			method = Constant.METHOD_GET_TIEZI;
+		}
+		Request.getTieZi(method, params, new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				LogUtil.D("onFailure: " + content + error);
+			}
 
-					@Override
-					public void onSuccess(int statusCode, JSONObject response) {
-						super.onSuccess(statusCode, response);
-						MyPreferences
-								.saveBoolean(Constant.KEY_ISFATIEOK, false);
-						try {
-							int code = response.getInt("code");
-							if (code == Request.REQUEST_SUCCESS) {
-								tieZiBeans = null;
-								tieZiBeans = JsonUtils.parse(
-										response.toString(), TieZiData.class);
-								if (tieZiBeans != null
-										&& tieZiBeans.getTieZiBeans() != null
-										&& !tieZiBeans.getTieZiBeans()
-												.isEmpty()) {
-									LogUtil.D("updateView111");
-									updateView();
-									
-								} else {
-									MyToast.showCustomerToast("没有更多数据了");
-								}
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				super.onSuccess(statusCode, response);
+				MyPreferences.saveBoolean(Constant.KEY_ISFATIEOK, false);
+				try {
+					int code = response.getInt("code");
+					if (code == Request.REQUEST_SUCCESS) {
+						tieZiBeans = null;
+						tieZiBeans = JsonUtils.parse(response.toString(),
+								TieZiData.class);
+						if (tieZiBeans != null
+								&& tieZiBeans.getTieZiBeans() != null
+								&& !tieZiBeans.getTieZiBeans().isEmpty()) {
+							LogUtil.D("updateView111");
+							updateView();
 
-							} else {
-								MyToast.showCustomerToast("获取数据失败");
-							}
-						} catch (Exception e) {
-							MyToast.showCustomerToast("获取数据失败");
-							LogUtil.D("ddd: " + e.toString());
+						} else {
+							MyToast.showCustomerToast("没有更多数据了");
 						}
-					}
 
-					@Override
-					public void onFinish(String url) {
-						super.onFinish(url);
-						if (pullToRefreshListView != null) {
-							pullToRefreshListView.onRefreshComplete();
-						}
-						Pdialog.hiddenDialog();
-
+					} else {
+						MyToast.showCustomerToast("获取数据失败");
 					}
-				});
+				} catch (Exception e) {
+					MyToast.showCustomerToast("获取数据失败");
+					LogUtil.D("ddd: " + e.toString());
+				}
+			}
+
+			@Override
+			public void onFinish(String url) {
+				super.onFinish(url);
+				if (pullToRefreshListView != null) {
+					pullToRefreshListView.onRefreshComplete();
+				}
+				Pdialog.hiddenDialog();
+
+			}
+		});
 
 	}
 
 	private void updateView() {
 		if (isUpdate) {
-			if (adapter!=null && adapter.tieZiBeans != null) {
+			if (adapter != null && adapter.tieZiBeans != null) {
 				adapter.tieZiBeans.clear();
 				adapter.tieZiBeans = null;
 			}
 			adapter = null;
 		}
 		if (adapter == null) {
-			
+			LogUtil.D("111111111111111dddddddddddddddddddddddddddddddddddddddddd");
 			adapter = new TieZiAdapter(this.getActivity(),
-					tieZiBeans.getTieZiBeans(),this);
+					tieZiBeans.getTieZiBeans(), this);
 			pullToRefreshListView.setAdapter(adapter);
 		} else {
+			LogUtil.D("dddddddddddddddddddddddddddddddddddddddddd");
 			adapter.addData(tieZiBeans.getTieZiBeans());
 		}
 		isUpdate = false;
@@ -245,7 +255,7 @@ public class NewTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 
 	@Override
 	public void getUserId(Long uid) {
-       startShowOneUserActivity(getActivity(), uid);
+		startShowOneUserActivity(getActivity(), uid);
 	}
 
 }

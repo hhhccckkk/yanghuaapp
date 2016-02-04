@@ -61,7 +61,6 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		loadMsg();
 		login();
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -75,9 +74,12 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	private void login() {
 		UserBean userBean = MyData.getData().getUserBean();
-		if (userBean != null) {
-			loginServer2(userBean.getUserId().toLowerCase());
+		if (!EMChat.getInstance().isLoggedIn()) {
+			if (userBean != null) {
+				loginServer2(userBean.getUserId().toLowerCase());
+			}
 		}
+		
 	}
 
 	private void initView() {
@@ -103,7 +105,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			params.put("jingdu", bdLocation.getLongitude() + "");
 			params.put("weidu", bdLocation.getLatitude() + "");
 		}
-		Request.getUserData(Constant.METHOD_GET_USER_DATA,true, params,
+		Request.getUserData(Constant.METHOD_GET_USER_DATA, true, params,
 				new JsonHttpResponseHandler() {
 					public void onFinish(String url) {
 
@@ -112,15 +114,15 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					public void onFailure(Throwable error, String content) {
 						MyToast.showCustomerToast("网络异常登录失败");
 						loginBtn.setVisibility(View.VISIBLE);
-						
+
 					};
 
 					public void onSuccess(int statusCode, JSONObject response) {
-						LogUtil.D("onSuccess: "+response.toString());
+						LogUtil.D("onSuccess: " + response.toString());
 						pareUserData(response);
 					};
 				});
-		
+
 	}
 
 	private void pareUserData(JSONObject response) {
@@ -182,6 +184,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			@Override
 			public void onComplete(Platform arg0, int arg1,
 					HashMap<String, Object> arg2) {
+				
 				Message message = new Message();
 				message.what = LOGIN_SUCCESS;
 
@@ -208,11 +211,13 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 		PlatformDb platDB = arg0.getDb();
 		userBean.setAddress(data.get("province").toString()
 				+ data.get("city").toString());
+		
 		userBean.setUserId(platDB.getUserId());
 		userBean.setName(platDB.getUserName());
 		userBean.setTouxiang(data.get("figureurl_qq_2").toString());
 		userBean.setCity(data.get("city").toString());
 		String xingbie = data.get("gender").toString();
+		LogUtil.D("getUserData: "+userBean.getName() +userBean.getAddress());
 		if (Constant.MAN.equals(xingbie)) {
 			userBean.setXingbie(Constant.NAN);
 		} else {
@@ -236,7 +241,8 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 				pBar.setVisibility(View.VISIBLE);
 				userBean = (UserBean) msg.obj;
 				if (userBean != null) {
-					userName =userBean.getUserId();
+					userName = userBean.getUserId();
+					LogUtil.D("userNameuserNameuserNameuserNameuserName: "+userName);
 					regsterToMsgServer(userName);
 				} else {
 					loginBtn.setVisibility(View.VISIBLE);
@@ -254,7 +260,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			return;
 		}
 		RequestParams params = new RequestParams();
-		params.put("userId",userBean.getUserId());
+		params.put("userId", userBean.getUserId());
 		params.put("xingbie", userBean.getXingbie() + "");
 		params.put("touxiang", userBean.getTouxiang());
 		params.put("userName", userBean.getName());
@@ -367,19 +373,6 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 		manager.downloadApk(downUrl);
 	}
 
-	// 加载本地聊天信息
-	private void loadMsg() {
-		new Thread(new Runnable() {
-			public void run() {
-				if (EMChat.getInstance().isLoggedIn()) {
-					EMGroupManager.getInstance().loadAllGroups();
-					EMChatManager.getInstance().loadAllConversations();
-				}
-			}
-		}).start();
-
-	}
-
 	private static final int NET_WORK_BAD = 1;
 	private static final int USER_NAME_IS_EXIT = 2;
 	private static final int UNKNOWN_ERROR = 3;
@@ -429,6 +422,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	}
 
 	private void loginToMsgServer() {
+		
 		EMChatManager.getInstance().login(userName.toLowerCase(),
 				Constant.PASSWORD, new EMCallBack() {// 回调
 					@Override

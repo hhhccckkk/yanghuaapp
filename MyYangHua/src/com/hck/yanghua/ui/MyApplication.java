@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
 import com.easemob.easeui.controller.EaseUI;
 import com.hck.yanghua.R;
 import com.hck.yanghua.data.MyData;

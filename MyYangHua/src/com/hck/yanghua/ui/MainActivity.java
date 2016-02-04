@@ -16,6 +16,9 @@ import cn.sharesdk.tencent.qq.QQ;
 
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
 import com.hck.httpserver.JsonHttpResponseHandler;
 import com.hck.httpserver.RequestParams;
 import com.hck.yanghua.R;
@@ -33,6 +36,7 @@ import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyPreferences;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.view.CustomAlertDialog;
+import com.hck.yanghua.view.Pdialog;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -183,7 +187,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				exit();
+				loginOut();
 			}
 		});
 
@@ -217,9 +221,31 @@ public class MainActivity extends SlidingFragmentActivity implements
 		Platform qq = ShareSDK.getPlatform(QQ.NAME);
 		if (qq != null) {
 			qq.removeAccount();
+			qq.removeAccount(true);
 		}
 	}
-
+   private void loginOut(){
+	   Pdialog.showDialog(this, "正在退出当前账号", true);
+	   EMChatManager.getInstance().logout(new EMCallBack() {
+           
+           @Override
+           public void onSuccess() {
+               exit();
+               Pdialog.hiddenDialog();
+           }
+           
+           @Override
+           public void onProgress(int progress, String status) {
+               
+           }
+           
+           @Override
+           public void onError(int code, String error) {
+        	   Pdialog.hiddenDialog();
+               MyToast.showCustomerToast("退出当前账号失败");
+           }
+       });
+   }
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

@@ -30,7 +30,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="6dp"
-                android:text="老科"
                 android:textColor="#363636"
                 android:textSize="18sp" />
 
@@ -96,6 +95,7 @@
         android:orientation="horizontal" >
 
         <LinearLayout
+           android:onClick="showMyTieZi"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -106,7 +106,6 @@
                 android:id="@+id/user_dongtai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1000"
                 android:textColor="@color/red_anniu_bt_color"
                 android:textSize="16sp" />
 
@@ -114,9 +113,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="动态"
+                android:text="我的帖子"
                 android:textColor="#363636"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <View
@@ -127,6 +126,7 @@
             android:background="@color/line_color" />
 
         <LinearLayout
+            android:onClick="showMyFenSi"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -137,7 +137,6 @@
                 android:id="@+id/user_fensi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="340"
                 android:textColor="@color/red_anniu_bt_color"
                 android:textSize="16sp" />
 
@@ -145,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="粉丝"
+                android:text="我的粉丝"
                 android:textColor="#363636"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -158,6 +157,7 @@
             android:background="@color/line_color" />
 
         <LinearLayout
+            android:onClick="showMyGuanZhu"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -168,7 +168,6 @@
                 android:id="@+id/user_guanzhu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1000"
                 android:textColor="@color/red_anniu_bt_color"
                 android:textSize="16sp" />
 
@@ -176,7 +175,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="关注"
+                android:text="我的关注"
                 android:textColor="#363636"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -188,6 +187,51 @@
         android:background="#f8f6f7" />
 
     <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/user_item_selector"
+        android:onClick="showMyBaoBei" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/user_huabao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="好友动态"
+                android:textColor="#686868"
+                android:textSize="16sp" />
+            <ImageView 
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/icon_tail_statusbar_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/user_remind"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/right_jiantou" />
+    </FrameLayout>
+     <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color" />
+     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/user_item_selector"

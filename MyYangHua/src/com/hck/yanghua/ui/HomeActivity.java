@@ -18,7 +18,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 	private NewTieZiFragment tieZiFragment;
 	private HotTieZiFragment hotTieZiFragment;
 	private ChuShouTieZiFragment chuShouTieZiFragment;
-	private Fragment mFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
 	private void initHomeFragment() {
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.home_content, tieZiFragment).commit();
-		mFragment = tieZiFragment;
 	}
 
 	private void initFragment() {
@@ -56,7 +54,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
    private void changeFragment(Fragment fragment){
 	   getSupportFragmentManager().beginTransaction()
 		.replace(R.id.home_content, fragment).commit();
-        mFragment = fragment;
    }
 	@Override
 	public void onClick(View v) {

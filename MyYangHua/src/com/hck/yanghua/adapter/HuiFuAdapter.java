@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,12 +24,12 @@ import com.hck.yanghua.ui.ShowOneUserActivity;
 import com.hck.yanghua.ui.TieZiXiangXiActivity;
 import com.hck.yanghua.util.ExpressionUtil;
 import com.hck.yanghua.util.GetImageUtil;
+import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.util.TimeUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HuiFuAdapter extends BaseAdapter {
-	
 
 	private Context context;
 	private List<HuiTieBean> huiTieBeans;
@@ -93,7 +94,8 @@ public class HuiFuAdapter extends BaseAdapter {
 			viewHolder.huiTieLayout = (LinearLayout) convertView
 					.findViewById(R.id.huitie_huifu_lay);
 			setListener(viewHolder.huifuImageView);
-			viewHolder.headerLayout=(LinearLayout) convertView.findViewById(R.id.huitie_header);
+			viewHolder.headerLayout = (LinearLayout) convertView
+					.findViewById(R.id.huitie_header);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -133,19 +135,43 @@ public class HuiFuAdapter extends BaseAdapter {
 			viewHolder.imageView1.setVisibility(View.GONE);
 		} else {
 			viewHolder.imageView1.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(imag1, viewHolder.imageView1);
+			if (huiTieBean.isBenDi()) {
+				LogUtil.D("isBenDiisBenDiisBenDiisBenDi");
+				ImageLoader.getInstance().displayImage("file://" + imag1,
+						viewHolder.imageView1);
+			} else {
+				GetImageUtil.showImageDaTu(imag1, viewHolder.imageView1);
+			}
+			viewHolder.imageView1.setTag(huiTieBean);
+			onCliceImgCallBack(viewHolder.imageView1);
+
 		}
 		if (TextUtils.isEmpty(imag2)) {
 			viewHolder.imageView2.setVisibility(View.GONE);
 		} else {
 			viewHolder.imageView2.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(imag2, viewHolder.imageView2);
+			if (huiTieBean.isBenDi()) {
+				ImageLoader.getInstance().displayImage("file://" + imag2,
+						viewHolder.imageView2);
+			} else {
+				GetImageUtil.showImageDaTu(imag2, viewHolder.imageView2);
+			}
+			viewHolder.imageView2.setTag(huiTieBean);
+			onCliceImgCallBack(viewHolder.imageView2);
+
 		}
 		if (TextUtils.isEmpty(imag3)) {
 			viewHolder.imageView3.setVisibility(View.GONE);
 		} else {
 			viewHolder.imageView3.setVisibility(View.VISIBLE);
-			GetImageUtil.showImageDaTu(imag3, viewHolder.imageView3);
+			if (huiTieBean.isBenDi()) {
+				ImageLoader.getInstance().displayImage("file://" + imag3,
+						viewHolder.imageView3);
+			} else {
+				GetImageUtil.showImageDaTu(imag3, viewHolder.imageView3);
+			}
+			viewHolder.imageView3.setTag(huiTieBean);
+			onCliceImgCallBack(viewHolder.imageView3);
 		}
 		viewHolder.tiemTextView.setText("丨"
 				+ TimeUtil.forTime(huiTieBean.getTime()));
@@ -178,25 +204,39 @@ public class HuiFuAdapter extends BaseAdapter {
 			}
 		});
 	}
-   private void setShowUserActivity(View view){
-	   view.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent intent =new Intent();
-			intent.putExtra("uid", (Long)v.getTag());
-			intent.setClass(context, ShowOneUserActivity.class);
-              context.startActivity(intent);			
-		}
-	});
-   }
+
+	private void onCliceImgCallBack(final ImageView imageView) {
+		imageView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				HuiTieBean huiTieBean = (HuiTieBean) imageView.getTag();
+				((TieZiXiangXiActivity) context).onclickImg(huiTieBean);
+				
+			}
+		});
+	}
+
+	private void setShowUserActivity(View view) {
+		view.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.putExtra("uid", (Long) v.getTag());
+				intent.setClass(context, ShowOneUserActivity.class);
+				context.startActivity(intent);
+			}
+		});
+	}
+
 	public void updateView(List<HuiTieBean> huiTieBeans) {
 		this.huiTieBeans.addAll(huiTieBeans);
 		this.notifyDataSetChanged();
 	}
 
 	public void updateView(HuiTieBean huiTieBeans) {
-		this.huiTieBeans.add(0,huiTieBeans);
+		this.huiTieBeans.add(0, huiTieBeans);
 		this.notifyDataSetChanged();
 	}
 

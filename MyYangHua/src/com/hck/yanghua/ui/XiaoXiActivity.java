@@ -17,8 +17,8 @@ import com.hck.yanghua.R;
 import com.hck.yanghua.bean.UserBean;
 import com.hck.yanghua.data.Constant;
 import com.hck.yanghua.data.MyData;
-import com.hck.yanghua.fragment.HuiFuMsgFragment;
 import com.hck.yanghua.fragment.TongZhiMsgFragment;
+import com.hck.yanghua.fragment.GuanZhuMsgFragment;
 import com.hck.yanghua.liaotian.MainMsgReceiver;
 import com.hck.yanghua.liaotian.MainMsgReceiver.HasNewMsgGet;
 import com.hck.yanghua.util.MyPreferences;
@@ -29,8 +29,8 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 	private static final int HUIFU_MSG = 2;
 	private static final int XITONG_MSG = 3;
 	private EaseConversationListFragment conversationListFragment;
-	private HuiFuMsgFragment huiFuMsgFragment;
-	private TongZhiMsgFragment xiTongMsgFragment;
+	private TongZhiMsgFragment tongzhiMsgFragment;
+	private GuanZhuMsgFragment guanzhuTongMsgFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 	}
 
 	private void showHongDian() {
-		boolean isNewTz = MyPreferences.getBoolean("tz", false);
-		boolean isNewGz = MyPreferences.getBoolean("gz", false);
+		boolean isNewTz = MyPreferences.getBoolean(MyData.getData().getUserId()+"tz", false);
+		boolean isNewGz = MyPreferences.getBoolean(MyData.getData().getUserId()+"gz", false);
 		if (isNewTz) {
 			mTitleBar.showTongzhiImg();
 
@@ -70,8 +70,8 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 	private void initFragment() {
 		conversationListFragment = new EaseConversationListFragment();
 
-		huiFuMsgFragment = new HuiFuMsgFragment();
-		xiTongMsgFragment = new TongZhiMsgFragment();
+		tongzhiMsgFragment = new TongZhiMsgFragment();
+		guanzhuTongMsgFragment = new GuanZhuMsgFragment();
 	}
 
 	private void initTitle() {
@@ -167,9 +167,9 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 			rightTextView.setTextColor(getResources().getColor(R.color.whilt));
 			centerTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
 			rightTextView.setBackgroundResource(R.color.transparent);
-			changeFragment(huiFuMsgFragment);
+			changeFragment(tongzhiMsgFragment);
 			MyPreferences.saveBoolean("tz",false);
-			MyPreferences.saveInt("tzSize", MyData.tz);
+			MyPreferences.saveInt(MyData.getData().getUserId()+"tzSize", MyData.tz);
 			break;
 		case XITONG_MSG:
 			leftTextView.setBackgroundResource(R.color.transparent);
@@ -179,8 +179,8 @@ public class XiaoXiActivity extends BaseActivity implements OnClickListener,
 					R.color.red_anniu_bt_color));
 			centerTextView.setBackgroundResource(R.color.transparent);
 			rightTextView.setBackgroundResource(R.drawable.home_title_bt_shap);
-			changeFragment(xiTongMsgFragment);
-			MyPreferences.saveInt("gzSize", MyData.gz);
+			changeFragment(guanzhuTongMsgFragment);
+			MyPreferences.saveInt(MyData.getData().getUserId()+"gzSize", MyData.gz);
 			break;
 		default:
 			break;

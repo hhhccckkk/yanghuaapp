@@ -209,4 +209,17 @@ public class Request {
 		requestGet(Constant.METHOD_GET_MSG_SIZE, params, handler, true);
 	}
 
+	// 获取关注我的信息
+	public static void getGuanZhuMsg(String method,RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(method, params, handler, true);
+	}
+
+	// 获取我的帖子数量
+	public static void getMyTieZiSize(RequestParams params,
+			HCKHttpResponseHandler handler) {
+		requestGet(Constant.METHOD_GET_MY_TIEZI_SIZE, params, handler, true);
+
+	}
+
 }

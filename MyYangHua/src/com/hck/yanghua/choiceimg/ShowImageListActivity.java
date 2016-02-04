@@ -61,29 +61,29 @@ public class ShowImageListActivity extends BaseTitleActivity {
 	}
 
 	private void setListener() {
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent intent = new Intent(ShowImageListActivity.this,
-						ImgsActivity.class);
-				intent.putExtra("size", maxSize);
-				Bundle bundle = new Bundle();
-				bundle.putParcelable("data", locallist.get(position));
-				intent.putExtras(bundle);
-				if (FaTieActivity.fatieActivity != null) {
-					FaTieActivity.fatieActivity.startActivityForResult(intent,
-							FaTieActivity.GET_PICTER);
-				} else {
-					TieZiXiangXiActivity.tieZiXiangXiActivity
-							.startActivityForResult(intent,
-									FaTieActivity.GET_PICTER);
-				}
-				finish();
-				System.gc();
-			}
-		});
+//		listView.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				Intent intent = new Intent(ShowImageListActivity.this,
+//						ImgsActivity.class);
+//				intent.putExtra("size", maxSize);
+//				Bundle bundle = new Bundle();
+//				bundle.putParcelable("data", locallist.get(position));
+//				intent.putExtras(bundle);
+//				if (FaTieActivity.fatieActivity != null) {
+//					FaTieActivity.fatieActivity.startActivityForResult(intent,
+//							FaTieActivity.GET_PICTER);
+//				} else {
+//					TieZiXiangXiActivity.tieZiXiangXiActivity
+//							.startActivityForResult(intent,
+//									FaTieActivity.GET_PICTER);
+//				}
+//				finish();
+//				System.gc();
+//			}
+//		});
 	}
 
 }

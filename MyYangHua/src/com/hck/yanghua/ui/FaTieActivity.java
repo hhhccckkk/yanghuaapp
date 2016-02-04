@@ -4,17 +4,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,26 +32,25 @@ import com.hck.yanghua.util.LogUtil;
 import com.hck.yanghua.util.MyToast;
 import com.hck.yanghua.util.MyTools;
 import com.hck.yanghua.view.MyEditextView;
+import com.hck.yanghua.view.MyGridView;
+import com.hck.yanghua.view.MyGridView.GetBiaoQingCallBack;
 import com.hck.yanghua.view.Pdialog;
-import com.hck.yanghua.view.PopupChoicePicter;
-import com.hck.yanghua.view.PopupWindowChiceBiaoQing;
-import com.hck.yanghua.view.PopupWindowChiceBiaoQing.GetBiaoQing;
 
-public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
+public class FaTieActivity extends BaseTitleActivity implements
+		GetBiaoQingCallBack {
 	private static final int MAX_SIZE = 600;
-	private static final int GET_PHOTO = 1;
-	public static final int GET_PICTER = 2;
-	private static final String IMAGEFILE = "/yanghua/";
+	private static final int REQUEST_IMAGE = 1;
 	private static final String HAS_IMAGE = "1";
 	private MyEditextView contentEditText;
-	private PopupWindowChiceBiaoQing pBiaoQing;
 	private List<Bitmap> bitmaps = new ArrayList<>();
-	private String imagePath;
 	private LinearLayout imageLayout;
 	private ArrayList<String> imagePaths = new ArrayList<>();
 	ArrayList<String> listfile = new ArrayList<String>();
 	public static Activity fatieActivity;
 	private int type = 0;
+	private MyGridView gridView;
+	private LinearLayout choicePicterLay;
+	private ArrayList<String> mSelectPath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +64,14 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 
 	private void initView() {
 		contentEditText = (MyEditextView) findViewById(R.id.fatie_content_ex);
+		choicePicterLay = (LinearLayout) findViewById(R.id.choicePicterLay);
 		contentEditText.setBackgroundColor(getResources().getColor(
 				R.color.transparent));
 		contentEditText.setHint("内容不超过500个字");
 		imageLayout = (LinearLayout) findViewById(R.id.fatie_lay);
+		gridView = (MyGridView) findViewById(R.id.fatie_gridview);
+		gridView.setGetBiaoQingCallBackListener(this);
+		hidenPop();
 	}
 
 	private void initTitle() {
@@ -192,60 +194,37 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 		sendBroadcast(intent);
 	}
 
-	// 获取一个路径，保存拍照后获取的照片
-	public String getPath() {
-		File sdDir = null;
-		String path2;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		if (sdCardExist) {
-			sdDir = Environment.getExternalStorageDirectory();
-			File file = null;
-			File dir = new File(sdDir + IMAGEFILE);
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
-			file = new File(dir, System.currentTimeMillis() + ".jpg");
-			path2 = file.toString();
-			return path2;
-		} else {
-			MyToast.showCustomerToast("没有sdcard");
-			return null;
-		}
-
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == GET_PICTER) {
-			if (data != null) {
-				listfile = data.getStringArrayListExtra("files");
-				for (int i = 0; i < listfile.size(); i++) {
-					String imagePath = listfile.get(i);
-					addImagePath(imagePath);
-					Bitmap bitmap = MyTools.getSmallBitmap(imagePath);
+		LogUtil.D("onActivityResultonActivityResultonActivityResult: "
+				+ requestCode + ":" + resultCode);
+		if (requestCode == REQUEST_IMAGE) {
+			if (resultCode == RESULT_OK) {
+				mSelectPath = data
+						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+				for (String imgPath : mSelectPath) {
+					Bitmap bitmap = MyTools.getSmallBitmap2(imgPath);
 					if (bitmap != null) {
-						showImages(bitmap, imagePath);
+						addImagePath(imgPath);
+						showImages(bitmap, imgPath);
 					}
 					bitmaps.add(bitmap);
 				}
-			} else {
+			}
+		}
+
+		if (requestCode == 1 && data != null) {
+			String path = data.getStringExtra("img");
+			int type = data.getIntExtra("type", -1);
+			if (type == 100) {
+				if (!TextUtils.isEmpty(path)) {
+					addImagePath(path);
+					Bitmap bitmap = MyTools.getSmallBitmap2(path);
+					LogUtil.D("bitmapbitmap: " + bitmap);
+					showImages(bitmap, path);
+				}
 			}
 
-		} else if (requestCode == GET_PHOTO) {
-			Bitmap photo = null;
-			File file = new File(imagePath);
-			if (file != null && file.exists()) {
-				BitmapFactory.Options option = new BitmapFactory.Options();
-				option.inSampleSize = 8;
-				photo = BitmapFactory.decodeFile(file.getPath(), option);
-				addImagePath(imagePath);
-			}
-			if (photo != null) {
-				showImages(photo, imagePath);
-
-			}
-			bitmaps.add(photo);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -283,71 +262,68 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 				String tag = (String) v.getTag();
 				removePath(tag);
 				imageLayout.removeView(view);
-				LogUtil.D("removePath: " + tag);
 			}
 		});
 		imageLayout.addView(view);
 	}
 
 	// 弹出选择获取图片的pop
-	public void getPicter(View view, String path) {
-		PopupChoicePicter popupController = new PopupChoicePicter(this, path,
-				GET_PHOTO, GET_PICTER, 5);
-		popupController.checkPopupWindow();
-		popupController.getPopupWindow().setAnimationStyle(
-				R.style.popwin_anim_style);
-		popupController.getPopupWindow().showAtLocation(view, Gravity.BOTTOM,
-				0, 0);
+	public void choicePicter(View view) {
+		choicePicterLay.setVisibility(View.VISIBLE);
 	}
 
-	// 弹出选择图片界面
-	public void choicePicter(View view) {
+	public void choiceNormPicter(View view) {
+		hidenPop();
+		Intent intent = new Intent(this, MultiImageSelectorActivity.class);
+		int imageSize = imagePaths.size();
+
+		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT,
+				5 - imageSize);
+
+		if (mSelectPath != null && mSelectPath.size() > 0) {
+			intent.putExtra(
+					MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST,
+					mSelectPath);
+		}
+		startActivityForResult(intent, REQUEST_IMAGE);
+	}
+
+	public void choiceBiaoQianPicter(View view) {
+		hidenPop();
 		if (imagePaths.size() >= 5) {
-			MyToast.showCustomerToast("最多添加5张图片哦");
+			MyToast.showCustomerToast("最多5张图，点击可删除");
 			return;
 		}
-		hideInput(view);
-		String path = getPath();
-		imagePath = path;
-		getPicter(view, path);
+		Intent intent = new Intent(this, MultiImageSelectorActivity.class);
+		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE,
+				MultiImageSelectorActivity.MODE_SINGLE);
+		startActivityForResult(intent, REQUEST_IMAGE);
 	}
 
 	// 弹出选择表情界面
 	public void showPopChiceImage(View view) {
-		if (pBiaoQing == null) {
-			hideInput(view);
-			pBiaoQing = new PopupWindowChiceBiaoQing();
-			pBiaoQing.showFaTieView(view, this, this);
+		if (gridView.getVisibility() == View.VISIBLE) {
+			gridView.setVisibility(View.GONE);
+		} else {
+			gridView.setVisibility(View.VISIBLE);
+			choicePicterLay.setVisibility(View.GONE);
 		}
 
 	}
 
 	// 隐藏选择表情界面
 	private void hidenPop() {
-		if (pBiaoQing != null && pBiaoQing.popupWindow != null) {
-			pBiaoQing.popupWindow.dismiss();
-		}
-		pBiaoQing = null;
+		gridView.setVisibility(View.GONE);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (pBiaoQing != null) {
-			hidenPop();
+		if (gridView.getVisibility() == View.VISIBLE) {
+			gridView.setVisibility(View.GONE);
 			return false;
-		} else {
-			finish();
-			return super.onKeyDown(keyCode, event);
 		}
+		return super.onKeyDown(keyCode, event);
 
-	}
-
-	@Override
-	public void getImage(SpannableString spannableString) {
-		if (spannableString != null) {
-			contentEditText.append(spannableString);
-		}
-		hidenPop();
 	}
 
 	@Override
@@ -362,6 +338,14 @@ public class FaTieActivity extends BaseTitleActivity implements GetBiaoQing {
 		super.onDestroy();
 		destroyBitMap();
 		System.gc();
+	}
+
+	@Override
+	public void getBiaoQing(SpannableString data) {
+		if (data != null) {
+			contentEditText.append(data);
+		}
+
 	}
 
 }

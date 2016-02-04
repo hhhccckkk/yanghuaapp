@@ -43,7 +43,16 @@ public class HuiTieBean implements Serializable {
     private String huifuUserName;   
 	@JsonProperty("userIdString")
     private String userIdString;
+    private boolean isBenDi;
     
+	public boolean isBenDi() {
+		return isBenDi;
+	}
+
+	public void setBenDi(boolean isBenDi) {
+		this.isBenDi = isBenDi;
+	}
+
 	public String getUserIdString() {
 		return userIdString;
 	}

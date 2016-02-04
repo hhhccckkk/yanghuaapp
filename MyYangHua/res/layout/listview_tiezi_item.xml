@@ -73,10 +73,10 @@
         android:layout_below="@+id/tiezi_touxiang"
         android:layout_gravity="top"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/btn_all_orange_n"
         android:padding="1dp"
         android:text="火爆"
-         android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
         android:textSize="12sp" />
 
@@ -86,11 +86,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tiezi_touxiang"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/tiezi_huo"
         android:background="@drawable/btn_all_blue_n"
         android:padding="1dp"
         android:text="精华"
-        android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
         android:textSize="12sp" />
 
@@ -100,11 +100,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tiezi_touxiang"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/tiezi_jing"
         android:background="@drawable/btn_all_red_n"
         android:padding="1dp"
         android:text="推荐"
-         android:layout_marginTop="5dp"
         android:textColor="@color/whilt"
         android:textSize="12sp" />
 
@@ -141,9 +141,9 @@
         <ImageView
             android:id="@+id/tiezi_image2"
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="fill_parent"
             android:layout_marginLeft="3dp"
-            android:layout_weight="1"
             android:scaleType="fitXY" />
     </LinearLayout>
 
