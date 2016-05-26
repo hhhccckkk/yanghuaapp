@@ -101,7 +101,7 @@ public class FriendActivity extends BaseTitleActivity {
 							if (data != null && data.getFriendBeans() != null) {
 								updateView(data.getFriendBeans());
 							} else {
-								MyToast.showCustomerToast("您还没有好友");
+								MyToast.showCustomerToast("您还没有好友",FriendActivity.this);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();

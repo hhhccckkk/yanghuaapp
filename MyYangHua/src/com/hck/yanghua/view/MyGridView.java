@@ -40,7 +40,7 @@ public class MyGridView extends GridView {
 
 	private void initBiaoQing(final Context context) {
 		List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < BIAO_QING_SIZE; i++) {
+		for (int i = 1; i < BIAO_QING_SIZE; i++) {
 			try {
 				if (i < 10) {
 					Field field = R.drawable.class

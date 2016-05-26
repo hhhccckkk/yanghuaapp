@@ -94,7 +94,7 @@ public class PopupChoicePicter {
 				if (state.equals(Environment.MEDIA_MOUNTED)) { // 被分区,有读和写的权限
 					getPhoto();
 				} else {
-					MyToast.showCustomerToast("SD卡无读写权限");
+					MyToast.showCustomerToast("SD卡无读写权限",activity);
 				}
 				/**
 	         * 

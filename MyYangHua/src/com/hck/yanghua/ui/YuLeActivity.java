@@ -42,7 +42,7 @@ public class YuLeActivity extends BaseTitleActivity {
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
 				LogUtil.D("onFailureonFailure: " + content + error);
-				MyToast.showCustomerToast("网络异常获取数据失败");
+				MyToast.showCustomerToast("网络异常获取数据失败", YuLeActivity.this);
 			}
 
 			@Override
@@ -54,7 +54,7 @@ public class YuLeActivity extends BaseTitleActivity {
 							HuoDongdata.class);
 					updateView();
 				} catch (Exception e) {
-					MyToast.showCustomerToast("网络异常获取数据失败");
+					MyToast.showCustomerToast("网络异常获取数据失败", YuLeActivity.this);
 				}
 			}
 
@@ -101,14 +101,14 @@ public class YuLeActivity extends BaseTitleActivity {
 					String url = response.getString("url");
 					startYuLeActivity(url);
 				} catch (Exception e) {
-					MyToast.showCustomerToast("网络异常");
+					MyToast.showCustomerToast("网络异常", YuLeActivity.this);
 					LogUtil.D("ddd: " + e.toString());
 				}
 			};
 
 			public void onFailure(Throwable error, String content) {
 				LogUtil.D("onSuccess: " + error + content);
-				MyToast.showCustomerToast("网络异常");
+				MyToast.showCustomerToast("网络异常", YuLeActivity.this);
 			};
 		});
 	}

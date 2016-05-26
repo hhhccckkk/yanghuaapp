@@ -90,11 +90,11 @@ public class FaTieActivity extends BaseTitleActivity implements
 		StringBuffer data = new StringBuffer("");
 		String content = contentEditText.getText().toString();
 		if (TextUtils.isEmpty(content)) {
-			MyToast.showCustomerToast("内容不能为空");
+			MyToast.showCustomerToast("内容不能为空",this);
 			return;
 		}
 		if (content.length() > MAX_SIZE) {
-			MyToast.showCustomerToast("内容不能超过600个文字");
+			MyToast.showCustomerToast("内容不能超过600个文字",this);
 			return;
 		}
 		content = content.trim();
@@ -151,7 +151,7 @@ public class FaTieActivity extends BaseTitleActivity implements
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("失败: " + error + content);
-						MyToast.showCustomerToast("网络异常发帖失败");
+						MyToast.showCustomerToast("网络异常发帖失败",fatieActivity);
 					}
 
 					@Override
@@ -161,11 +161,11 @@ public class FaTieActivity extends BaseTitleActivity implements
 						try {
 							int code = response.getInt("code");
 							if (code == Request.REQUEST_SUCCESS) {
-								MyToast.showCustomerToast("发帖成功");
+								MyToast.showCustomerToast("发帖成功",fatieActivity);
 								sendBroadcast();
 								finish();
 							} else {
-								MyToast.showCustomerToast("发帖失败");
+								MyToast.showCustomerToast("发帖失败",fatieActivity);
 							}
 						} catch (Exception e) {
 
@@ -291,7 +291,7 @@ public class FaTieActivity extends BaseTitleActivity implements
 	public void choiceBiaoQianPicter(View view) {
 		hidenPop();
 		if (imagePaths.size() >= 5) {
-			MyToast.showCustomerToast("最多5张图，点击可删除");
+			MyToast.showCustomerToast("最多5张图，点击可删除",this);
 			return;
 		}
 		Intent intent = new Intent(this, MultiImageSelectorActivity.class);

@@ -1,5 +1,6 @@
 package com.hck.yanghua.util;
 
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +12,15 @@ import com.hck.yanghua.ui.MyApplication;
 
 public class MyToast {
 	 private static Toast sToast;
-	 public static void showCustomerToast(String textString) {
-	        View view = LayoutInflater.from(MyApplication.context).inflate(R.layout.toast, null);
+	 public static void showCustomerToast(String textString,Context context) {
+	        View view = LayoutInflater.from(context).inflate(R.layout.toast, null);
 	        TextView textView = (TextView) view.findViewById(R.id.toast_text);
 	        textView.setText(textString);
 	        if (sToast != null) {
 	            sToast.cancel();
 	            sToast = null;
 	        }
-	        sToast = new Toast(MyApplication.context);
+	        sToast = new Toast(context);
 	        sToast.setDuration(Toast.LENGTH_LONG);
 	        sToast.setGravity(Gravity.CENTER, 0, 0);
 	        sToast.setView(view);

@@ -112,7 +112,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					};
 
 					public void onFailure(Throwable error, String content) {
-						MyToast.showCustomerToast("网络异常登录失败");
+						MyToast.showCustomerToast("网络异常登录失败",SplashActivity.this);
 						loginBtn.setVisibility(View.VISIBLE);
 
 					};
@@ -136,16 +136,16 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					MyData.getData().setUserBean(userBean);
 					startMainActivity();
 				} else {
-					MyToast.showCustomerToast("网络异常登录失败");
+					MyToast.showCustomerToast("网络异常登录失败",SplashActivity.this);
 					loginBtn.setVisibility(View.VISIBLE);
 				}
 			} else {
-				MyToast.showCustomerToast("网络异常登录失败");
+				MyToast.showCustomerToast("网络异常登录失败",SplashActivity.this);
 				loginBtn.setVisibility(View.VISIBLE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			MyToast.showCustomerToast("网络异常登录失败");
+			MyToast.showCustomerToast("网络异常登录失败",SplashActivity.this);
 			loginBtn.setVisibility(View.VISIBLE);
 		}
 	}
@@ -165,11 +165,11 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 	private void loginQQ() {
 		Platform qq = ShareSDK.getPlatform(QQ.NAME);
 		if (qq == null) {
-			MyToast.showCustomerToast("登录失败");
+			MyToast.showCustomerToast("登录失败",SplashActivity.this);
 			return;
 		}
 		if (qq != null && !qq.isAuthValid()) {
-			MyToast.showCustomerToast("正在启动qq...");
+			MyToast.showCustomerToast("正在启动qq...",SplashActivity.this);
 		}
 		qq.SSOSetting(false);
 		qq.setPlatformActionListener(new PlatformActionListener() {
@@ -234,7 +234,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 			loginBtn.setFocusable(true);
 			if (msg == null || msg.what == LOGIN_ERROR
 					|| msg.what == LOGIN_CANCEL) {
-				MyToast.showCustomerToast("登录失败 您可以重新登录");
+				MyToast.showCustomerToast("登录失败 您可以重新登录",SplashActivity.this);
 				loginBtn.setVisibility(View.VISIBLE);
 			} else if (msg.what == LOGIN_SUCCESS) {
 				loginBtn.setVisibility(View.GONE);
@@ -246,7 +246,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					regsterToMsgServer(userName);
 				} else {
 					loginBtn.setVisibility(View.VISIBLE);
-					MyToast.showCustomerToast("登录失败");
+					MyToast.showCustomerToast("登录失败",SplashActivity.this);
 				}
 			}
 
@@ -255,7 +255,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 
 	private void addUser(UserBean userBean) {
 		if (userBean == null) {
-			MyToast.showCustomerToast("登录失败");
+			MyToast.showCustomerToast("登录失败",SplashActivity.this);
 			loginBtn.setVisibility(View.VISIBLE);
 			return;
 		}
@@ -285,7 +285,7 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + content + error);
-						MyToast.showCustomerToast("网络异常登录失败");
+						MyToast.showCustomerToast("网络异常登录失败",SplashActivity.this);
 						loginBtn.setVisibility(View.VISIBLE);
 					}
 
@@ -381,14 +381,14 @@ public class SplashActivity extends Activity implements UpdateAppCallBack {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case NET_WORK_BAD:
-				MyToast.showCustomerToast("网络异常");
+				MyToast.showCustomerToast("网络异常",SplashActivity.this);
 				break;
 			case USER_NAME_IS_EXIT: // 存在说明已注册，表示成功
 			case REGIST_OK:
 				loginToMsgServer();
 				break;
 			case UNKNOWN_ERROR:
-				MyToast.showCustomerToast("登录失败 请重试");
+				MyToast.showCustomerToast("登录失败 请重试",SplashActivity.this);
 				break;
 			default:
 				break;

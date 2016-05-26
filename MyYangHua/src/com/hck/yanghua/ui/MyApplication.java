@@ -21,7 +21,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class MyApplication extends Application {
-	public static Context context;
 	private static final int memoryCacheSize = 1024 * 1024 * 5;
 
 	@Override
@@ -32,14 +31,13 @@ public class MyApplication extends Application {
 		// B.a(HCK());
 		getLocation();
 		LogUtil.isPrintLog = true;
-		context = this;
 		new MyPreferences(this);
 		initImagerLoder();
 	}
 
-	static {
-		System.loadLibrary("hck");
-	}
+//	static {
+//		System.loadLibrary("hck");
+//	}
 
 	public native String HCK();
 

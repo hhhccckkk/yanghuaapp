@@ -134,7 +134,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 	public void huifu(View view) {
 		final String data = contentEditText.getText().toString();
 		if (TextUtils.isEmpty(data)) {
-			MyToast.showCustomerToast("评论不能为空");
+			MyToast.showCustomerToast("评论不能为空",this);
 			return;
 		}
 		Pdialog.showDialog(this, "提交数据中...", false);
@@ -157,7 +157,7 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + error + content);
-						MyToast.showCustomerToast("回复失败");
+						MyToast.showCustomerToast("回复失败",HuiFuActivity.this);
 						Pdialog.hiddenDialog();
 					}
 
@@ -168,12 +168,12 @@ public class HuiFuActivity extends BaseTitleActivity implements GetBiaoQing {
 						try {
 							int code = response.getInt("code");
 							if (code == 0) {
-								MyToast.showCustomerToast("回复成功");
+								MyToast.showCustomerToast("回复成功",HuiFuActivity.this);
 								sendBroadcast(pos);
 								updateView(huiTieBean.getName(),
 										huiTieBean.getContent(), data);
 							} else {
-								MyToast.showCustomerToast("回复失败");
+								MyToast.showCustomerToast("回复失败",HuiFuActivity.this);
 							}
 						} catch (Exception e) {
 						}

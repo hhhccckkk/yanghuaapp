@@ -23,7 +23,7 @@ public class MsgRequestUtil {
 	private static RequestParams params;
 	public static final boolean isGetFriendsOk = false;
 
-	public static void getFriends3() {
+	public static void getFriends() {
 		RequestParams params = new RequestParams();
 		Request.getFriends(params, new JsonHttpResponseHandler()
 
@@ -47,7 +47,6 @@ public class MsgRequestUtil {
 							MyPreferences.saveString("friend",
 									response.toString());
 						} else {
-							MyToast.showCustomerToast("您还没有好友");
 						}
 					}
 

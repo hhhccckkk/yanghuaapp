@@ -96,7 +96,7 @@ public class TongZhiMsgFragment extends BaseFragment implements LiaoTianCallBack
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + content);
-						MyToast.showCustomerToast("网络异常获取数据失败");
+						MyToast.showCustomerToast("网络异常获取数据失败",getActivity());
 					}
 				});
 
@@ -230,7 +230,7 @@ public class TongZhiMsgFragment extends BaseFragment implements LiaoTianCallBack
 			@Override
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
-				MyToast.showCustomerToast("删除失败");
+				MyToast.showCustomerToast("删除失败",getActivity());
 			}
 
 			@Override
@@ -243,7 +243,7 @@ public class TongZhiMsgFragment extends BaseFragment implements LiaoTianCallBack
 						adapter.msgBeans.remove(pos);
 						adapter.notifyDataSetChanged();
 					} else {
-						MyToast.showCustomerToast("删除失败");
+						MyToast.showCustomerToast("删除失败",getActivity());
 					}
 				} catch (Exception e) {
 					LogUtil.D("eee: " + e.toString());

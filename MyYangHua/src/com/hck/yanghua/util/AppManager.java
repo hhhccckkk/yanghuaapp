@@ -1,35 +1,48 @@
 package com.hck.yanghua.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
-import android.content.Context;
+
 public class AppManager {
-	
-	private static List<Activity> activityStack;
+
+	private static Set<Activity> activityStack;
 	private static AppManager instance;
-	
-	private AppManager(){}
-	public static AppManager getAppManager(){
-		if(instance==null){
-			instance=new AppManager();
+
+	private AppManager() {
+	}
+
+	public static AppManager getAppManager() {
+		if (instance == null) {
+			instance = new AppManager();
 		}
 		return instance;
 	}
-	public void addActivity(Activity activity){
-		if(activityStack==null){
-			activityStack=new ArrayList<Activity>();
+
+	public void addActivity(Activity activity) {
+		if (activityStack == null) {
+			activityStack = new HashSet<>();
 		}
-	     activityStack.add(activity);
+		activityStack.add(activity);
 	}
+
 	public void AppExit() {
 		try {
-			
-			for (int i = 0; i < activityStack.size(); i++) {
-				((Activity)activityStack.get(i)).finish();
+
+			for (Activity activity : activityStack) {
+				activity.finish();
 			}
 			System.exit(0);
-		} catch (Exception e) {	}
+		} catch (Exception e) {
+		}
+	}
+
+	public void removeActivity(Activity activity) {
+		if (activityStack != null) {
+			activityStack.remove(activity);
+		}
 	}
 }

@@ -49,11 +49,9 @@ public class UpdateManager {
                 installApk();
                 break;
             case 0:
-                MyToast.showCustomerToast("网络异常,下载失败");
                 AppManager.getAppManager().AppExit();
                 break;
             case DOWN_ERROR_FILE_ERROR:
-                MyToast.showCustomerToast("下载地址错误，无法下载");
             default:
                 break;
             }

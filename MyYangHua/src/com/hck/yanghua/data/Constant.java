@@ -4,7 +4,7 @@ public class Constant {
 	public static final String PASSWORD = "123456"; // 默认用户密码
 	// public static final String MAINHOST =
 	// "http://172.22.131.36:8080/MyYangHua/";
-	public static final String MAINHOST = "http://218.244.150.164:8080/MyYangHua/";
+	public static final String MAINHOST = "http://192.168.100.217:8080/MyYangHua/";
 	public static final String IMAGE_DATU_PATH = MAINHOST + "tiezi_images/";
 	public static final String IMAGE_XIAOTU_PATH = MAINHOST
 			+ "tiezi_images_xiaotu/";

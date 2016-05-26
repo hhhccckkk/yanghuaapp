@@ -119,7 +119,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			getDuiHuanUrl();
 			break;
 		case R.id.dapeng:
-			MyToast.showCustomerToast("暂未开放");
+			MyToast.showCustomerToast("暂未开放",this);
 		default:
 			break;
 		}
@@ -139,7 +139,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			@Override
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
-				MyToast.showCustomerToast("网络异常");
+				MyToast.showCustomerToast("网络异常",MainActivity.this);
 				LogUtil.D("onFailure: " + content + ": " + error);
 			}
 
@@ -242,7 +242,7 @@ public class MainActivity extends SlidingFragmentActivity implements
            @Override
            public void onError(int code, String error) {
         	   Pdialog.hiddenDialog();
-               MyToast.showCustomerToast("退出当前账号失败");
+               MyToast.showCustomerToast("退出当前账号失败",MainActivity.this);
            }
        });
    }

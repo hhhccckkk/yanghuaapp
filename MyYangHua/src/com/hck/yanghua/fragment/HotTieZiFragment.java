@@ -192,14 +192,14 @@ public class HotTieZiFragment extends BaseFragment implements OnTouXiangCliceLis
 												.isEmpty()) {
 									updateView();
 								} else {
-									MyToast.showCustomerToast("没有更多数据了");
+									MyToast.showCustomerToast("没有更多数据了",getActivity());
 								}
 
 							} else {
-								MyToast.showCustomerToast("获取数据失败");
+								MyToast.showCustomerToast("获取数据失败",getActivity());
 							}
 						} catch (Exception e) {
-							MyToast.showCustomerToast("获取数据失败");
+							MyToast.showCustomerToast("获取数据失败",getActivity());
 							LogUtil.D("ddd: " + e.toString());
 						}
 					}

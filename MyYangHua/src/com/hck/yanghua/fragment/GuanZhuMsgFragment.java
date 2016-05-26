@@ -93,7 +93,7 @@ public class GuanZhuMsgFragment extends BaseFragment implements
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
 				LogUtil.D("onFailure: " + error + content);
-				MyToast.showCustomerToast("网络异常 获取数据失败");
+				MyToast.showCustomerToast("网络异常 获取数据失败",getActivity());
 			}
 
 			@Override
@@ -105,7 +105,7 @@ public class GuanZhuMsgFragment extends BaseFragment implements
 							GuanZhuData.class);
 					updateView();
 				} catch (Exception e) {
-					MyToast.showCustomerToast("没有数据");
+					MyToast.showCustomerToast("没有数据",getActivity());
 				}
 			}
 		});

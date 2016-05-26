@@ -59,7 +59,7 @@ public class ShowNearUserActivity extends BaseTitleActivity {
 			location = MyData.bdLocation;
 		}
 		if (location == null) {
-			MyToast.showCustomerToast("无法获取您的位置");
+			MyToast.showCustomerToast("无法获取您的位置",this);
 			Pdialog.hiddenDialog();
 			return;
 		}
@@ -72,7 +72,7 @@ public class ShowNearUserActivity extends BaseTitleActivity {
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
 				LogUtil.D("onFailure: " + content + error);
-				MyToast.showCustomerToast("网络异常获取数据失败");
+				MyToast.showCustomerToast("网络异常获取数据失败",ShowNearUserActivity.this);
 			}
 
 			@Override

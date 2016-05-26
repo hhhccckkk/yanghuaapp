@@ -156,7 +156,7 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
 				LogUtil.D("onFailure: " + error + content);
-				MyToast.showCustomerToast("取消关注失败");
+				MyToast.showCustomerToast("取消关注失败", ShowOneUserActivity.this);
 			}
 
 			@Override
@@ -237,7 +237,8 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 						guanzhuButton.setText("取消关注");
 						updateUser(1);
 					} else {
-						MyToast.showCustomerToast("网络异常 关注失败");
+						MyToast.showCustomerToast("网络异常 关注失败",
+								ShowOneUserActivity.this);
 					}
 				} catch (Exception e) {
 				}
@@ -248,15 +249,16 @@ public class ShowOneUserActivity extends BaseTitleActivity implements
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
 				LogUtil.D("onFailure: " + error + content);
-				MyToast.showCustomerToast("网络异常 关注失败");
+				MyToast.showCustomerToast("网络异常 关注失败", ShowOneUserActivity.this);
 			}
 		});
 	}
-private void updateUser(int size){
-	UserBean userBean=MyData.getData().getUserBean();
-	userBean.setGuanzhu(userBean.getGuanzhu()+size);
-	MyData.getData().setUserBean(userBean);
-}
+
+	private void updateUser(int size) {
+		UserBean userBean = MyData.getData().getUserBean();
+		userBean.setGuanzhu(userBean.getGuanzhu() + size);
+		MyData.getData().setUserBean(userBean);
+	}
 
 	private void getUserInfo() {
 		Pdialog.showDialog(this, "正在获取用户信息", false);
@@ -280,7 +282,8 @@ private void updateUser(int size){
 							updateView();
 						} catch (Exception e) {
 							LogUtil.D("eeeeee: " + e.toString());
-							MyToast.showCustomerToast("获取用户数据失败");
+							MyToast.showCustomerToast("获取用户数据失败",
+									ShowOneUserActivity.this);
 						}
 					}
 
@@ -288,7 +291,8 @@ private void updateUser(int size){
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + error + content);
-						MyToast.showCustomerToast("获取用户数据失败");
+						MyToast.showCustomerToast("获取用户数据失败",
+								ShowOneUserActivity.this);
 					}
 				});
 	}

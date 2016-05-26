@@ -75,6 +75,7 @@ public class BaseActivity extends FragmentActivity {
 	public String getStringData(int id) {
 		return getResources().getString(id);
 	}
+
 	public void alertExitD() {
 		CustomAlertDialog alertDialog = new CustomAlertDialog(this);
 		alertDialog.setCancelable(true);
@@ -101,6 +102,7 @@ public class BaseActivity extends FragmentActivity {
 		alertDialog.show();
 
 	}
+
 	private void haoPing() {
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -109,10 +111,15 @@ public class BaseActivity extends FragmentActivity {
 
 	}
 
-
 	private void exit() {
 		AppManager.getAppManager().AppExit();
 		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		AppManager.getAppManager().removeActivity(this);
 	}
 
 }

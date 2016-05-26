@@ -134,7 +134,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					@Override
 					public void onFailure(Throwable error, String content) {
 						LogUtil.D("onFailure: " + content);
-						MyToast.showCustomerToast("获取评论失败");
+						MyToast.showCustomerToast("获取评论失败",TieZiXiangXiActivity.this);
 					}
 
 					@Override
@@ -254,7 +254,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == 1) {
-				MyToast.showCustomerToast("分享成功");
+				MyToast.showCustomerToast("分享成功",TieZiXiangXiActivity.this);
 			}
 		};
 	};
@@ -307,7 +307,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 									try {
 										if (response.getInt(Constant.CODE) == Request.REQUEST_SUCCESS) {
 											zanImageView.setEnabled(false);
-											MyToast.showCustomerToast("赞+1");
+											MyToast.showCustomerToast("赞+1",TieZiXiangXiActivity.this);
 											if (pos > 0) {
 
 												sendBroadcast(pos, true);
@@ -375,7 +375,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	public void choicePicter(View view) {
 		hidenPop();
 		if (imagePaths.size() >= 3) {
-			MyToast.showCustomerToast("最多3张图，点击可删除");
+			MyToast.showCustomerToast("最多3张图，点击可删除",TieZiXiangXiActivity.this);
 			return;
 		}
 		int imageSize = imagePaths.size();
@@ -736,7 +736,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private void sendPunLun() {
 		final String data = editText.getText().toString();
 		if (TextUtils.isEmpty(data)) {
-			MyToast.showCustomerToast("评论不能为空");
+			MyToast.showCustomerToast("评论不能为空",TieZiXiangXiActivity.this);
 			return;
 		}
 		Pdialog.showDialog(this, "提交数据中..", false);
@@ -785,7 +785,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 					public void onFailure(Throwable error, String content) {
 						super.onFailure(error, content);
 						LogUtil.D("onFailure: " + error + content);
-						MyToast.showCustomerToast("回复失败");
+						MyToast.showCustomerToast("回复失败",TieZiXiangXiActivity.this);
 					}
 
 					@Override
@@ -816,7 +816,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 
 								addHuiFu(huiTieBean);
 
-								MyToast.showCustomerToast("回复成功");
+								MyToast.showCustomerToast("回复成功",TieZiXiangXiActivity.this);
 								if (pos > 0) {
 									sendBroadcast(pos, false);
 								}
@@ -825,7 +825,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 								removeAllImagePath();
 
 							} else {
-								MyToast.showCustomerToast("回复失败");
+								MyToast.showCustomerToast("回复失败",TieZiXiangXiActivity.this);
 							}
 						} catch (Exception e) {
 							LogUtil.D("eeeeeeeeeeeeeeeeee: " + e.toString());
