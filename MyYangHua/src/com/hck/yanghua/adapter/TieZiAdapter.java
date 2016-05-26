@@ -42,7 +42,7 @@ public class TieZiAdapter extends BaseAdapter {
 			OnTouXiangCliceListener onTouXiangCliceListener) {
 		this.tieZiBeans = tieZiBeans;
 		if (this.tieZiBeans == null) {
-			this.tieZiBeans = new ArrayList<>();
+			this.tieZiBeans = new ArrayList<TieZiBean>();
 		}
 		this.context = context;
 		this.oCliceListener = onTouXiangCliceListener;

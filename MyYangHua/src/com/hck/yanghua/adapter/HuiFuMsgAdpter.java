@@ -38,7 +38,7 @@ public class HuiFuMsgAdpter extends BaseAdapter {
 		this.msgBeans = msgBeans;
 		this.callBack = callBack;
 		if (this.msgBeans == null) {
-			this.msgBeans = new ArrayList<>();
+			this.msgBeans = new ArrayList<MsgBean>();
 		}
 	}
 

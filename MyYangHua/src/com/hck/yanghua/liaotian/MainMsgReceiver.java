@@ -217,7 +217,7 @@ public class MainMsgReceiver implements EMEventListener {
 		}
 	}
 
-	private List<HasNewMsgGet>  hasNewMsgGets =new ArrayList<>();
+	private List<HasNewMsgGet>  hasNewMsgGets =new ArrayList<HasNewMsgGet>();
 
 	public interface HasNewMsgGet {
 		void haseNewMsg();

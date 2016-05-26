@@ -84,7 +84,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private MyEditextView editText;
 	private View view = null;
 	ImageView imageView = null;
-	private ArrayList<String> imageStrings = new ArrayList<>();
+	private ArrayList<String> imageStrings = new ArrayList<String>();
 	private View tupianView;
 	private LinearLayout biaoqingLayout;
 	private ImageView zanImageView;
@@ -366,8 +366,8 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	private static final int GET_PHOTO = 1;
 	public static final int GET_PICTER = 2;
 	public static final int PINGLUN_OK = 3;
-	private ArrayList<String> imagePaths = new ArrayList<>();
-	private List<Bitmap> bitmaps = new ArrayList<>();
+	private ArrayList<String> imagePaths = new ArrayList<String>();
+	private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
 	private ArrayList<String> mSelectPath;
 
@@ -686,7 +686,7 @@ public class TieZiXiangXiActivity extends BaseTitleActivity implements
 	}
 
 	public void onclickImg(HuiTieBean huiTieBean) {
-		ArrayList<String> dataArrayList = new ArrayList<>();
+		ArrayList<String> dataArrayList = new ArrayList<String>();
 		if (!TextUtils.isEmpty(huiTieBean.getImage1())) {
 			dataArrayList.add(huiTieBean.getImage1());
 		}

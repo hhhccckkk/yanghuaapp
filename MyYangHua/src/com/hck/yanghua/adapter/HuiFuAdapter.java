@@ -38,7 +38,7 @@ public class HuiFuAdapter extends BaseAdapter {
 		this.context = context;
 		this.huiTieBeans = huiTieBeans;
 		if (this.huiTieBeans == null) {
-			this.huiTieBeans = new ArrayList<>();
+			this.huiTieBeans = new ArrayList<HuiTieBean>();
 		}
 	}
 

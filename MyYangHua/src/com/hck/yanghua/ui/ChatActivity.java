@@ -70,12 +70,12 @@ public class ChatActivity extends EaseBaseActivity implements InitViewOk {
 
 	@Override
 	public void initTitleOk() {
-		try {
-			chatFragment.getTitleBar().setBackgroundColor(
-					getResources().getColor(R.color.red_anniu_bt_color));
-			chatFragment.getTitleBar().setLeftImageResource(R.drawable.back_img);
-		} catch (Exception e) {
-		}
+//		try {
+//			chatFragment.getTitleBar().setBackgroundColor(
+//					getResources().getColor(R.color.red_anniu_bt_color));
+//			chatFragment.getTitleBar().setLeftImageResource(R.drawable.back_img);
+//		} catch (Exception e) {
+//		}
 
 	}
 

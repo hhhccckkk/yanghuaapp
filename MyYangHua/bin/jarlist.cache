@@ -1,10 +1,7 @@
 # cache for current jar dependency. DO NOT EDIT.
 # format is <lastModified> <length> <SHA-1> <path>
 # Encoding is UTF-8
-1373731176000 125339 212dff9b98c634495573061857cb05dd3151f169 C:\Users\Huoyunren\git\image-selector\libs\universal-image-loader-1.8.5.jar
-1373731176000 125339 212dff9b98c634495573061857cb05dd3151f169 C:\Users\Huoyunren\git\msg\libs\universal-image-loader-1.8.5.jar
-1454466614966 758727 efec67655f6db90757faa37201efcee2a9ec3507 C:\Users\Huoyunren\git\slidelibrary\libs\android-support-v4.jar
-1454466614966 758727 efec67655f6db90757faa37201efcee2a9ec3507 C:\Users\Huoyunren\git\image-selector\libs\android-support-v4.jar
-1454229671925 758727 efec67655f6db90757faa37201efcee2a9ec3507 C:\Users\Huoyunren\git\HLListView\libs\android-support-v4.jar
-1454229671925 758727 efec67655f6db90757faa37201efcee2a9ec3507 C:\Users\Huoyunren\git\GPUImage\libs\android-support-v4.jar
-1454466614966 758727 efec67655f6db90757faa37201efcee2a9ec3507 C:\Users\Huoyunren\git\msg\libs\android-support-v4.jar
+1464230551216 758727 efec67655f6db90757faa37201efcee2a9ec3507 F:\gitworkplace\myproject\HLListView\libs\android-support-v4.jar
+1464230572910 758727 efec67655f6db90757faa37201efcee2a9ec3507 F:\gitworkplace\myproject\image_choice_biaoqian\libs\android-support-v4.jar
+1464230560197 758727 efec67655f6db90757faa37201efcee2a9ec3507 F:\gitworkplace\myproject\huanxin_msg\libs\android-support-v4.jar
+1464230684627 758727 efec67655f6db90757faa37201efcee2a9ec3507 F:\gitworkplace\myproject\cehua\libs\android-support-v4.jar

@@ -42,9 +42,9 @@ public class FaTieActivity extends BaseTitleActivity implements
 	private static final int REQUEST_IMAGE = 1;
 	private static final String HAS_IMAGE = "1";
 	private MyEditextView contentEditText;
-	private List<Bitmap> bitmaps = new ArrayList<>();
+	private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 	private LinearLayout imageLayout;
-	private ArrayList<String> imagePaths = new ArrayList<>();
+	private ArrayList<String> imagePaths = new ArrayList<String>();
 	ArrayList<String> listfile = new ArrayList<String>();
 	public static Activity fatieActivity;
 	private int type = 0;
